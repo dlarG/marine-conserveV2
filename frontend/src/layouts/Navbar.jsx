@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Heart, Menu, X, Phone, FileText } from "lucide-react";
+import { ChevronDown, Heart, Menu, X, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // ─── Inline social SVGs (lucide-react doesn't include these) ─────────────────
