@@ -15,6 +15,8 @@ import AdvancedOpenWater from "./pages/courses/PADI/AdvancedOpenWater";
 import RescueDiver from "./pages/courses/PADI/RescueDiver";
 import Divemaster from "./pages/courses/PADI/Divemaster";
 
+import MarinePhotography from "./pages/courses/Specialty/MarinePhotography";
+
 const HomePage = () => {
   return (
     <div>
@@ -53,6 +55,10 @@ const DivemasterPage = () => {
   return <Divemaster />;
 };
 
+const MarinePhotographyPage = () => {
+  return <MarinePhotography />;
+};
+
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -85,6 +91,10 @@ const App = () => {
             element={<RescueDiverPage />}
           />
           <Route path="/courses/padi/divemaster" element={<DivemasterPage />} />
+          <Route
+            path="/courses/specialty/marine-photography"
+            element={<MarinePhotographyPage />}
+          />
         </Routes>
       </div>
     </Router>
