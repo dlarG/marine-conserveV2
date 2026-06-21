@@ -2,9 +2,9 @@ import { useRef, useEffect, useCallback, useState } from "react";
 
 // ─── Spotlight config ─────────────────────────────────────────────────────────
 const SPOTLIGHT = {
-  radius: 140, // px – fully transparent core (healthy reef fully visible)
-  feather: 200, // px – soft edge width beyond core
-  glowRadius: 170, // px – CSS cursor glow ring size
+  radius: 95, // px – fully transparent core (healthy reef fully visible)
+  feather: 95, // px – soft edge width beyond core
+  glowRadius: 60, // px – CSS cursor glow ring size
   enterSpeed: 0.1, // lerp factor per frame when cursor enters (0–1)
   leaveSpeed: 0.07, // lerp factor per frame when cursor leaves
 };
