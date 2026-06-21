@@ -1,5 +1,6 @@
 // WhyUs.jsx
 import { Shield, Leaf, Users, Globe } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 import useScrollAnimation from "../../utilities/useScrollAnimation";
 
 const FeatureCard = ({ feature, index }) => {
@@ -44,10 +45,71 @@ const FeatureCard = ({ feature, index }) => {
   );
 };
 
+// ─── Animated Counter Component ──────────────────────────────────────────────
+const AnimatedCounter = ({
+  end,
+  duration = 2000,
+  suffix = "",
+  prefix = "",
+}) => {
+  const [count, setCount] = useState(0);
+  const [ref, isVisible] = useScrollAnimation({
+    threshold: 0.5,
+    once: true,
+  });
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    if (isVisible && !hasAnimated.current) {
+      hasAnimated.current = true;
+      let startTime = null;
+      const startValue = 0;
+
+      const animate = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+
+        // Easing function for smooth deceleration
+        const easeOutExpo = 1 - Math.pow(1 - progress, 3);
+
+        setCount(Math.floor(easeOutExpo * (end - startValue) + startValue));
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [isVisible, end, duration]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {count}
+      {suffix}
+    </span>
+  );
+};
+
 const StatItem = ({ stat, index }) => {
   const [ref, isVisible] = useScrollAnimation({
     threshold: 0.5,
   });
+
+  // Parse the stat number for the counter
+  const parseStatNumber = (numberStr) => {
+    const match = numberStr.match(/^(\d+)(\+?)$/);
+    if (match) {
+      return {
+        value: parseInt(match[1]),
+        suffix: match[2],
+      };
+    }
+    return { value: parseInt(numberStr) || 0, suffix: "" };
+  };
+
+  const { value, suffix } = parseStatNumber(stat.number);
 
   return (
     <div
@@ -62,7 +124,7 @@ const StatItem = ({ stat, index }) => {
       }}
     >
       <div className="text-3xl lg:text-4xl font-bold text-teal-600 mb-2">
-        {stat.number}
+        <AnimatedCounter end={value} suffix={suffix} duration={2000} />
       </div>
       <div className="text-gray-600 text-sm">{stat.label}</div>
     </div>
