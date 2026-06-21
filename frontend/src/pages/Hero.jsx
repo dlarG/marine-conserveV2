@@ -2,11 +2,11 @@ import { useRef, useEffect, useCallback, useState } from "react";
 
 // ─── Spotlight config ─────────────────────────────────────────────────────────
 const SPOTLIGHT = {
-  radius: 95, // px – fully transparent core (healthy reef fully visible)
-  feather: 95, // px – soft edge width beyond core
-  glowRadius: 60, // px – CSS cursor glow ring size
-  enterSpeed: 0.1, // lerp factor per frame when cursor enters (0–1)
-  leaveSpeed: 0.07, // lerp factor per frame when cursor leaves
+  radius: 150,
+  feather: 150,
+  glowRadius: 60,
+  enterSpeed: 0.1,
+  leaveSpeed: 0.07,
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -44,13 +44,12 @@ export default function CoralSpotlight() {
   const canvasRef = useRef(null);
   const rafRef = useRef(null);
 
-  // All mutable render state lives here — zero React re-renders per frame
   const stateRef = useRef({
     healthyImg: null,
     deadImg: null,
-    mouse: null, // {x, y} canvas coords, or null when outside
-    alpha: 0, // current interpolated reveal strength (0 = dead, 1 = full spotlight)
-    targetAlpha: 0, // 1 when hovering, 0 when not
+    mouse: null,
+    alpha: 0,
+    targetAlpha: 0,
   });
 
   const [loaded, setLoaded] = useState(false);
@@ -82,45 +81,30 @@ export default function CoralSpotlight() {
     const W = canvas.width;
     const H = canvas.height;
 
-    // Lerp alpha toward target each frame → smooth enter / leave fade
     const speed =
       s.targetAlpha > s.alpha ? SPOTLIGHT.enterSpeed : SPOTLIGHT.leaveSpeed;
     s.alpha += (s.targetAlpha - s.alpha) * speed;
-    const a = s.alpha; // convenience
+    const a = s.alpha;
 
     // ── 1. Draw healthy reef as permanent base ──────────────────────────────
     const hf = coverFit(s.healthyImg.width, s.healthyImg.height, W, H);
     ctx.drawImage(s.healthyImg, hf.sx, hf.sy, hf.sw, hf.sh, 0, 0, W, H);
 
     // ── 2. Build dead reef layer with spotlight hole ────────────────────────
-    //
-    // Strategy: draw the dead reef onto an offscreen canvas, then paint a
-    // radial gradient on top of it using "destination-out" compositing.
-    // The gradient erases the dead reef in a soft circle at the cursor,
-    // scaled by the current alpha (so entering / leaving eases smoothly).
-    // Then stamp the offscreen onto the main canvas.
-    //
-    // This is recalculated from scratch every single frame — no state carried
-    // between frames, no persistent mask.
-
     const off = document.createElement("canvas");
     off.width = W;
     off.height = H;
     const oc = off.getContext("2d");
 
-    // Draw dead reef
     const df = coverFit(s.deadImg.width, s.deadImg.height, W, H);
     oc.drawImage(s.deadImg, df.sx, df.sy, df.sw, df.sh, 0, 0, W, H);
 
-    // Punch spotlight hole only when cursor is present and alpha > 0
     if (s.mouse && a > 0.001) {
       const { x, y } = s.mouse;
       const innerR = SPOTLIGHT.radius;
       const outerR = SPOTLIGHT.radius + SPOTLIGHT.feather;
 
       const grad = oc.createRadialGradient(x, y, 0, x, y, outerR);
-      //  center → clear (erases dead reef most here)
-      //  edge   → opaque (dead reef fully restored here)
       grad.addColorStop(0, `rgba(0,0,0,${a})`);
       grad.addColorStop((innerR / outerR) * 0.6, `rgba(0,0,0,${a})`);
       grad.addColorStop(innerR / outerR, `rgba(0,0,0,${a * 0.85})`);
@@ -136,10 +120,9 @@ export default function CoralSpotlight() {
       oc.globalCompositeOperation = "source-over";
     }
 
-    // Stamp masked dead reef over the healthy base
     ctx.drawImage(off, 0, 0);
 
-    // ── 3. Bioluminescent rim glow on canvas (inside the spotlight edge) ────
+    // ── 3. Bioluminescent rim glow ────
     if (s.mouse && a > 0.01) {
       const { x, y } = s.mouse;
       const rimR = SPOTLIGHT.radius + SPOTLIGHT.feather * 0.5;
@@ -163,7 +146,7 @@ export default function CoralSpotlight() {
       ctx.fill();
     }
 
-    // ── 4. Vignette + bottom gradient (purely aesthetic) ───────────────────
+    // ── 4. Vignette + bottom gradient ───────────────────
     const vign = ctx.createRadialGradient(
       W / 2,
       H / 2,
@@ -251,8 +234,6 @@ export default function CoralSpotlight() {
 
     const onLeave = () => {
       stateRef.current.targetAlpha = 0;
-      // keep stateRef.current.mouse for the fade-out animation,
-      // clear it once alpha reaches ~0 (handled in paint loop naturally)
       setGlowPos((g) => ({ ...g, on: false }));
     };
 
@@ -332,83 +313,155 @@ export default function CoralSpotlight() {
         </div>
       )}
 
-      {/* Hero text */}
+      {/* Hero Content - Centered Layout */}
       {loaded && (
         <div
           style={{
             position: "absolute",
-            bottom: "9%",
-            left: 0,
-            right: 0,
+            inset: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
             textAlign: "center",
             color: "#fff",
             padding: "0 24px",
             pointerEvents: "none",
           }}
         >
+          {/* Top Label */}
           <p
             style={{
               fontSize: "clamp(9px,1.1vw,12px)",
               letterSpacing: "0.28em",
               textTransform: "uppercase",
               color: "#5cc8e8",
-              marginBottom: "12px",
+              marginBottom: "16px",
               fontWeight: 600,
+              opacity: 0.9,
             }}
           >
-            Coral Restoration Project
+            Coral Restoration Project since 2013
           </p>
+
+          {/* Main Headline */}
           <h1
             style={{
-              fontSize: "clamp(30px,5.2vw,68px)",
+              fontSize: "clamp(36px,6vw,80px)",
               fontWeight: 800,
-              lineHeight: 1.06,
-              margin: "0 0 14px",
-              letterSpacing: "-0.025em",
+              lineHeight: 1.08,
+              margin: "0 0 20px",
+              letterSpacing: "-0.03em",
+              maxWidth: "800px",
             }}
           >
             What We Stand
             <br />
             To Lose
           </h1>
+
+          {/* Description */}
           <p
             style={{
-              fontSize: "clamp(12px,1.4vw,16px)",
-              opacity: 0.68,
-              maxWidth: "420px",
-              lineHeight: 1.6,
-              margin: 0,
+              fontSize: "clamp(14px,1.3vw,17px)",
+              opacity: 0.75,
+              maxWidth: "880px",
+              lineHeight: 1.7,
+              margin: "0 0 36px",
+              color: "white",
+              fontWeight: 600,
             }}
           >
-            Hover to shine a restoration light — and see the
-            <br />
-            living reef hidden beneath the bleached surface.
+            GREEN, Inc. launches a full-time marine conservation operation in
+            Malitbog, Southern Leyte, focusing on coral restoration, marine
+            debris removal, and science-based conservation to protect Sogod
+            Bay's rich marine ecosystems.
           </p>
+
+          {/* Buttons */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              pointerEvents: "auto",
+            }}
+          >
+            <button
+              style={{
+                padding: "15px 34px",
+                backgroundColor: "#0d9488",
+                color: "#fff",
+                border: "none",
+                borderRadius: "50px",
+                fontSize: "clamp(13px,1.1vw,15px)",
+                fontWeight: 600,
+                cursor: "pointer",
+                letterSpacing: "0.02em",
+                transition: "all 0.3s ease",
+                boxShadow: "0 4px 15px rgba(13,148,136,0.3)",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#0f766e";
+                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 6px 20px rgba(13,148,136,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "#0d9488";
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 4px 15px rgba(13,148,136,0.3)";
+              }}
+            >
+              Support Our Mission
+            </button>
+            <button
+              style={{
+                padding: "15px 34px",
+                backgroundColor: "transparent",
+                color: "#fff",
+                border: "2px solid rgba(255,255,255,0.5)",
+                borderRadius: "50px",
+                fontSize: "clamp(13px,1.1vw,15px)",
+                fontWeight: 600,
+                cursor: "pointer",
+                letterSpacing: "0.02em",
+                transition: "all 0.3s ease",
+                backdropFilter: "blur(4px)",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "rgba(255,255,255,0.12)";
+                e.target.style.borderColor = "rgba(255,255,255,0.8)";
+                e.target.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "transparent";
+                e.target.style.borderColor = "rgba(255,255,255,0.5)";
+                e.target.style.transform = "translateY(0)";
+              }}
+            >
+              Explore Our Impact
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Hint */}
       {loaded && (
         <div
           style={{
             position: "absolute",
-            top: "38%",
+            top: "22%",
             left: "50%",
             transform: "translate(-50%,-50%)",
             pointerEvents: "none",
-            color: "rgba(255,255,255,0.42)",
+            color: "rgba(255,255,255,0.5)",
             fontSize: "clamp(10px,1.1vw,13px)",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             textAlign: "center",
             animation: "breathe 3.5s ease-in-out infinite",
           }}
-        >
-          ✦ &nbsp; Shine your light &nbsp; ✦
-        </div>
+        ></div>
       )}
 
       {/* Custom cursor orb */}
@@ -440,7 +493,7 @@ export default function CoralSpotlight() {
             }}
           />
           {/* Mid ring */}
-          <div
+          {/* <div
             style={{
               position: "absolute",
               width: "56px",
@@ -451,9 +504,9 @@ export default function CoralSpotlight() {
               border: "1.5px solid rgba(100,210,255,0.28)",
               boxShadow: "0 0 12px 2px rgba(60,180,240,0.15)",
             }}
-          />
+          /> */}
           {/* Inner bright dot */}
-          <div
+          {/* <div
             style={{
               position: "absolute",
               width: "8px",
@@ -465,7 +518,7 @@ export default function CoralSpotlight() {
               boxShadow:
                 "0 0 6px 3px rgba(100,210,255,0.7), 0 0 18px 8px rgba(40,170,230,0.35)",
             }}
-          />
+          /> */}
         </div>
       )}
 
@@ -475,8 +528,8 @@ export default function CoralSpotlight() {
           50%       { transform: scale(1.15); opacity: 0.72; }
         }
         @keyframes breathe {
-          0%, 100% { opacity: 0.42; }
-          50%       { opacity: 0.18; }
+          0%, 100% { opacity: 0.5; }
+          50%       { opacity: 0.2; }
         }
       `}</style>
     </div>
