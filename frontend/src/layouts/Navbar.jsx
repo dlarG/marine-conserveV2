@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, Heart, Menu, X, Phone, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // ─── Inline social SVGs (lucide-react doesn't include these) ─────────────────
 const FacebookIcon = ({ size = 18 }) => (
@@ -55,43 +56,75 @@ const NAV_ITEMS = [
   {
     label: "Organization",
     items: [
-      "History",
-      "Mission & Vission",
-      "The Team",
-      "Our Partners",
-      "Blogs",
-      "News",
+      { name: "History", path: "/organization/history" },
+      { name: "Mission & Vision", path: "/organization/mission-vision" },
+      { name: "The Team", path: "/organization/the-team" },
+      { name: "Our Partners", path: "/organization/our-partners" },
+      { name: "Blogs", path: "/organization/blogs" },
+      { name: "News", path: "/organization/news" },
     ],
   },
   {
-    label: "PADI Courses",
-    items: [
-      "Discover Scuba Diving",
-      "Open Water Diver",
-      "Advanced Open Water Diver",
-      "EFR",
-      "Rescue Diver",
-      "Divemaster",
-    ],
-  },
-
-  {
-    label: "Specialty Courses",
-    items: [
-      "Marine Photography",
-      "Deep Diver",
-      "Navigation",
-      "Night Diver",
-      "Peak Performance Buoyancy",
+    label: "Our Courses",
+    // Two-column layout for courses
+    columns: [
+      {
+        title: "PADI Diver Courses",
+        items: [
+          {
+            name: "Discover Scuba Diving",
+            path: "/courses/padi/discover-scuba-diving",
+          },
+          { name: "Open Water Diver", path: "/courses/padi/open-water-diver" },
+          {
+            name: "Advanced Open Water Diver",
+            path: "/courses/padi/advanced-open-water-diver",
+          },
+          { name: "EFR", path: "/courses/padi/efr" },
+          { name: "Rescue Diver", path: "/courses/padi/rescue-diver" },
+          { name: "Divemaster", path: "/courses/padi/divemaster" },
+        ],
+      },
+      {
+        title: "Specialty Courses",
+        items: [
+          {
+            name: "Marine Photography",
+            path: "/courses/specialty/marine-photography",
+          },
+          { name: "Deep Diver", path: "/courses/specialty/deep-diver" },
+          { name: "Navigation", path: "/courses/specialty/navigation" },
+          { name: "Night Diver", path: "/courses/specialty/night-diver" },
+          {
+            name: "Peak Performance Buoyancy",
+            path: "/courses/specialty/peak-performance-buoyancy",
+          },
+        ],
+      },
     ],
   },
   {
     label: "Volunteer",
     items: [
-      "Coral Conservation",
-      "Marine Debris Removal",
-      "COTS Monitoring",
-      "Scientific Data Collection",
+      { name: "Coral Conservation", path: "/volunteer/coral-conservation" },
+      {
+        name: "Marine Debris Removal",
+        path: "/volunteer/marine-debris-removal",
+      },
+      { name: "COTS Monitoring", path: "/volunteer/cots-monitoring" },
+      {
+        name: "Scientific Data Collection",
+        path: "/volunteer/scientific-data-collection",
+      },
+    ],
+  },
+  {
+    label: "Contact Us",
+    items: [
+      { name: "Get in Touch", path: "/contact" },
+      { name: "FAQs", path: "/faqs" },
+      { name: "Location", path: "/contact/location" },
+      { name: "Support", path: "/contact/support" },
     ],
   },
 ];
@@ -106,7 +139,7 @@ const SOCIAL_LINKS = [
   { Icon: InstagramIcon, href: "#", label: "Instagram" },
 ];
 
-// ─── Desktop dropdown ─────────────────────────────────────────────────────────
+// ─── Desktop dropdown (single column) ────────────────────────────────────────
 function Dropdown({ label, items, scrolled }) {
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
@@ -144,17 +177,18 @@ function Dropdown({ label, items, scrolled }) {
         style={{
           display: open ? "block" : "none",
         }}
-        className="absolute uppercase top-12 left-0 mt-1 w-70 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden z-50"
+        className="absolute uppercase top-12 left-0 mt-1 w-64 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden z-50"
       >
         <ul className="py-2">
           {items.map((item) => (
-            <li key={item}>
-              <a
-                href="#"
-                className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150 group/item"
+            <li key={item.name}>
+              <Link
+                to={item.path}
+                className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
+                onClick={() => setOpen(false)}
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>
@@ -163,8 +197,83 @@ function Dropdown({ label, items, scrolled }) {
   );
 }
 
-// ─── Mobile accordion ─────────────────────────────────────────────────────────
-function MobileAccordion({ label, items }) {
+// ─── Desktop dropdown (two columns for Courses) ──────────────────────────────
+function CoursesDropdown({ label, columns, scrolled }) {
+  const [open, setOpen] = useState(false);
+  const timerRef = useRef(null);
+
+  const show = () => {
+    clearTimeout(timerRef.current);
+    setOpen(true);
+  };
+  const hide = () => {
+    timerRef.current = setTimeout(() => setOpen(false), 80);
+  };
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
+  const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
+  const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
+
+  return (
+    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      <button
+        style={{ color: textColor }}
+        className="cursor-pointer uppercase relative flex items-center text-sm font-light tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        {label}
+        <span
+          style={{ backgroundColor: hoverUnder }}
+          className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full"
+        />
+      </button>
+
+      {/* Two-Column Panel */}
+      <div
+        style={{
+          display: open ? "flex" : "none",
+        }}
+        className="absolute top-12 left-1/2 -translate-x-1/2 mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden z-50"
+      >
+        {columns.map((column, colIndex) => (
+          <div
+            key={column.title}
+            className={`flex-1 min-w-[260px] ${
+              colIndex === 0 ? "border-r border-gray-100" : ""
+            }`}
+          >
+            {/* Column Title */}
+            <div className="px-5 pt-4 pb-2">
+              <h4 className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">
+                {column.title}
+              </h4>
+            </div>
+
+            {/* Column Items */}
+            <ul className="pb-3">
+              {column.items.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Mobile accordion (single column) ────────────────────────────────────────
+function MobileAccordion({ label, items, onClose }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -189,17 +298,74 @@ function MobileAccordion({ label, items }) {
       >
         <ul className="pb-3">
           {items.map((item) => (
-            <li key={item}>
-              <a
-                href="#"
+            <li key={item.name}>
+              <Link
+                to={item.path}
+                onClick={onClose}
                 className="flex items-center gap-3 px-8 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
-                {item}
-              </a>
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>
+      </div>
+    </div>
+  );
+}
+
+// ─── Mobile accordion (two columns for Courses) ──────────────────────────────
+function MobileCoursesAccordion({ label, columns, onClose }) {
+  const [open, setOpen] = useState(false);
+
+  // Calculate total items for max-height
+  const totalItems = columns.reduce((sum, col) => sum + col.items.length, 0);
+
+  return (
+    <div className="border-b border-gray-100 last:border-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full px-5 py-4 text-[15px] font-medium text-gray-700 hover:text-teal-700 transition-colors"
+      >
+        {label}
+        <ChevronDown
+          size={16}
+          className="text-teal-500 transition-transform duration-200 flex-shrink-0"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0)" }}
+        />
+      </button>
+      <div
+        style={{
+          maxHeight: open ? `${totalItems * 48 + 80}px` : "0",
+          overflow: "hidden",
+          transition: "max-height 0.26s ease",
+        }}
+      >
+        <div className="pb-3">
+          {columns.map((column) => (
+            <div key={column.title} className="mb-2">
+              {/* Mobile Column Title */}
+              <h4 className="px-8 py-2 text-[11px] font-bold text-teal-600 uppercase tracking-wider">
+                {column.title}
+              </h4>
+              <ul>
+                {column.items.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      to={item.path}
+                      onClick={onClose}
+                      className="flex items-center gap-3 px-10 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -250,7 +416,7 @@ export default function Navbar() {
         }}
         className="fixed top-0 left-0 right-0 z-40"
       >
-        <div className="max-w-8xl mx-auto px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex items-center justify-between h-[100px]">
             {/* ── Logo ── */}
             <a href="/" className="flex items-center gap-3 flex-shrink-0 group">
@@ -281,43 +447,36 @@ export default function Navbar() {
               </div>
             </a>
 
-            {/* ── Desktop nav — centered with generous spacing ── */}
-            <div className="hidden lg:flex items-center">
-              {NAV_ITEMS.map((nav) => (
-                <Dropdown
-                  key={nav.label}
-                  label={nav.label}
-                  items={nav.items}
-                  scrolled={scrolled}
-                />
-              ))}
+            {/* ── Desktop nav — centered with all items including Contact ── */}
+            <div className="hidden lg:flex items-center gap-1">
+              {NAV_ITEMS.map((nav) => {
+                // Check if it's the Courses item with columns
+                if (nav.columns) {
+                  return (
+                    <CoursesDropdown
+                      key={nav.label}
+                      label={nav.label}
+                      columns={nav.columns}
+                      scrolled={scrolled}
+                    />
+                  );
+                }
+                // Regular single-column dropdown
+                return (
+                  <Dropdown
+                    key={nav.label}
+                    label={nav.label}
+                    items={nav.items}
+                    scrolled={scrolled}
+                  />
+                );
+              })}
             </div>
 
-            {/* ── Right: Contact + Apply + Donate + Social ── */}
+            {/* ── Right: Apply + Donate + Social ── */}
             <div className="hidden lg:flex items-center gap-3">
-              {/* Contact Button */}
-              <a
-                href="#contact"
-                style={{
-                  color: scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)",
-                  transition: "all 0.4s ease",
-                }}
-                className="cursor-pointer uppercase relative flex items-center gap-2 text-sm font-light tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
-              >
-                <Phone size={14} className="flex-shrink-0" />
-                Contact
-                <span
-                  style={{
-                    backgroundColor: scrolled
-                      ? "#0d9488"
-                      : "rgba(255,255,255,0.6)",
-                  }}
-                  className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full"
-                />
-              </a>
-
               {/* Social icons */}
-              <div className="flex items-center gap-3 ml-2">
+              <div className="flex items-center gap-3">
                 {SOCIAL_LINKS.map(({ Icon, href, label }) => (
                   <a
                     key={label}
@@ -346,9 +505,9 @@ export default function Navbar() {
                 className="w-px h-5"
               />
 
-              {/* Donate */}
-              <a
-                href="#apply"
+              {/* Apply */}
+              <Link
+                to="/apply"
                 style={{
                   color: scrolled ? "#0d9488" : "#fff",
                   borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
@@ -357,10 +516,12 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
               >
                 <FileText size={14} className="flex-shrink-0" />
-                Apply Now
-              </a>
-              <a
-                href="#donate"
+                Apply
+              </Link>
+
+              {/* Donate */}
+              <Link
+                to="/donate"
                 className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
                 style={{
                   background:
@@ -371,7 +532,7 @@ export default function Navbar() {
                 }}
               >
                 Donate
-              </a>
+              </Link>
             </div>
 
             {/* ── Mobile hamburger ── */}
@@ -400,37 +561,46 @@ export default function Navbar() {
           className="lg:hidden"
         >
           <div className="max-w-7xl mx-auto">
-            {NAV_ITEMS.map((nav) => (
-              <MobileAccordion
-                key={nav.label}
-                label={nav.label}
-                items={nav.items}
-              />
-            ))}
+            {NAV_ITEMS.map((nav) => {
+              // Check if it's the Courses item with columns for mobile
+              if (nav.columns) {
+                return (
+                  <MobileCoursesAccordion
+                    key={nav.label}
+                    label={nav.label}
+                    columns={nav.columns}
+                    onClose={() => setMobileOpen(false)}
+                  />
+                );
+              }
+              // Regular single-column accordion
+              return (
+                <MobileAccordion
+                  key={nav.label}
+                  label={nav.label}
+                  items={nav.items}
+                  onClose={() => setMobileOpen(false)}
+                />
+              );
+            })}
 
             {/* Mobile bottom strip */}
             <div className="px-5 py-4 space-y-3">
-              {/* Contact & Apply buttons */}
-              <div className="flex gap-3">
-                <a
-                  href="#contact"
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition-colors border border-teal-200"
-                >
-                  Contact Us
-                </a>
-                <a
-                  href="#apply"
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white transition-all"
-                >
-                  <FileText size={16} />
-                  Apply Now
-                </a>
-              </div>
+              {/* Apply button */}
+              <Link
+                to="/apply"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white transition-all"
+              >
+                <FileText size={16} />
+                Apply Now
+              </Link>
 
               {/* Donate + Social */}
               <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                <a
-                  href="#donate"
+                <Link
+                  to="/donate"
+                  onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
                   style={{
                     background: "linear-gradient(135deg, #0d9488, #0891b2)",
@@ -438,7 +608,7 @@ export default function Navbar() {
                 >
                   <Heart size={14} strokeWidth={2.5} />
                   Donate
-                </a>
+                </Link>
                 <div className="flex items-center gap-4">
                   {SOCIAL_LINKS.map(({ Icon, href, label }) => (
                     <a
