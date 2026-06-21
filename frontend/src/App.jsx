@@ -11,6 +11,9 @@ import CTA from "./pages/home/CTA";
 
 import DiscoverScubaDive from "./pages/courses/PADI/DSD";
 import OpenWater from "./pages/courses/PADI/OpenWater";
+import AdvancedOpenWater from "./pages/courses/PADI/AdvancedOpenWater";
+import RescueDiver from "./pages/courses/PADI/RescueDiver";
+import Divemaster from "./pages/courses/PADI/Divemaster";
 
 const HomePage = () => {
   return (
@@ -26,6 +29,10 @@ const HomePage = () => {
   );
 };
 
+const AdvancedOpenWaterPage = () => {
+  return <AdvancedOpenWater />;
+};
+
 const DiscoverScubaDivingPage = () => {
   return (
     <div>
@@ -36,6 +43,14 @@ const DiscoverScubaDivingPage = () => {
 
 const OpenWaterPage = () => {
   return <OpenWater />;
+};
+
+const RescueDiverPage = () => {
+  return <RescueDiver />;
+};
+
+const DivemasterPage = () => {
+  return <Divemaster />;
 };
 
 const NotFoundPage = () => {
@@ -61,6 +76,15 @@ const App = () => {
             path="/courses/padi/open-water-diver"
             element={<OpenWaterPage />}
           />
+          <Route
+            path="/courses/padi/advanced-open-water-diver"
+            element={<AdvancedOpenWaterPage />}
+          />
+          <Route
+            path="/courses/padi/rescue-diver"
+            element={<RescueDiverPage />}
+          />
+          <Route path="/courses/padi/divemaster" element={<DivemasterPage />} />
         </Routes>
       </div>
     </Router>
