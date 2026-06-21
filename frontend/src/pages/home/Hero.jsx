@@ -50,10 +50,24 @@ export default function CoralSpotlight() {
     mouse: null,
     alpha: 0,
     targetAlpha: 0,
+    imageOpacity: 0, // For image fade-in
+    targetImageOpacity: 1, // Target full opacity
   });
 
   const [loaded, setLoaded] = useState(false);
   const [glowPos, setGlowPos] = useState({ x: -300, y: -300, on: false });
+  const [contentVisible, setContentVisible] = useState(false);
+
+  // ── Trigger content animation after load ──────────────────────────────────
+  useEffect(() => {
+    if (loaded) {
+      // Stagger the content animation slightly after image starts fading in
+      const timer = setTimeout(() => {
+        setContentVisible(true);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [loaded]);
 
   // ── Resize ─────────────────────────────────────────────────────────────────
   const resize = useCallback(() => {
@@ -81,10 +95,22 @@ export default function CoralSpotlight() {
     const W = canvas.width;
     const H = canvas.height;
 
+    // Lerp image opacity for fade-in effect
+    const imageFadeSpeed = 0.03;
+    s.imageOpacity += (s.targetImageOpacity - s.imageOpacity) * imageFadeSpeed;
+
+    // Lerp alpha toward target each frame → smooth enter / leave fade
     const speed =
       s.targetAlpha > s.alpha ? SPOTLIGHT.enterSpeed : SPOTLIGHT.leaveSpeed;
     s.alpha += (s.targetAlpha - s.alpha) * speed;
     const a = s.alpha;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, W, H);
+
+    // Apply global alpha for image fade-in
+    ctx.save();
+    ctx.globalAlpha = s.imageOpacity;
 
     // ── 1. Draw healthy reef as permanent base ──────────────────────────────
     const hf = coverFit(s.healthyImg.width, s.healthyImg.height, W, H);
@@ -165,6 +191,8 @@ export default function CoralSpotlight() {
     btm.addColorStop(1, "rgba(2,12,24,0.68)");
     ctx.fillStyle = btm;
     ctx.fillRect(0, 0, W, H);
+
+    ctx.restore();
   }, []);
 
   // ── RAF loop ───────────────────────────────────────────────────────────────
@@ -313,7 +341,7 @@ export default function CoralSpotlight() {
         </div>
       )}
 
-      {/* Hero Content - Centered Layout */}
+      {/* Hero Content - Centered Layout with Fade-in Animation */}
       {loaded && (
         <div
           style={{
@@ -338,7 +366,10 @@ export default function CoralSpotlight() {
               color: "#5cc8e8",
               marginBottom: "16px",
               fontWeight: 600,
-              opacity: 0.9,
+              opacity: contentVisible ? 0.9 : 0,
+              transform: contentVisible ? "translateY(0)" : "translateY(30px)",
+              transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
+              transitionDelay: "0.2s",
             }}
           >
             Coral Restoration Project since 2013
@@ -353,6 +384,10 @@ export default function CoralSpotlight() {
               margin: "0 0 20px",
               letterSpacing: "-0.03em",
               maxWidth: "800px",
+              opacity: contentVisible ? 1 : 0,
+              transform: contentVisible ? "translateY(0)" : "translateY(30px)",
+              transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
+              transitionDelay: "0.4s",
             }}
           >
             What We Stand
@@ -364,12 +399,15 @@ export default function CoralSpotlight() {
           <p
             style={{
               fontSize: "clamp(14px,1.3vw,17px)",
-              opacity: 0.75,
+              opacity: contentVisible ? 0.75 : 0,
               maxWidth: "880px",
               lineHeight: 1.7,
               margin: "0 0 36px",
               color: "white",
               fontWeight: 600,
+              transform: contentVisible ? "translateY(0)" : "translateY(30px)",
+              transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
+              transitionDelay: "0.6s",
             }}
           >
             GREEN, Inc. launches a full-time marine conservation operation in
@@ -386,6 +424,10 @@ export default function CoralSpotlight() {
               flexWrap: "wrap",
               justifyContent: "center",
               pointerEvents: "auto",
+              opacity: contentVisible ? 1 : 0,
+              transform: contentVisible ? "translateY(0)" : "translateY(30px)",
+              transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
+              transitionDelay: "0.8s",
             }}
           >
             <button
@@ -459,7 +501,12 @@ export default function CoralSpotlight() {
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             textAlign: "center",
-            animation: "breathe 3.5s ease-in-out infinite",
+            opacity: contentVisible ? 1 : 0,
+            transition: "opacity 1s ease-out",
+            transitionDelay: "1s",
+            animation: contentVisible
+              ? "breathe 3.5s ease-in-out infinite"
+              : "none",
           }}
         ></div>
       )}
@@ -492,33 +539,6 @@ export default function CoralSpotlight() {
               animation: "pulse 2.4s ease-in-out infinite",
             }}
           />
-          {/* Mid ring */}
-          {/* <div
-            style={{
-              position: "absolute",
-              width: "56px",
-              height: "56px",
-              top: "-28px",
-              left: "-28px",
-              borderRadius: "50%",
-              border: "1.5px solid rgba(100,210,255,0.28)",
-              boxShadow: "0 0 12px 2px rgba(60,180,240,0.15)",
-            }}
-          /> */}
-          {/* Inner bright dot */}
-          {/* <div
-            style={{
-              position: "absolute",
-              width: "8px",
-              height: "8px",
-              top: "-4px",
-              left: "-4px",
-              borderRadius: "50%",
-              background: "rgba(220,245,255,0.97)",
-              boxShadow:
-                "0 0 6px 3px rgba(100,210,255,0.7), 0 0 18px 8px rgba(40,170,230,0.35)",
-            }}
-          /> */}
         </div>
       )}
 

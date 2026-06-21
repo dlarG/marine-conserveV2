@@ -1,13 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Hero from "./pages/Hero";
+
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
+
+import Hero from "./pages/home/Hero";
+import WhyUs from "./pages/home/WhyUs";
+import Review from "./pages/home/Review";
+import FAQ from "./pages/home/Faq";
+import CTA from "./pages/home/CTA";
 
 const HomePage = () => {
   return (
     <div>
       <Navbar />
       <Hero />
+      <WhyUs />
+      <Review />
+      <FAQ />
+      <CTA />
       <Footer />
     </div>
   );

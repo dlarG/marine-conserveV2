@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Heart, Menu, X } from "lucide-react";
+import { ChevronDown, Heart, Menu, X, Phone, FileText } from "lucide-react";
 
 // ─── Inline social SVGs (lucide-react doesn't include these) ─────────────────
 const FacebookIcon = ({ size = 18 }) => (
@@ -54,7 +54,14 @@ const InstagramIcon = ({ size = 18 }) => (
 const NAV_ITEMS = [
   {
     label: "Organization",
-    items: ["History", "The Team", "Our Partners", "Blogs", "News"],
+    items: [
+      "History",
+      "Mission & Vission",
+      "The Team",
+      "Our Partners",
+      "Blogs",
+      "News",
+    ],
   },
   {
     label: "PADI Courses",
@@ -243,7 +250,7 @@ export default function Navbar() {
         }}
         className="fixed top-0 left-0 right-0 z-40"
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="max-w-8xl mx-auto px-5 sm:px-8">
           <div className="flex items-center justify-between h-[100px]">
             {/* ── Logo ── */}
             <a href="/" className="flex items-center gap-3 flex-shrink-0 group">
@@ -258,7 +265,7 @@ export default function Navbar() {
                     color: scrolled ? "#0f4c5c" : "#fff",
                     transition: "color 0.4s ease",
                   }}
-                  className="text-[21px] font-bold tracking-tight"
+                  className="text-[18px] font-bold tracking-tight"
                 >
                   GREEN Inc.
                 </div>
@@ -267,7 +274,7 @@ export default function Navbar() {
                     color: scrolled ? "#0d9488" : "rgba(255,255,255,0.65)",
                     transition: "color 0.4s ease",
                   }}
-                  className="text-[10px] tracking-[0.2em] ml-0.5 uppercase font-medium"
+                  className="text-[9px] tracking-[0.2em] ml-0.5 uppercase font-medium"
                 >
                   Sogod Bay
                 </div>
@@ -275,7 +282,7 @@ export default function Navbar() {
             </a>
 
             {/* ── Desktop nav — centered with generous spacing ── */}
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex items-center">
               {NAV_ITEMS.map((nav) => (
                 <Dropdown
                   key={nav.label}
@@ -286,10 +293,31 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* ── Right: Donate + Social ── */}
-            <div className="hidden lg:flex items-center gap-5">
+            {/* ── Right: Contact + Apply + Donate + Social ── */}
+            <div className="hidden lg:flex items-center gap-3">
+              {/* Contact Button */}
+              <a
+                href="#contact"
+                style={{
+                  color: scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)",
+                  transition: "all 0.4s ease",
+                }}
+                className="cursor-pointer uppercase relative flex items-center gap-2 text-sm font-light tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+              >
+                <Phone size={14} className="flex-shrink-0" />
+                Contact
+                <span
+                  style={{
+                    backgroundColor: scrolled
+                      ? "#0d9488"
+                      : "rgba(255,255,255,0.6)",
+                  }}
+                  className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full"
+                />
+              </a>
+
               {/* Social icons */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 ml-2">
                 {SOCIAL_LINKS.map(({ Icon, href, label }) => (
                   <a
                     key={label}
@@ -319,6 +347,18 @@ export default function Navbar() {
               />
 
               {/* Donate */}
+              <a
+                href="#apply"
+                style={{
+                  color: scrolled ? "#0d9488" : "#fff",
+                  borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
+                  transition: "all 0.4s ease",
+                }}
+                className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
+              >
+                <FileText size={14} className="flex-shrink-0" />
+                Apply Now
+              </a>
               <a
                 href="#donate"
                 className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
@@ -369,28 +409,48 @@ export default function Navbar() {
             ))}
 
             {/* Mobile bottom strip */}
-            <div className="flex items-center justify-between px-5 py-5 border-t border-gray-100 mt-1">
-              <a
-                href="#donate"
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
-                style={{
-                  background: "linear-gradient(135deg, #0d9488, #0891b2)",
-                }}
-              >
-                <Heart size={14} strokeWidth={2.5} />
-                Donate
-              </a>
-              <div className="flex items-center gap-4">
-                {SOCIAL_LINKS.map(({ Icon, href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="text-teal-600 hover:text-teal-800 transition-colors"
-                  >
-                    <Icon size={19} />
-                  </a>
-                ))}
+            <div className="px-5 py-4 space-y-3">
+              {/* Contact & Apply buttons */}
+              <div className="flex gap-3">
+                <a
+                  href="#contact"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 transition-colors border border-teal-200"
+                >
+                  Contact Us
+                </a>
+                <a
+                  href="#apply"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white transition-all"
+                >
+                  <FileText size={16} />
+                  Apply Now
+                </a>
+              </div>
+
+              {/* Donate + Social */}
+              <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                <a
+                  href="#donate"
+                  className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
+                  style={{
+                    background: "linear-gradient(135deg, #0d9488, #0891b2)",
+                  }}
+                >
+                  <Heart size={14} strokeWidth={2.5} />
+                  Donate
+                </a>
+                <div className="flex items-center gap-4">
+                  {SOCIAL_LINKS.map(({ Icon, href, label }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      aria-label={label}
+                      className="text-teal-600 hover:text-teal-800 transition-colors"
+                    >
+                      <Icon size={19} />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
