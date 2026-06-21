@@ -8,7 +8,7 @@ const TabLink = ({ active, onClick, children }) => {
     <button
       type="button"
       onClick={onClick}
-      className={`cursor-pointer relative px-1 pb-4 text-sm md:text-base font-medium transition-colors ${
+      className={`cursor-pointer relative px-1 pb-4 text-sm font-medium transition-colors ${
         active ? "text-teal-700" : "text-gray-500 hover:text-gray-800"
       }`}
     >
@@ -241,15 +241,15 @@ const OpenWater = () => {
         />
         <div className="relative max-w-7xl mx-auto px-4 pt-28 pb-16">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-semibold">
               Diver Certification Path
             </div>
 
-            <h1 className="mt-5 text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-tight text-white">
               PADI Open Water Diver
             </h1>
 
-            <p className="mt-4 text-base md:text-lg text-white/85 leading-relaxed">
+            <p className="mt-4 text-base md:text-base text-white/85 leading-relaxed">
               This courses is the first step in your scuba diving journey, right
               after the Discover Scuba Diving experience.
             </p>
@@ -257,13 +257,13 @@ const OpenWater = () => {
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 href="#details"
-                className="px-5 py-2.5 rounded-full bg-teal-600 text-white font-medium hover:bg-teal-700 transition-colors"
+                className="px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"
               >
                 View details
               </a>
               <a
                 href="#dates"
-                className="px-5 py-2.5 rounded-full bg-white/10 text-white font-medium border border-white/20 hover:bg-white/15 transition-colors"
+                className="px-4 py-2 text-sm rounded-full bg-white/10 text-white font-normal border border-white/20 hover:bg-white/15 transition-colors"
               >
                 Course dates
               </a>
@@ -277,11 +277,11 @@ const OpenWater = () => {
         id="details"
         className="bg-gradient-to-b from-white to-teal-50/60"
       >
-        <div className="max-w-7xl mx-auto px-4 py-14">
+        <div className="max-w-7xl mx-auto px-2 py-10">
           {/* Top tabs bar + Apply button */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             {/* Scrollable tabs on mobile */}
-            <div className="w-full overflow-x-auto scrollbar-hide -mx-4 px-4">
+            <div className="w-full overflow-x-auto scrollbar-hide">
               <div className="flex items-center gap-4 md:gap-8 border-b border-gray-200 min-w-max">
                 {tabs.map((t) => (
                   <TabLink
@@ -298,7 +298,7 @@ const OpenWater = () => {
             <button
               type="button"
               //   onClick={() => setIsApplyOpen(true)}
-              className="cursor-pointer w-full md:w-auto px-6 py-3 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
+              className="cursor-pointer text-base w-full md:w-auto px-3 py-2 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
             >
               APPLY NOW
             </button>
@@ -317,22 +317,30 @@ const OpenWater = () => {
                 </div>
               </div>
 
-              <div className="mt-8 rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm"></div>
+              <img
+                src={active.rightImage.src}
+                alt={active.rightImage.alt || "Certificate image"}
+                className="mt-4 w-[71vh] h-auto max-h-[71vh] object-contain bg-white select-none border border-gray-200 rounded-lg shadow-sm mx-auto"
+                loading="lazy"
+                draggable={false}
+                onDragStart={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
+              />
             </div>
           ) : (
             <>
               <div className="mt-10 grid lg:grid-cols-2 gap-8 md:gap-10 items-start">
                 <div className="text-gray-700 leading-relaxed">
-                  <h3 className="text-xl md:text-3xl font-light text-gray-700">
+                  <h3 className="text-xl md:text-2xl font-light text-gray-700">
                     {active?.leftTitle}
                   </h3>
-                  <p className="mt-4 md:mt-6 text-sm md:text-lg text-gray-600">
+                  <p className="mt-4 md:mt-6 text-sm md:text-base text-gray-600">
                     {active?.leftText}
                   </p>
 
                   <a
                     href="#dates"
-                    className="inline-flex mt-8 md:mt-10 px-6 py-3 rounded-xl border-2 border-teal-600 text-teal-700 font-bold hover:bg-teal-600 hover:text-white transition-colors text-sm md:text-base"
+                    className="inline-flex mt-8 md:mt-10 px-6 py-3 rounded-xl border-2 border-teal-600 text-teal-700 font-bold hover:bg-teal-600 hover:text-white transition-colors text-sm md:text-sm"
                   >
                     VIEW COURSE DATES
                   </a>
@@ -340,11 +348,11 @@ const OpenWater = () => {
 
                 {/* Right bullets */}
                 <div>
-                  <h3 className="text-xl md:text-3xl font-light text-gray-700">
+                  <h3 className="text-xl md:text-2xl font-light text-gray-700">
                     {active?.rightTitle}
                   </h3>
 
-                  <div className="mt-4 md:mt-6">
+                  <div className="mt-4 md:mt-6 text-base md:text-base text-gray-600">
                     <BulletList items={active?.rightItems || []} />
                   </div>
                 </div>
@@ -356,10 +364,10 @@ const OpenWater = () => {
 
       <section id="dates" className="bg-white">
         <div className="max-w-7xl mx-auto px-4 py-14">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+          <h2 className="text-2xl md:text-2xl font-bold text-teal-600">
             Course Dates
           </h2>
-          <p className="mt-2 text-gray-600 max-w-2xl">
+          <p className="mt-2 text-gray-600 max-w-2xl text-sm md:text-base">
             We offer regular Discover Scuba Diving sessions throughout the year.
           </p>
 
@@ -413,7 +421,7 @@ const OpenWater = () => {
                 className="rounded-2xl border border-gray-100 shadow-sm p-6 bg-gradient-to-b from-green-50 to-green-50"
               >
                 <div className="text-sm text-gray-500">Date Range</div>
-                <div className="mt-1 text-xl font-extrabold text-gray-900">
+                <div className="mt-1 text-lg font-extrabold text-gray-900">
                   {d.from} – {d.to}
                 </div>
 
@@ -430,17 +438,17 @@ const OpenWater = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-3xl font-bold text-gray-900 mb-4">
                 Continue Your Journey
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-gray-600 text-base">
                 Ready for more? Take the next step with our certification
                 courses.
               </p>
             </div>
             <a
               href="/courses"
-              className="text-teal-700 font-semibold hover:text-teal-800 inline-flex items-center gap-2 group"
+              className="text-base text-teal-700 font-semibold hover:text-teal-800 inline-flex items-center gap-2 group"
             >
               View All Courses
               <span className="group-hover:translate-x-1 transition-transform">
@@ -493,17 +501,17 @@ const OpenWater = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
                 <div className="absolute top-6 left-6">
-                  <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full border border-white/30">
+                  <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded-full border border-white/30">
                     {c.level}
                   </span>
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                  <h3 className="text-xl font-bold text-white mb-2">
                     {c.title}
                   </h3>
-                  <p className="text-white/80 mb-4">{c.description}</p>
-                  <span className="inline-flex items-center text-white font-semibold group-hover:gap-3 transition-all">
+                  <p className="text-white/80 mb-4 text-sm">{c.description}</p>
+                  <span className="inline-flex items-center text-white font-semibold group-hover:gap-3 transition-all text-sm">
                     Learn More
                     <span className="ml-2 group-hover:translate-x-2 transition-transform">
                       →
