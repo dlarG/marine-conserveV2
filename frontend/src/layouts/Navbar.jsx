@@ -513,7 +513,7 @@ export default function Navbar() {
                   borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
                   transition: "all 0.4s ease",
                 }}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
+                className="uppercase flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
               >
                 <FileText size={14} className="flex-shrink-0" />
                 Apply
@@ -522,10 +522,8 @@ export default function Navbar() {
               {/* Donate */}
               <Link
                 to="/donate"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
+                className="uppercase flex items-center gap-2 px-5 py-2.5 bg-teal-600 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #0d9488 0%, #0891b2 100%)",
                   boxShadow: scrolled
                     ? "0 2px 14px rgba(13,148,136,0.4)"
                     : "0 2px 14px rgba(0,0,0,0.25)",

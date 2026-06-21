@@ -10,6 +10,7 @@ import FAQ from "./pages/home/Faq";
 import CTA from "./pages/home/CTA";
 
 import DiscoverScubaDive from "./pages/courses/PADI/DSD";
+import OpenWater from "./pages/courses/PADI/OpenWater";
 
 const HomePage = () => {
   return (
@@ -33,6 +34,10 @@ const DiscoverScubaDivingPage = () => {
   );
 };
 
+const OpenWaterPage = () => {
+  return <OpenWater />;
+};
+
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -51,6 +56,10 @@ const App = () => {
           <Route
             path="/courses/padi/discover-scuba-diving"
             element={<DiscoverScubaDivingPage />}
+          />
+          <Route
+            path="/courses/padi/open-water-diver"
+            element={<OpenWaterPage />}
           />
         </Routes>
       </div>
