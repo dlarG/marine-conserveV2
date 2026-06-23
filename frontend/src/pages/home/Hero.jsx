@@ -292,7 +292,7 @@ export default function CoralSpotlight() {
         height: "100vh",
         overflow: "hidden",
         background: "#010c18",
-        cursor: "none",
+        cursor: "default",
         fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
       }}
     >
