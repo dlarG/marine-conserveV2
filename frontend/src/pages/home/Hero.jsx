@@ -397,10 +397,11 @@ export default function CoralSpotlight() {
 
           {/* Description */}
           <p
+            className="mt-4 text-base md:text-lg text-white/85 leading-relaxed"
             style={{
               fontSize: "clamp(14px,1.3vw,17px)",
               opacity: contentVisible ? 0.75 : 0,
-              maxWidth: "880px",
+              maxWidth: "900px",
               lineHeight: 1.7,
               margin: "0 0 36px",
               color: "white",

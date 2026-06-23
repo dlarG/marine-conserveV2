@@ -1,7 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import Navbar from "../../../layouts/Navbar";
 import Footer from "../../../layouts/Footer";
-// import ApplyNowModal from "./ApplyNowModal";
+// import ApplyNowModalWithCert from "./ApplyNowModalWithCert";
 
 const TabLink = ({ active, onClick, children }) => {
   return (
@@ -54,11 +54,7 @@ const BulletList = ({ items }) => {
 //   );
 // };
 
-const DiscoverScubaDive = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    document.title = "PADI Discover Scuba Diving Course | GREEN Inc.";
-  }, []);
+const OpenWater = () => {
   //   const [isApplyOpen, setIsApplyOpen] = useState(false);
   //   const dateRanges = useMemo(
   //     () => [
@@ -139,22 +135,22 @@ const DiscoverScubaDive = () => {
   // NEW: content model for the two-column layout
   const tabModel = useMemo(() => {
     const baseDescription =
-      "Discover Scuba Diving (DSD) is a beginner-friendly, non-certification experience that allows you to try scuba diving under the direct supervision of an instructor. Typically lasting a few hours to a full day, it includes a safety briefing, shallow water skills practice, and a guided, shallow open-water dive to experience breathing underwater.";
+      "The PADI Open Water Diver course is the foundational, globally recognized scuba certification, allowing you to dive independently with a buddy to a maximum depth of 18 meters (60 feet). It typically takes 3–4 days, combining theoretical knowledge, confined water skill practice, and four open water check-out dives.";
 
     return {
       skills: {
-        leftTitle: "Scuba Diving Basics",
+        leftTitle: "PADI Open Water Overview",
         leftText: baseDescription,
         rightTitle: "What You'll Learn",
         rightItems: [
-          "Basic scuba equipment introduction and setup",
-          "Pre-dive safety check & buddy procedures",
-          "Breathing underwater and regulator clearing",
-          "Buoyancy basics and underwater positioning",
-          "Equalization techniques",
-          "Basic mask skills (clear & recover)",
-          "Hand signals and underwater communication",
-          "Safe entries/exits and shallow-water confidence building",
+          "Equipment Setup: Learning to assemble and check your scuba unit.",
+          "Underwater Navigation: Basic use of a compass and natural landmarks.",
+          "Safety Procedures: Practice for emergency scenarios, like using an alternate air source or performing a controlled emergency swimming ascent (CESA).",
+          "Buoyancy Control: Understanding and managing your buoyancy underwater.",
+          "Equalization Techniques: Learning how to equalize pressure in your ears during descent.",
+          "Mask Skills: Practicing clearing and recovering your mask underwater.",
+          "Communication: Using hand signals and other methods to communicate underwater.",
+          "Entry and Exit Techniques: Safe ways to enter and exit the water.",
         ],
       },
       prereq: {
@@ -163,35 +159,32 @@ const DiscoverScubaDive = () => {
           "Before joining, make sure you're comfortable in the water and meet the minimum requirements. If you have any medical concerns, we recommend a clearance prior to participation.",
         rightTitle: "Prerequisites",
         rightItems: [
-          "Comfortable in water (no advanced swimming needed)",
-          "Willingness to learn and follow instructor guidance",
-          "Minimum age requirement (set your policy)",
+          "Discover Scuba Diving experience or equivalent comfort in the water",
+          "Discover Scuba Diving Certificate (if applicable)",
+          "Minimum age requirement (10 years old, or 8 with parental consent)",
           "Completed medical questionnaire / clearance if required",
         ],
       },
       inclusion: {
         leftTitle: "What's Included",
         leftText:
-          "We provide the instruction and equipment needed for your introductory session so you can focus on learning and enjoying the experience.",
+          "We provide the instruction and equipment needed for your session so you can focus on learning and enjoying the experience.",
         rightTitle: "Included",
         rightItems: [
-          "Instructor-led briefing & guidance",
-          "Use of scuba gear during the session (BCD, regulator, tank, weights)",
-          "Basic skills practice and safety orientation",
-          "Assistance throughout the session",
-          "Guided shallow-water dive experience",
-          "Photos of your dive (optional add-on)",
-          "Certificate of participation",
-          "Certificate of recognition (not a full certification, but a great keepsake)",
+          "Professional instruction by a certified PADI instructor",
+          "Use of scuba equipment (mask, snorkel, fins, regulator, buoyancy control device, tank)",
+          "Pool or confined water training sessions(5 sessions)",
+          "4 open water dive experience (40 ft on the first 2 dives and 60ft on your final dive)",
+          "Briefing and debriefing sessions",
         ],
       },
       fees: {
         leftTitle: "Pricing",
         leftText:
-          "Pricing depends on group size, schedule, and any add-ons. All prices are in pesos and include VAT. Contact us for custom group rates or private sessions.",
+          "The course is 3-4 days and gives you the foundational knowledge and skills you need to be a diver.",
         rightTitle: "Tuition Fees",
         rightItems: [
-          "Half-day Session: ₱4,500.00 per person",
+          "Full Price: ₱19,450.00",
           "Group discounts: optional",
           "Reservation policy: optional",
         ],
@@ -211,10 +204,10 @@ const DiscoverScubaDive = () => {
       certificate: {
         leftTitle: "Certificate of Participation Preview",
         leftText:
-          "Upon completing your Discover Scuba Diving experience, you'll receive a certificate of participation. This certificate is a great keepsake to commemorate your first underwater adventure and can also serve as a stepping stone if you choose to pursue further scuba certifications in the future with us.",
+          "Upon completing your PADI Open Water experience, you'll receive a certificate of participation from us.",
         rightTitle: "Certificate Preview",
         rightImage: {
-          src: "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775607945/Blue_and_Gold_Elegant_Certificate_Workshop_Participation_2_lshe1s.png",
+          src: "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775616064/Blue_and_Gold_Elegant_Certificate_Workshop_Participation_5_kqw3pj.png",
           alt: "Certificate preview (placeholder image)",
         },
         rightItems: [
@@ -240,7 +233,7 @@ const DiscoverScubaDive = () => {
           className="absolute inset-0 opacity-90"
           style={{
             backgroundImage:
-              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775547474/pexels-aydenzaki-8029908_gdieio.jpg)",
+              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549211/pexels-domingo-dias-260502921-12678039_uygdph.jpg)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -253,14 +246,12 @@ const DiscoverScubaDive = () => {
             </div>
 
             <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-tight text-white">
-              Discover Scuba Diving
+              PADI Open Water Diver
             </h1>
 
             <p className="mt-4 text-base md:text-base text-white/85 leading-relaxed">
-              Tempted with the idea of blowing bubbles underwater but just not
-              sure if you will like it? Or do you really want to get certified
-              but just don’t have the time? Then why not give the PADI discover
-              scuba dive a go.
+              This courses is the first step in your scuba diving journey, right
+              after the Discover Scuba Diving experience.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -469,13 +460,13 @@ const DiscoverScubaDive = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: "Open Water Diver",
+                title: "Discover Scuba Diving",
                 description:
-                  "Get certified to dive and learn core skills for independent diving with a buddy.",
-                href: "/courses/open-water",
+                  "Get a taste of scuba diving with a guided experience in a pool or confined water setting, perfect for beginners.",
+                href: "/courses/discover-scuba",
                 image:
-                  "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549211/pexels-domingo-dias-260502921-12678039_uygdph.jpg",
-                level: "Beginner",
+                  "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775547474/pexels-aydenzaki-8029908_gdieio.jpg",
+                level: "Previous Course",
               },
               {
                 title: "Advanced Open Water",
@@ -484,7 +475,7 @@ const DiscoverScubaDive = () => {
                 href: "/courses/advanced-open-water",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549270/pexels-diego-sandoval-3158170-4767068_ccrfv9.jpg",
-                level: "Intermediate",
+                level: "Next Course",
               },
               {
                 title: "Rescue Diver",
@@ -534,16 +525,17 @@ const DiscoverScubaDive = () => {
       </section>
 
       <Footer />
-      {/* <ApplyNowModal
+      {/* <ApplyNowModalWithCert
         isOpen={isApplyOpen}
         onClose={() => setIsApplyOpen(false)}
-        courseKey="discover-scuba"
-        courseTitle="Discover Scuba Diving"
+        courseKey="open-water"
+        courseTitle="PADI Open Water Diver"
         dateOptions={dateOptions}
         apiBaseUrl="http://localhost:5000"
+        certLabel="Discover Scuba Certificate Photo *"
       /> */}
     </div>
   );
 };
 
-export default DiscoverScubaDive;
+export default OpenWater;

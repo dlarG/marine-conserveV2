@@ -1,5 +1,4 @@
 // WhyUs.jsx
-import { Shield, Leaf, Users, Globe } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import useScrollAnimation from "../../utilities/useScrollAnimation";
 
@@ -12,7 +11,7 @@ const FeatureCard = ({ feature, index }) => {
   return (
     <div
       ref={ref}
-      className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+      className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden"
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0)" : "translateY(40px)",
@@ -21,25 +20,30 @@ const FeatureCard = ({ feature, index }) => {
         }s, transform 0.6s ease-out ${index * 0.15}s`,
       }}
     >
-      {/* Gradient Line on Hover */}
-      <div
-        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-      />
+      {/* Image Section */}
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={feature.image}
+          alt={feature.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        {/* Overlay gradient on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      {/* Icon */}
-      <div
-        className={`${feature.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-      >
-        <span className={feature.iconColor}>{feature.icon}</span>
+        {/* Gradient Line on Hover */}
+        <div
+          className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+        />
       </div>
 
-      {/* Content */}
-      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-      <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-
-      {/* Subtle number decoration */}
-      <div className="absolute bottom-4 right-6 text-6xl font-bold text-gray-50 select-none">
-        {String(index + 1).padStart(2, "0")}
+      {/* Content Section */}
+      <div className="p-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-3">
+          {feature.title}
+        </h3>
+        <p className="text-gray-600 leading-relaxed text-sm">
+          {feature.description}
+        </p>
       </div>
     </div>
   );
@@ -138,7 +142,7 @@ const WhyUs = () => {
 
   const features = [
     {
-      icon: <Shield className="w-7 h-7" />,
+      image: "/asset/track.jpg", // Scuba diver on healthy reef
       title: "Proven Track Record",
       description:
         "Over a decade of successful marine conservation with measurable impact on reef restoration and marine biodiversity.",
@@ -147,7 +151,7 @@ const WhyUs = () => {
       iconColor: "text-teal-600",
     },
     {
-      icon: <Users className="w-7 h-7" />,
+      image: "/asset/community.jpg", // Community working together
       title: "Community-Driven",
       description:
         "Working hand-in-hand with local communities in Southern Leyte to create sustainable, long-lasting environmental change.",
@@ -156,7 +160,7 @@ const WhyUs = () => {
       iconColor: "text-blue-600",
     },
     {
-      icon: <Leaf className="w-7 h-7" />,
+      image: "/asset/science.jpg", // Marine biologist researching
       title: "Science-Based Methods",
       description:
         "Every initiative is backed by marine biology research and data collection to ensure maximum ecological impact.",
@@ -165,7 +169,7 @@ const WhyUs = () => {
       iconColor: "text-green-600",
     },
     {
-      icon: <Globe className="w-7 h-7" />,
+      image: "/asset/global.jpg", // Global recognition/award
       title: "Global Recognition",
       description:
         "Partnered with international organizations and recognized for excellence in coral conservation and marine protection.",

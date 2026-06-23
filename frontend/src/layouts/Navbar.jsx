@@ -58,7 +58,7 @@ const NAV_ITEMS = [
     items: [
       { name: "History", path: "/organization/history" },
       { name: "Mission & Vision", path: "/organization/mission-vision" },
-      { name: "The Team", path: "/organization/the-team" },
+      { name: "The Team", path: "/team" },
       { name: "Our Partners", path: "/organization/our-partners" },
       { name: "Blogs", path: "/organization/blogs" },
       { name: "News", path: "/organization/news" },
@@ -90,14 +90,14 @@ const NAV_ITEMS = [
         items: [
           {
             name: "Marine Photography",
-            path: "/courses/specialty/marine-photography",
+            path: "/courses/special/marine-photography",
           },
-          { name: "Deep Diver", path: "/courses/specialty/deep-diver" },
-          { name: "Navigation", path: "/courses/specialty/navigation" },
-          { name: "Night Diver", path: "/courses/specialty/night-diver" },
+          { name: "Deep Diver", path: "/courses/special/deep-diver" },
+          { name: "Navigation", path: "/courses/special/dive-navigation" },
+          { name: "Night Diver", path: "/courses/special/night-diver" },
           {
             name: "Peak Performance Buoyancy",
-            path: "/courses/specialty/peak-performance-buoyancy",
+            path: "/courses/special/peak-performance-buoyancy",
           },
         ],
       },
@@ -513,7 +513,7 @@ export default function Navbar() {
                   borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
                   transition: "all 0.4s ease",
                 }}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
+                className="uppercase flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
               >
                 <FileText size={14} className="flex-shrink-0" />
                 Apply
@@ -522,10 +522,8 @@ export default function Navbar() {
               {/* Donate */}
               <Link
                 to="/donate"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
+                className="uppercase flex items-center gap-2 px-5 py-2.5 bg-teal-600 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #0d9488 0%, #0891b2 100%)",
                   boxShadow: scrolled
                     ? "0 2px 14px rgba(13,148,136,0.4)"
                     : "0 2px 14px rgba(0,0,0,0.25)",

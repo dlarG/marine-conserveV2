@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import Navbar from "../../../layouts/Navbar";
 import Footer from "../../../layouts/Footer";
 // import ApplyNowModal from "./ApplyNowModal";
+// import ApplyNowModalWithCert from "./ApplyNowModalWithCert";
 
 const TabLink = ({ active, onClick, children }) => {
   return (
@@ -35,93 +36,77 @@ const BulletList = ({ items }) => {
   );
 };
 
-// const CourseTile = ({ title, description, href }) => {
-//   return (
-//     <a
-//       href={href}
-//       className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all p-6"
-//     >
-//       <div className="flex items-start justify-between gap-4">
-//         <div>
-//           <h4 className="text-lg font-extrabold text-gray-900 group-hover:text-teal-700 transition-colors">
-//             {title}
-//           </h4>
-//           <p className="mt-2 text-sm text-gray-600">{description}</p>
-//         </div>
-//         <span className="text-teal-700 font-semibold">→</span>
-//       </div>
-//     </a>
-//   );
-// };
+const RescueDiver = () => {
+  // const [isApplyOpen, setIsApplyOpen] = useState(false);
 
-const DiscoverScubaDive = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "PADI Discover Scuba Diving Course | GREEN Inc.";
+    document.title = "PADI Rescue Diver Course | GREEN Inc.";
   }, []);
-  //   const [isApplyOpen, setIsApplyOpen] = useState(false);
-  //   const dateRanges = useMemo(
-  //     () => [
-  //       {
-  //         from: "January 1st",
-  //         to: "February 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "February 1st",
-  //         to: "March 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "March 10th",
-  //         to: "April 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //       {
-  //         from: "April 20th",
-  //         to: "May 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "June 20th",
-  //         to: "July 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "August 20th",
-  //         to: "September 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "October 1st",
-  //         to: "November 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "November 10th",
-  //         to: "December 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //     ],
-  //     []
-  //   );
 
-  //   const dateOptions = useMemo(
-  //     () =>
-  //       dateRanges.map((d) => ({
-  //         value: `${d.from} - ${d.to}`,
-  //         label: `${d.from} - ${d.to} (${d.time})`,
-  //       })),
-  //     [dateRanges]
-  //   );
+  // const dateRanges = useMemo(
+  //   () => [
+  //     {
+  //       from: "January 1st",
+  //       to: "February 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "February 1st",
+  //       to: "March 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "March 10th",
+  //       to: "April 10th",
+  //       time: "Opens Daily",
+  //       slots: "6 slots",
+  //     },
+  //     {
+  //       from: "April 20th",
+  //       to: "May 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "June 20th",
+  //       to: "July 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "August 20th",
+  //       to: "September 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "October 1st",
+  //       to: "November 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "November 10th",
+  //       to: "December 10th",
+  //       time: "Opens Daily",
+  //       slots: "6 slots",
+  //     },
+  //   ],
+  //   []
+  // );
+
+  // const dateOptions = useMemo(
+  //   () =>
+  //     dateRanges.map((d) => ({
+  //       value: `${d.from} - ${d.to}`,
+  //       label: `${d.from} - ${d.to} (${d.time})`,
+  //     })),
+  //   [dateRanges]
+  // );
+
   const tabs = useMemo(
     () => [
       { key: "skills", label: "Description" },
@@ -136,70 +121,79 @@ const DiscoverScubaDive = () => {
 
   const [activeTab, setActiveTab] = useState("skills");
 
-  // NEW: content model for the two-column layout
   const tabModel = useMemo(() => {
     const baseDescription =
-      "Discover Scuba Diving (DSD) is a beginner-friendly, non-certification experience that allows you to try scuba diving under the direct supervision of an instructor. Typically lasting a few hours to a full day, it includes a safety briefing, shallow water skills practice, and a guided, shallow open-water dive to experience breathing underwater.";
+      "The Rescue Diver course develops your ability to prevent problems, manage stress, and respond to dive emergencies. You'll practice realistic scenarios and improve your confidence as a buddy and a leader underwater.";
 
     return {
       skills: {
-        leftTitle: "Scuba Diving Basics",
+        leftTitle: "Rescue Diver Overview",
         leftText: baseDescription,
-        rightTitle: "What You'll Learn",
+        leftHighlight: {
+          title: "This course is 4-5 days and consists of:",
+          sections: [
+            {
+              label: "5 engaging classroom sessions",
+              description:
+                "Will expand your rescue knowledge through reviews and a final exam",
+              isBullet: true,
+            },
+            {
+              label: "10 exciting skill exercises",
+              description: "Will help you master in-water rescue skills",
+              isBullet: true,
+            },
+            {
+              label: "2 final in-water emergency scenarios",
+              description: "Will then test your newfound knowledge",
+              isBullet: true,
+            },
+          ],
+          note: "You should always be prepared during this course as you never know when a diver will need your help.",
+        },
+        rightTitle: "Skills You'll Learn",
         rightItems: [
-          "Basic scuba equipment introduction and setup",
-          "Pre-dive safety check & buddy procedures",
-          "Breathing underwater and regulator clearing",
-          "Buoyancy basics and underwater positioning",
-          "Equalization techniques",
-          "Basic mask skills (clear & recover)",
-          "Hand signals and underwater communication",
-          "Safe entries/exits and shallow-water confidence building",
+          "Risk awareness and accident prevention",
+          "Self-rescue skills and stress management",
+          "Assisting tired or panicked divers",
+          "Search patterns and missing diver procedures",
+          "Bringing an unresponsive diver to the surface",
+          "In-water rescue breathing and exits",
+          "Emergency action planning and coordination",
         ],
       },
       prereq: {
         leftTitle: "Requirements",
         leftText:
-          "Before joining, make sure you're comfortable in the water and meet the minimum requirements. If you have any medical concerns, we recommend a clearance prior to participation.",
+          "Rescue training is challenging and rewarding. Make sure you meet the prerequisites and are comfortable in open water conditions.",
         rightTitle: "Prerequisites",
         rightItems: [
-          "Comfortable in water (no advanced swimming needed)",
-          "Willingness to learn and follow instructor guidance",
-          "Minimum age requirement (set your policy)",
-          "Completed medical questionnaire / clearance if required",
+          "This course is available to anyone who has an advanced diving certificate.",
         ],
       },
       inclusion: {
         leftTitle: "What's Included",
         leftText:
-          "We provide the instruction and equipment needed for your introductory session so you can focus on learning and enjoying the experience.",
+          "We guide you through scenario-based training with structured assessments and coaching.",
         rightTitle: "Included",
         rightItems: [
-          "Instructor-led briefing & guidance",
-          "Use of scuba gear during the session (BCD, regulator, tank, weights)",
-          "Basic skills practice and safety orientation",
-          "Assistance throughout the session",
-          "Guided shallow-water dive experience",
-          "Photos of your dive (optional add-on)",
-          "Certificate of participation",
-          "Certificate of recognition (not a full certification, but a great keepsake)",
+          "Instructor-led rescue scenario training",
+          "Briefings and debriefings",
+          "In-water practice sessions",
+          "Performance feedback and coaching",
+          "Course completion guidance (processing may vary)",
         ],
       },
       fees: {
         leftTitle: "Pricing",
-        leftText:
-          "Pricing depends on group size, schedule, and any add-ons. All prices are in pesos and include VAT. Contact us for custom group rates or private sessions.",
+        leftText: "Pricing depends on group size, schedule, and any add-ons.",
         rightTitle: "Tuition Fees",
-        rightItems: [
-          "Half-day Session: ₱4,500.00 per person",
-          "Group discounts: optional",
-          "Reservation policy: optional",
-        ],
+        rightItems: ["Course Package: ₱19,950.00"],
       },
       not_included: {
         leftTitle: "What's Not Included",
         leftText:
-          "To avoid surprises, these common items are usually not covered unless you specify otherwise.",
+          "Common items that may not be included unless specified in your package.",
         rightTitle: "Not Included",
         rightItems: [
           "Transportation to/from the dive site",
@@ -209,20 +203,14 @@ const DiscoverScubaDive = () => {
         ],
       },
       certificate: {
-        leftTitle: "Certificate of Participation Preview",
+        leftTitle: "Certification Preview",
         leftText:
-          "Upon completing your Discover Scuba Diving experience, you'll receive a certificate of participation. This certificate is a great keepsake to commemorate your first underwater adventure and can also serve as a stepping stone if you choose to pursue further scuba certifications in the future with us.",
+          "Upon completion you will receive a PADI Project AWARE Rescue Diver Certificate that is a lifelong diving cert accepted worldwide and also takes you one step closer to beginning your PADI Divemaster Course, the first professional rating in PADI.",
         rightTitle: "Certificate Preview",
         rightImage: {
-          src: "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775607945/Blue_and_Gold_Elegant_Certificate_Workshop_Participation_2_lshe1s.png",
+          src: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1400&q=80",
           alt: "Certificate preview (placeholder image)",
         },
-        rightItems: [
-          "Official certificate of participation",
-          "Includes your name and date of the experience",
-          "Not a scuba diving certification (not valid for independent diving)",
-          "Great for sharing with friends and family or as a memento",
-        ],
       },
     };
   }, []);
@@ -240,7 +228,7 @@ const DiscoverScubaDive = () => {
           className="absolute inset-0 opacity-90"
           style={{
             backgroundImage:
-              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775547474/pexels-aydenzaki-8029908_gdieio.jpg)",
+              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549361/pexels-cannontaler-20481590_yck89a.jpg)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -253,14 +241,15 @@ const DiscoverScubaDive = () => {
             </div>
 
             <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-tight text-white">
-              Discover Scuba Diving
+              PADI Rescue Diver
             </h1>
 
             <p className="mt-4 text-base md:text-base text-white/85 leading-relaxed">
-              Tempted with the idea of blowing bubbles underwater but just not
-              sure if you will like it? Or do you really want to get certified
-              but just don’t have the time? Then why not give the PADI discover
-              scuba dive a go.
+              Could you recognize and help a diver in distress? Could you calm a
+              panicked diver down? What would you do if you came across an
+              unconscious diver? Do you have the confidence to take charge? This
+              fun filled and challenging course will teach you how to help
+              yourself and others who may be in need.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -287,9 +276,7 @@ const DiscoverScubaDive = () => {
         className="bg-gradient-to-b from-white to-teal-50/60"
       >
         <div className="max-w-7xl mx-auto px-2 py-10">
-          {/* Top tabs bar + Apply button */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            {/* Scrollable tabs on mobile */}
             <div className="w-full overflow-x-auto scrollbar-hide">
               <div className="flex items-center gap-4 md:gap-8 border-b border-gray-200 min-w-max">
                 {tabs.map((t) => (
@@ -306,19 +293,19 @@ const DiscoverScubaDive = () => {
 
             <button
               type="button"
-              //   onClick={() => setIsApplyOpen(true)}
+              // onClick={() => setIsApplyOpen(true)}
               className="cursor-pointer text-base w-full md:w-auto px-3 py-2 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
             >
               APPLY NOW
             </button>
           </div>
-          {/* CHANGED: Certificate tab becomes full-width image preview */}
+
           {activeTab === "certificate" && active?.rightImage?.src ? (
             <div className="mt-10">
               <div className="flex flex-col gap-4">
                 <div>
                   <h3 className="text-xl md:text-3xl font-light text-gray-700">
-                    {active?.leftTitle || "Certificate of Participation"}
+                    {active?.leftTitle || "Certificate Preview"}
                   </h3>
                   <p className="mt-3 text-sm md:text-base text-gray-600 max-w-3xl">
                     {active?.leftText}
@@ -337,47 +324,104 @@ const DiscoverScubaDive = () => {
               />
             </div>
           ) : (
-            <>
-              <div className="mt-10 grid lg:grid-cols-2 gap-8 md:gap-10 items-start">
-                <div className="text-gray-700 leading-relaxed">
-                  <h3 className="text-xl md:text-2xl font-light text-gray-700">
-                    {active?.leftTitle}
-                  </h3>
-                  <p className="mt-4 md:mt-6 text-sm md:text-base text-gray-600">
-                    {active?.leftText}
-                  </p>
+            <div className="mt-10 grid lg:grid-cols-2 gap-8 md:gap-10 items-start">
+              <div className="text-gray-700 leading-relaxed">
+                <h3 className="text-xl md:text-2xl font-light text-gray-700">
+                  {active?.leftTitle}
+                </h3>
 
-                  <a
-                    href="#dates"
-                    className="inline-flex mt-8 md:mt-10 px-6 py-3 rounded-xl border-2 border-teal-600 text-teal-700 font-bold hover:bg-teal-600 hover:text-white transition-colors text-sm md:text-sm"
-                  >
-                    VIEW COURSE DATES
-                  </a>
-                </div>
+                {/* Course overview text */}
+                <p className="mt-4 md:mt-6 text-sm md:text-base text-gray-600">
+                  {active?.leftText}
+                </p>
 
-                {/* Right bullets */}
-                <div>
-                  <h3 className="text-xl md:text-2xl font-light text-gray-700">
-                    {active?.rightTitle}
-                  </h3>
+                {/* Structured course breakdown - shows for any tab that has leftHighlight */}
+                {active?.leftHighlight && (
+                  <div className="mt-6 space-y-5">
+                    <p className="text-sm md:text-base text-gray-700 font-medium">
+                      {active.leftHighlight.title}
+                    </p>
 
-                  <div className="mt-4 md:mt-6 text-base md:text-base text-gray-600">
-                    <BulletList items={active?.rightItems || []} />
+                    {/* Sections with bullet points */}
+                    <ul className="space-y-3">
+                      {active.leftHighlight.sections.map((section, idx) => (
+                        <li key={idx} className="flex gap-3">
+                          <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-teal-600 flex-shrink-0" />
+                          <div>
+                            <span className="text-sm md:text-sm text-gray-800 font-semibold">
+                              {section.label}
+                            </span>
+                            <span className="text-sm md:text-sm text-gray-600">
+                              {" "}
+                              — {section.description}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Important note */}
+                    {active.leftHighlight.note && (
+                      <div className="bg-teal-50 border-l-4 border-teal-600 rounded-r-lg p-4">
+                        <p className="text-sm md:text-sm text-teal-800 font-medium">
+                          {active.leftHighlight.note}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Prerequisite info */}
+                    {active.leftHighlight.prerequisite && (
+                      <div className="flex gap-3">
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-teal-600 flex-shrink-0" />
+                        <p className="text-sm md:text-sm text-gray-600">
+                          {active.leftHighlight.prerequisite}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Certification info */}
+                    {active.leftHighlight.certification && (
+                      <div className="flex gap-3">
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-teal-600 flex-shrink-0" />
+                        <p className="text-sm md:text-sm text-gray-600">
+                          {active.leftHighlight.certification}
+                        </p>
+                      </div>
+                    )}
                   </div>
+                )}
+
+                <a
+                  href="#dates"
+                  className="inline-flex mt-8 md:mt-10 px-6 py-3 rounded-xl border-2 border-teal-600 text-teal-700 font-bold hover:bg-teal-600 hover:text-white transition-colors text-sm md:text-sm"
+                >
+                  VIEW COURSE DATES
+                </a>
+              </div>
+
+              <div>
+                <h3 className="text-xl md:text-2xl font-light text-gray-700">
+                  {active?.rightTitle}
+                </h3>
+                <div className="mt-4 md:mt-6">
+                  <BulletList items={active?.rightItems || []} />
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       </section>
 
+      {/* DATES */}
       <section id="dates" className="bg-white">
         <div className="max-w-7xl mx-auto px-4 py-14">
           <h2 className="text-2xl md:text-2xl font-bold text-teal-600">
             Course Dates
           </h2>
           <p className="mt-2 text-gray-600 max-w-2xl text-sm md:text-base">
-            We offer regular Discover Scuba Diving sessions throughout the year.
+            Available course dates for the PADI Rescue Diver certification. Each
+            date range represents a separate course session with limited slots,
+            so be sure to book early!
           </p>
 
           <div className="mt-8 grid md:grid-cols-3 gap-6">
@@ -389,9 +433,15 @@ const DiscoverScubaDive = () => {
                 slots: "8 slots",
               },
               {
+                from: "February 1st",
+                to: "March 1st",
+                time: "Opens Daily",
+                slots: "8 slots",
+              },
+              {
                 from: "March 10th",
                 to: "April 10th",
-                time: "Opens Daily ",
+                time: "Opens Daily",
                 slots: "6 slots",
               },
               {
@@ -442,7 +492,6 @@ const DiscoverScubaDive = () => {
         </div>
       </section>
 
-      {/* ADDITIONAL COURSES */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -471,11 +520,11 @@ const DiscoverScubaDive = () => {
               {
                 title: "Open Water Diver",
                 description:
-                  "Get certified to dive and learn core skills for independent diving with a buddy.",
+                  "Your first step into the underwater world. Learn the basics and get certified to dive anywhere in the world.",
                 href: "/courses/open-water",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549211/pexels-domingo-dias-260502921-12678039_uygdph.jpg",
-                level: "Beginner",
+                level: "Previous Course",
               },
               {
                 title: "Advanced Open Water",
@@ -484,16 +533,16 @@ const DiscoverScubaDive = () => {
                 href: "/courses/advanced-open-water",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549270/pexels-diego-sandoval-3158170-4767068_ccrfv9.jpg",
-                level: "Intermediate",
+                level: "Previous Course",
               },
               {
-                title: "Rescue Diver",
+                title: "Divemaster",
                 description:
-                  "Learn to prevent and manage problems in the water and become a stronger buddy.",
-                href: "/courses/rescue-diver",
+                  "Take the plunge into leadership and dive theory. Become a dive professional.",
+                href: "/courses/divemaster",
                 image:
-                  "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549361/pexels-cannontaler-20481590_yck89a.jpg",
-                level: "Advanced",
+                  "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771396227/pexels-leonardo-lamas-32247393-7001658_jez7o0.jpg",
+                level: "Next Course",
               },
             ].map((c) => (
               <a
@@ -534,16 +583,18 @@ const DiscoverScubaDive = () => {
       </section>
 
       <Footer />
-      {/* <ApplyNowModal
+
+      {/* <ApplyNowModalWithCert
         isOpen={isApplyOpen}
         onClose={() => setIsApplyOpen(false)}
-        courseKey="discover-scuba"
-        courseTitle="Discover Scuba Diving"
+        courseKey="rescue"
+        courseTitle="PADI Rescue Diver"
         dateOptions={dateOptions}
         apiBaseUrl="http://localhost:5000"
+        certLabel="Advanced Open Water Certificate *"
       /> */}
     </div>
   );
 };
 
-export default DiscoverScubaDive;
+export default RescueDiver;

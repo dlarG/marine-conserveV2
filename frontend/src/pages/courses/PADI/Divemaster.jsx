@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import Navbar from "../../../layouts/Navbar";
 import Footer from "../../../layouts/Footer";
-// import ApplyNowModal from "./ApplyNowModal";
+// import ApplyNowModalWithCert from "./ApplyNowModalWithCert";
 
 const TabLink = ({ active, onClick, children }) => {
   return (
@@ -54,74 +54,77 @@ const BulletList = ({ items }) => {
 //   );
 // };
 
-const DiscoverScubaDive = () => {
+const Divemaster = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "PADI Discover Scuba Diving Course | GREEN Inc.";
+    document.title = "PADI Divemaster Course | GREEN Inc.";
   }, []);
-  //   const [isApplyOpen, setIsApplyOpen] = useState(false);
-  //   const dateRanges = useMemo(
-  //     () => [
-  //       {
-  //         from: "January 1st",
-  //         to: "February 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "February 1st",
-  //         to: "March 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "March 10th",
-  //         to: "April 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //       {
-  //         from: "April 20th",
-  //         to: "May 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "June 20th",
-  //         to: "July 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "August 20th",
-  //         to: "September 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "October 1st",
-  //         to: "November 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "November 10th",
-  //         to: "December 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //     ],
-  //     []
-  //   );
 
-  //   const dateOptions = useMemo(
-  //     () =>
-  //       dateRanges.map((d) => ({
-  //         value: `${d.from} - ${d.to}`,
-  //         label: `${d.from} - ${d.to} (${d.time})`,
-  //       })),
-  //     [dateRanges]
-  //   );
+  // const [isApplyOpen, setIsApplyOpen] = useState(false);
+
+  // const dateRanges = useMemo(
+  //   () => [
+  //     {
+  //       from: "January 1st",
+  //       to: "February 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "February 1st",
+  //       to: "March 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "March 10th",
+  //       to: "April 10th",
+  //       time: "Opens Daily",
+  //       slots: "6 slots",
+  //     },
+  //     {
+  //       from: "April 20th",
+  //       to: "May 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "June 20th",
+  //       to: "July 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "August 20th",
+  //       to: "September 20th",
+  //       time: "Opens Daily",
+  //       slots: "10 slots",
+  //     },
+  //     {
+  //       from: "October 1st",
+  //       to: "November 1st",
+  //       time: "Opens Daily",
+  //       slots: "8 slots",
+  //     },
+  //     {
+  //       from: "November 10th",
+  //       to: "December 10th",
+  //       time: "Opens Daily",
+  //       slots: "6 slots",
+  //     },
+  //   ],
+  //   []
+  // );
+
+  // const dateOptions = useMemo(
+  //   () =>
+  //     dateRanges.map((d) => ({
+  //       value: `${d.from} - ${d.to}`,
+  //       label: `${d.from} - ${d.to} (${d.time})`,
+  //     })),
+  //   [dateRanges]
+  // );
+
   const tabs = useMemo(
     () => [
       { key: "skills", label: "Description" },
@@ -139,22 +142,22 @@ const DiscoverScubaDive = () => {
   // NEW: content model for the two-column layout
   const tabModel = useMemo(() => {
     const baseDescription =
-      "Discover Scuba Diving (DSD) is a beginner-friendly, non-certification experience that allows you to try scuba diving under the direct supervision of an instructor. Typically lasting a few hours to a full day, it includes a safety briefing, shallow water skills practice, and a guided, shallow open-water dive to experience breathing underwater.";
+      "The PADI Divemaster course is the first professional level in the PADI system, designed for those who want to take their passion for diving to the next level. As a Divemaster, you'll gain advanced knowledge and skills that allow you to lead certified divers, assist instructors, and even start your own diving business. This course typically takes 4-6 weeks to complete and includes both theoretical learning and practical experience in various diving environments.";
 
     return {
       skills: {
-        leftTitle: "Scuba Diving Basics",
+        leftTitle: "PADI Divemaster Skills Overview",
         leftText: baseDescription,
-        rightTitle: "What You'll Learn",
+        rightTitle: "Skills You'll Learn",
         rightItems: [
-          "Basic scuba equipment introduction and setup",
-          "Pre-dive safety check & buddy procedures",
-          "Breathing underwater and regulator clearing",
-          "Buoyancy basics and underwater positioning",
-          "Equalization techniques",
-          "Basic mask skills (clear & recover)",
-          "Hand signals and underwater communication",
-          "Safe entries/exits and shallow-water confidence building",
+          "Equipment Setup: Learning to assemble and check your scuba unit.",
+          "Underwater Navigation: Basic use of a compass and natural landmarks.",
+          "Safety Procedures: Practice for emergency scenarios, like using an alternate air source or performing a controlled emergency swimming ascent (CESA).",
+          "Buoyancy Control: Understanding and managing your buoyancy underwater.",
+          "Equalization Techniques: Learning how to equalize pressure in your ears during descent.",
+          "Mask Skills: Practicing clearing and recovering your mask underwater.",
+          "Communication: Using hand signals and other methods to communicate underwater.",
+          "Entry and Exit Techniques: Safe ways to enter and exit the water.",
         ],
       },
       prereq: {
@@ -163,38 +166,32 @@ const DiscoverScubaDive = () => {
           "Before joining, make sure you're comfortable in the water and meet the minimum requirements. If you have any medical concerns, we recommend a clearance prior to participation.",
         rightTitle: "Prerequisites",
         rightItems: [
-          "Comfortable in water (no advanced swimming needed)",
-          "Willingness to learn and follow instructor guidance",
-          "Minimum age requirement (set your policy)",
+          "Discover Scuba Diving experience or equivalent comfort in the water",
+          "Discover Scuba Diving Certificate (if applicable)",
+          "Minimum age requirement (10 years old, or 8 with parental consent)",
           "Completed medical questionnaire / clearance if required",
         ],
       },
       inclusion: {
         leftTitle: "What's Included",
         leftText:
-          "We provide the instruction and equipment needed for your introductory session so you can focus on learning and enjoying the experience.",
+          "We provide the instruction and equipment needed for your session so you can focus on learning and enjoying the experience.",
         rightTitle: "Included",
         rightItems: [
-          "Instructor-led briefing & guidance",
-          "Use of scuba gear during the session (BCD, regulator, tank, weights)",
-          "Basic skills practice and safety orientation",
-          "Assistance throughout the session",
-          "Guided shallow-water dive experience",
-          "Photos of your dive (optional add-on)",
-          "Certificate of participation",
-          "Certificate of recognition (not a full certification, but a great keepsake)",
+          "Professional instruction by a certified PADI instructor",
+          "PADI divemaster crew pack and digital instructor manual",
+          "FREE PADI AWARE Dive Against Debris",
+          "Unlimited diving (terms & conditions apply)",
+          "FREE Wi-Fi",
+          "FREE GREEN, Inc. t-shirt and log book",
         ],
       },
       fees: {
         leftTitle: "Pricing",
         leftText:
-          "Pricing depends on group size, schedule, and any add-ons. All prices are in pesos and include VAT. Contact us for custom group rates or private sessions.",
+          "Pricing still depends on group size, schedule, and any add-ons.",
         rightTitle: "Tuition Fees",
-        rightItems: [
-          "Half-day Session: ₱4,500.00 per person",
-          "Group discounts: optional",
-          "Reservation policy: optional",
-        ],
+        rightItems: ["Full Price: ₱65,000.00"],
       },
       not_included: {
         leftTitle: "What's Not Included",
@@ -211,11 +208,11 @@ const DiscoverScubaDive = () => {
       certificate: {
         leftTitle: "Certificate of Participation Preview",
         leftText:
-          "Upon completing your Discover Scuba Diving experience, you'll receive a certificate of participation. This certificate is a great keepsake to commemorate your first underwater adventure and can also serve as a stepping stone if you choose to pursue further scuba certifications in the future with us.",
+          "Uplon completing this course you will receive a certificate of participation that recognizes your achievement and experience. While this certificate is not a scuba diving certification for independent diving, it serves as a great memento of your experience and can be shared with friends and family. And a certificate of recognition for your accomplishment in completing the PADI Divemaster course from PADI, which is a significant milestone in your diving journey. This certificate can be a great keepsake to commemorate your experience and dedication to diving, and it can also be shared with friends and family to celebrate your achievement.",
         rightTitle: "Certificate Preview",
         rightImage: {
-          src: "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775607945/Blue_and_Gold_Elegant_Certificate_Workshop_Participation_2_lshe1s.png",
-          alt: "Certificate preview (placeholder image)",
+          src: "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775616064/Blue_and_Gold_Elegant_Certificate_Workshop_Participation_5_kqw3pj.png",
+          alt: "Certificate preview",
         },
         rightItems: [
           "Official certificate of participation",
@@ -240,7 +237,7 @@ const DiscoverScubaDive = () => {
           className="absolute inset-0 opacity-90"
           style={{
             backgroundImage:
-              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775547474/pexels-aydenzaki-8029908_gdieio.jpg)",
+              "url(https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549211/pexels-domingo-dias-260502921-12678039_uygdph.jpg)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -253,14 +250,15 @@ const DiscoverScubaDive = () => {
             </div>
 
             <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-tight text-white">
-              Discover Scuba Diving
+              PADI Divemaster
             </h1>
 
             <p className="mt-4 text-base md:text-base text-white/85 leading-relaxed">
-              Tempted with the idea of blowing bubbles underwater but just not
-              sure if you will like it? Or do you really want to get certified
-              but just don’t have the time? Then why not give the PADI discover
-              scuba dive a go.
+              The PADI Divemaster is the first professional-level rating in the
+              PADI system, serving as the essential prerequisite for becoming a
+              PADI Instructor. It transforms qualified recreational divers into
+              dive leaders capable of supervising dive activities, assisting
+              instructors with student training, and guiding certified divers.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -306,7 +304,7 @@ const DiscoverScubaDive = () => {
 
             <button
               type="button"
-              //   onClick={() => setIsApplyOpen(true)}
+              // onClick={() => setIsApplyOpen(true)}
               className="cursor-pointer text-base w-full md:w-auto px-3 py-2 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
             >
               APPLY NOW
@@ -361,7 +359,7 @@ const DiscoverScubaDive = () => {
                     {active?.rightTitle}
                   </h3>
 
-                  <div className="mt-4 md:mt-6 text-base md:text-base text-gray-600">
+                  <div className="mt-4 md:mt-6">
                     <BulletList items={active?.rightItems || []} />
                   </div>
                 </div>
@@ -377,7 +375,9 @@ const DiscoverScubaDive = () => {
             Course Dates
           </h2>
           <p className="mt-2 text-gray-600 max-w-2xl text-sm md:text-base">
-            We offer regular Discover Scuba Diving sessions throughout the year.
+            Available course dates for the PADI Divemaster certification. Each
+            session includes both classroom and in-water training, with flexible
+            scheduling to accommodate your needs.
           </p>
 
           <div className="mt-8 grid md:grid-cols-3 gap-6">
@@ -471,11 +471,11 @@ const DiscoverScubaDive = () => {
               {
                 title: "Open Water Diver",
                 description:
-                  "Get certified to dive and learn core skills for independent diving with a buddy.",
+                  "Your first step into the underwater world. Learn the basics and get certified to dive anywhere in the world.",
                 href: "/courses/open-water",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549211/pexels-domingo-dias-260502921-12678039_uygdph.jpg",
-                level: "Beginner",
+                level: "Previous Course",
               },
               {
                 title: "Advanced Open Water",
@@ -484,7 +484,7 @@ const DiscoverScubaDive = () => {
                 href: "/courses/advanced-open-water",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549270/pexels-diego-sandoval-3158170-4767068_ccrfv9.jpg",
-                level: "Intermediate",
+                level: "Previous Course",
               },
               {
                 title: "Rescue Diver",
@@ -493,7 +493,7 @@ const DiscoverScubaDive = () => {
                 href: "/courses/rescue-diver",
                 image:
                   "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1775549361/pexels-cannontaler-20481590_yck89a.jpg",
-                level: "Advanced",
+                level: "Previous Course",
               },
             ].map((c) => (
               <a
@@ -534,16 +534,18 @@ const DiscoverScubaDive = () => {
       </section>
 
       <Footer />
-      {/* <ApplyNowModal
+
+      {/* <ApplyNowModalWithCert
         isOpen={isApplyOpen}
         onClose={() => setIsApplyOpen(false)}
-        courseKey="discover-scuba"
-        courseTitle="Discover Scuba Diving"
+        courseKey="divemaster"
+        courseTitle="PADI Divemaster"
         dateOptions={dateOptions}
         apiBaseUrl="http://localhost:5000"
+        certLabel="Rescue Diver Certificate *"
       /> */}
     </div>
   );
 };
 
-export default DiscoverScubaDive;
+export default Divemaster;
