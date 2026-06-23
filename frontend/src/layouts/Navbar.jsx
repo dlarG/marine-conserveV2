@@ -90,14 +90,14 @@ const NAV_ITEMS = [
         items: [
           {
             name: "Marine Photography",
-            path: "/courses/specialty/marine-photography",
+            path: "/courses/special/marine-photography",
           },
-          { name: "Deep Diver", path: "/courses/specialty/deep-diver" },
-          { name: "Navigation", path: "/courses/specialty/navigation" },
-          { name: "Night Diver", path: "/courses/specialty/night-diver" },
+          { name: "Deep Diver", path: "/courses/special/deep-diver" },
+          { name: "Navigation", path: "/courses/special/dive-navigation" },
+          { name: "Night Diver", path: "/courses/special/night-diver" },
           {
             name: "Peak Performance Buoyancy",
-            path: "/courses/specialty/peak-performance-buoyancy",
+            path: "/courses/special/peak-performance-buoyancy",
           },
         ],
       },

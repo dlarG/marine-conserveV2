@@ -16,6 +16,10 @@ import RescueDiver from "./pages/courses/PADI/RescueDiver";
 import Divemaster from "./pages/courses/PADI/Divemaster";
 
 import MarinePhotography from "./pages/courses/Specialty/MarinePhotography";
+import DeepDiver from "./pages/courses/Specialty/DeepDiver";
+import DiveNavigation from "./pages/courses/Specialty/DiveNavigation";
+import NightDiver from "./pages/courses/Specialty/NightDiver";
+import PerformanceBuoyancy from "./pages/courses/Specialty/PerformanceBouyancy";
 
 const HomePage = () => {
   return (
@@ -59,6 +63,22 @@ const MarinePhotographyPage = () => {
   return <MarinePhotography />;
 };
 
+const DeepDiverPage = () => {
+  return <DeepDiver />;
+};
+
+const DiveNavigationPage = () => {
+  return <DiveNavigation />;
+};
+
+const NightDiverPage = () => {
+  return <NightDiver />;
+};
+
+const PerformanceBuoyancyPage = () => {
+  return <PerformanceBuoyancy />;
+};
+
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -92,8 +112,24 @@ const App = () => {
           />
           <Route path="/courses/padi/divemaster" element={<DivemasterPage />} />
           <Route
-            path="/courses/specialty/marine-photography"
+            path="/courses/special/marine-photography"
             element={<MarinePhotographyPage />}
+          />
+          <Route
+            path="/courses/special/deep-diver"
+            element={<DeepDiverPage />}
+          />
+          <Route
+            path="/courses/special/dive-navigation"
+            element={<DiveNavigationPage />}
+          />
+          <Route
+            path="/courses/special/night-diver"
+            element={<NightDiverPage />}
+          />
+          <Route
+            path="/courses/special/peak-performance-buoyancy"
+            element={<PerformanceBuoyancyPage />}
           />
         </Routes>
       </div>
