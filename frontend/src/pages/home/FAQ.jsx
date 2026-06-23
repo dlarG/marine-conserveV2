@@ -119,7 +119,7 @@ const FAQ = () => {
             transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
           }}
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+          <h2 className="text-base font-normal text-gray-900 mb-6 tracking-tight">
             Frequently Asked
             <br />
             <span className="text-teal-600">Questions</span>
