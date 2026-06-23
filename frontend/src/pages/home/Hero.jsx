@@ -2,14 +2,13 @@ import { useRef, useEffect, useCallback, useState } from "react";
 
 // ─── Spotlight config ─────────────────────────────────────────────────────────
 const SPOTLIGHT = {
-  radius: 150,
-  feather: 150,
+  radius: 200,
+  feather: 200,
   glowRadius: 60,
   enterSpeed: 0.1,
   leaveSpeed: 0.07,
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();

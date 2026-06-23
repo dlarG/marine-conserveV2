@@ -154,8 +154,8 @@ function Dropdown({ label, items, scrolled }) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
-  const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
+  const textColor = scrolled ? "#0f4c5c" : "#0f4c5c";
+  const hoverUnder = scrolled ? "#0d9488" : "#0d9488";
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
@@ -212,8 +212,8 @@ function CoursesDropdown({ label, columns, scrolled }) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
-  const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
+  const textColor = scrolled ? "#0f4c5c" : "#0f4c5c";
+  const hoverUnder = scrolled ? "#0d9488" : "#0d9488";
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
@@ -399,18 +399,20 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  const socialColor = scrolled ? "#134e4a" : "rgba(255,255,255,0.85)";
+  const socialColor = scrolled ? "#134e4a" : "#134e4a";
 
   return (
     <>
       <nav
         style={{
-          backgroundColor: scrolled ? "rgba(255,255,255,0.97)" : "transparent",
+          backgroundColor: scrolled
+            ? "rgba(255,255,255,0.97)"
+            : "rgba(255,255,255,0.97)",
           boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.08)" : "none",
           backdropFilter: scrolled ? "blur(14px)" : "none",
           borderBottom: scrolled
             ? "1px solid rgba(13,148,136,0.1)"
-            : "1px solid transparent",
+            : "1px solid rgba(13,148,136,0.1)",
           transition:
             "background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease",
         }}
@@ -428,7 +430,7 @@ export default function Navbar() {
               <div className="leading-tight">
                 <div
                   style={{
-                    color: scrolled ? "#0f4c5c" : "#fff",
+                    color: scrolled ? "#0f4c5c" : "#0f4c5c",
                     transition: "color 0.4s ease",
                   }}
                   className="text-[18px] font-bold tracking-tight"
@@ -437,7 +439,7 @@ export default function Navbar() {
                 </div>
                 <div
                   style={{
-                    color: scrolled ? "#0d9488" : "rgba(255,255,255,0.65)",
+                    color: scrolled ? "#0d9488" : "#0d9488",
                     transition: "color 0.4s ease",
                   }}
                   className="text-[9px] tracking-[0.2em] ml-0.5 uppercase font-medium"
@@ -509,11 +511,11 @@ export default function Navbar() {
               <Link
                 to="/apply"
                 style={{
-                  color: scrolled ? "#0d9488" : "#fff",
-                  borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
+                  color: scrolled ? "#0d9488" : "#0d9488",
+                  borderColor: scrolled ? "#0d9488" : "#0d9488",
                   transition: "all 0.4s ease",
                 }}
-                className="uppercase flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
+                className="uppercase flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:text-white hover:border-teal-600 transition-all duration-200"
               >
                 <FileText size={14} className="flex-shrink-0" />
                 Apply
