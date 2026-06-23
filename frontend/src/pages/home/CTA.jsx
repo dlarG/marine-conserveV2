@@ -50,13 +50,13 @@ const CTA = () => {
           }}
         >
           {/* Main Headline */}
-          <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
+          <h2 className="text-3xl lg:text-3xl font-bold text-white mb-6 tracking-tight leading-tight">
             Ready to Make
             <br />
             <span className="text-teal-200">Waves of Change?</span>
           </h2>
 
-          <p className="text-lg lg:text-xl text-teal-50/90 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-sm lg:text-base text-teal-50/90 max-w-2xl mx-auto mb-12 leading-relaxed">
             Every coral planted, every reef cleaned, and every volunteer trained
             brings us closer to thriving oceans. Your support today creates
             impact that lasts for generations.
@@ -65,7 +65,7 @@ const CTA = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-10">
             <button
-              className="cursor-pointer group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-teal-700 rounded-full font-semibold text-lg hover:bg-teal-50 transition-all duration-300 shadow-2xl hover:shadow-white/25 hover:-translate-y-0.5"
+              className="cursor-pointer group inline-flex items-center justify-center gap-3 px-6 py-3 bg-white text-teal-700 rounded-full font-semibold text-base hover:bg-teal-50 transition-all duration-300 shadow-2xl hover:shadow-white/25 hover:-translate-y-0.5"
               style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0)" : "translateY(20px)",
@@ -74,11 +74,11 @@ const CTA = () => {
               }}
             >
               Donate Now
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button
-              className="cursor-pointer inline-flex items-center justify-center gap-3 px-8 py-4 bg-transparent text-white border-2 border-white/30 rounded-full font-semibold text-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5"
+              className="cursor-pointer inline-flex items-center justify-center gap-3 px-6 py-3 bg-transparent text-white border-2 border-white/30 rounded-full font-semibold text-base hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5"
               style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0)" : "translateY(20px)",
@@ -103,7 +103,7 @@ const CTA = () => {
         >
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-3">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-white/90 text-sm">
+            <span className="text-white/90 text-xs">
               <strong className="text-white">Urgent:</strong> 200 coral
               fragments need planting this month
             </span>

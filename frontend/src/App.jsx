@@ -27,6 +27,8 @@ import TeamBody from "./pages/organization/team/TeamBody";
 import HistoryHero from "./pages/organization/history/HistoryHero";
 import About1 from "./pages/organization/history/About1";
 import About2 from "./pages/organization/history/About2";
+import MissionHero from "./pages/organization/mission/MissionHero";
+import MissionBody from "./pages/organization/mission/MissionBody";
 
 const HomePage = () => {
   return (
@@ -109,6 +111,17 @@ const HistoryPage = () => {
   );
 };
 
+const MissionPage = () => {
+  return (
+    <div>
+      <Navbar />
+      <MissionHero />
+      <MissionBody />
+      <Footer />
+    </div>
+  );
+};
+
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -163,6 +176,7 @@ const App = () => {
           />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/mission-vision" element={<MissionPage />} />
         </Routes>
       </div>
     </Router>
