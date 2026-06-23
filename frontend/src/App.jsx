@@ -21,6 +21,9 @@ import DiveNavigation from "./pages/courses/Specialty/DiveNavigation";
 import NightDiver from "./pages/courses/Specialty/NightDiver";
 import PerformanceBuoyancy from "./pages/courses/Specialty/PerformanceBouyancy";
 
+import TeamHero from "./pages/organization/team/TeamHero";
+import TeamBody from "./pages/organization/team/TeamBody";
+
 const HomePage = () => {
   return (
     <div>
@@ -30,6 +33,17 @@ const HomePage = () => {
       <Review />
       <FAQ />
       <CTA />
+      <Footer />
+    </div>
+  );
+};
+
+const TeamPage = () => {
+  return (
+    <div>
+      <Navbar />
+      <TeamHero />
+      <TeamBody />
       <Footer />
     </div>
   );
@@ -131,6 +145,7 @@ const App = () => {
             path="/courses/special/peak-performance-buoyancy"
             element={<PerformanceBuoyancyPage />}
           />
+          <Route path="/team" element={<TeamPage />} />
         </Routes>
       </div>
     </Router>
