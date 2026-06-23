@@ -56,8 +56,8 @@ const NAV_ITEMS = [
   {
     label: "Organization",
     items: [
-      { name: "History", path: "/organization/history" },
-      { name: "Mission & Vision", path: "/organization/mission-vision" },
+      { name: "History", path: "/history" },
+      { name: "Mission & Vision", path: "/mission-vision" },
       { name: "The Team", path: "/team" },
       { name: "Our Partners", path: "/organization/our-partners" },
       { name: "Blogs", path: "/organization/blogs" },
