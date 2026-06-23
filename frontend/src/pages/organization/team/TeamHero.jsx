@@ -106,24 +106,24 @@ const TeamHero = ({
 
       <div className="relative h-full max-w-7xl mx-auto px-4 flex mt-30">
         <div className="max-w-2xl">
-          <h1 className="mt-4 text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+          <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
             {title}
           </h1>
 
-          <p className="mt-4 text-base md:text-lg text-white/85 leading-relaxed">
+          <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
             {subtitle}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href="#team-content"
-              className="px-5 py-2.5 rounded-full bg-teal-600 text-white font-medium hover:bg-teal-700 transition-colors"
+              className="px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"
             >
               Meet the team
             </a>
             <a
               href="/donate"
-              className="px-5 py-2.5 rounded-full bg-white/10 text-white font-medium border border-white/20 hover:bg-white/15 transition-colors"
+              className="px-4 py-2 text-sm rounded-full bg-white/10 text-white font-normal border border-white/20 hover:bg-white/15 transition-colors"
             >
               Support our work
             </a>
