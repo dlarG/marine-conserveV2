@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, X, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
 
 // ─── Inline social SVGs (lucide-react doesn't include these) ─────────────────
 const FacebookIcon = ({ size = 18 }) => (
@@ -60,7 +60,7 @@ const NAV_ITEMS = [
       { name: "Mission & Vision", path: "/mission-vision" },
       { name: "The Team", path: "/team" },
       { name: "Our Partners", path: "/organization/our-partners" },
-      { name: "Blogs", path: "/organization/blogs" },
+      { name: "Blogs & Stories", path: "/blogs" },
       { name: "News", path: "/organization/news" },
     ],
   },
@@ -122,9 +122,8 @@ const NAV_ITEMS = [
     label: "Contact Us",
     items: [
       { name: "Get in Touch", path: "/contact" },
-      { name: "FAQs", path: "/faqs" },
+      { name: "FAQs", path: "#faqs" },
       { name: "Location", path: "/contact/location" },
-      { name: "Support", path: "/contact/support" },
     ],
   },
 ];
@@ -143,6 +142,8 @@ const SOCIAL_LINKS = [
 function Dropdown({ label, items, scrolled }) {
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const show = () => {
     clearTimeout(timerRef.current);
@@ -153,6 +154,34 @@ function Dropdown({ label, items, scrolled }) {
   };
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
+
+  // Function to handle FAQ link click
+  const handleClick = (item, e) => {
+    e.preventDefault();
+    setOpen(false);
+
+    if (item.path.startsWith("#")) {
+      const targetId = item.path;
+
+      // If we're already on the homepage, just scroll
+      if (location.pathname === "/") {
+        const element = document.querySelector(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Navigate to homepage first, then scroll after navigation
+        navigate("/");
+        // Wait for the page to render, then scroll
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    }
+  };
 
   const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
   const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
@@ -182,13 +211,23 @@ function Dropdown({ label, items, scrolled }) {
         <ul className="py-2">
           {items.map((item) => (
             <li key={item.name}>
-              <Link
-                to={item.path}
-                className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
-                onClick={() => setOpen(false)}
-              >
-                {item.name}
-              </Link>
+              {item.path.startsWith("#") ? (
+                <a
+                  href={item.path}
+                  onClick={(e) => handleClick(item, e)}
+                  className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  to={item.path}
+                  className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -275,6 +314,37 @@ function CoursesDropdown({ label, columns, scrolled }) {
 // ─── Mobile accordion (single column) ────────────────────────────────────────
 function MobileAccordion({ label, items, onClose }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClick = (item, e) => {
+    e.preventDefault();
+    onClose();
+
+    if (item.path.startsWith("#")) {
+      const targetId = item.path;
+
+      // If we're already on the homepage, just scroll
+      if (location.pathname === "/") {
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300); // Delay to allow mobile menu to close first
+      } else {
+        // Navigate to homepage first
+        navigate("/");
+        // Wait for navigation and render, then scroll
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 400);
+      }
+    }
+  };
 
   return (
     <div className="border-b border-gray-100 last:border-0">
@@ -299,14 +369,28 @@ function MobileAccordion({ label, items, onClose }) {
         <ul className="pb-3">
           {items.map((item) => (
             <li key={item.name}>
-              <Link
-                to={item.path}
-                onClick={onClose}
-                className="flex items-center gap-3 px-8 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
-                {item.name}
-              </Link>
+              {item.path.startsWith("#") ? (
+                <a
+                  href={item.path}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleClick(item, e);
+                  }}
+                  className="flex items-center gap-3 px-8 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  to={item.path}
+                  onClick={onClose}
+                  className="flex items-center gap-3 px-8 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
+                  {item.name}
+                </Link>
+              )}
             </li>
           ))}
         </ul>

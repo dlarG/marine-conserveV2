@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import TeamMemberModal from "./TeamMemberModal";
 // import ApplyModal from "./ApplyModal";
 
 const teamMembers = [
   {
     name: "Jerome Jack Napala",
-    role: "Green Inc. CEO, Marine Biologist, and PADI Divemaster",
+    role: "Green Inc. CEO, Marine Biologist, SLSU Researcher, and PADI Divemaster",
     image:
       "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771384106/JeromaNapala_x6fqh2.jpg",
     bio: "Jerome started the nursery almost twenty years ago after witnessing how his childhood reefs had begun to show signs of stress. He started with a couple of plastic bottles, ropes, and the will to succeed.",
@@ -57,6 +58,8 @@ const TeamBody = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState("right");
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -349,9 +352,18 @@ const TeamBody = () => {
                             : "opacity-0"
                         }`}
                       >
-                        <div className="w-7 h-7 rounded-full bg-teal-500 flex items-center justify-center animate-pulse">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedMember(member);
+                            setIsModalOpen(true);
+                          }}
+                          className="w-9 h-9 rounded-full bg-teal-500 hover:bg-teal-600 flex items-center justify-center animate-pulse hover:animate-none transition-all duration-300 hover:scale-110 shadow-lg"
+                          title="View full story"
+                          style={{ cursor: "pointer" }}
+                        >
                           <svg
-                            className="w-3.5 h-3.5 text-white"
+                            className="w-5 h-5 text-white"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -363,7 +375,7 @@ const TeamBody = () => {
                               d="M14 5l7 7m0 0l-7 7m7-7H3"
                             />
                           </svg>
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -509,6 +521,14 @@ const TeamBody = () => {
           </div>
         </div>
       </div>
+      <TeamMemberModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedMember(null);
+        }}
+        member={selectedMember}
+      />
       {/* <ApplyModal
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}
