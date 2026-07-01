@@ -107,7 +107,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
+    <section id="faqs" className="py-20 lg:py-28 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div
@@ -119,7 +119,7 @@ const FAQ = () => {
             transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
           }}
         >
-          <h2 className="text-base font-normal text-gray-900 mb-6 tracking-tight">
+          <h2 className="text-3xl font-normal text-gray-900 mb-6 tracking-tight">
             Frequently Asked
             <br />
             <span className="text-teal-600">Questions</span>
