@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/purity */
 // CTA.jsx
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import useScrollAnimation from "../../utilities/useScrollAnimation";
 
 const CTA = () => {
@@ -64,7 +65,8 @@ const CTA = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-10">
-            <button
+            <Link
+              to={"/donate"}
               className="cursor-pointer group inline-flex items-center justify-center gap-3 px-6 py-3 bg-white text-teal-700 rounded-full font-semibold text-base hover:bg-teal-50 transition-all duration-300 shadow-2xl hover:shadow-white/25 hover:-translate-y-0.5"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -75,9 +77,10 @@ const CTA = () => {
             >
               Donate Now
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
 
-            <button
+            <Link
+              to={"/volunteer"}
               className="cursor-pointer inline-flex items-center justify-center gap-3 px-6 py-3 bg-transparent text-white border-2 border-white/30 rounded-full font-semibold text-base hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -87,7 +90,7 @@ const CTA = () => {
               }}
             >
               Become a Volunteer
-            </button>
+            </Link>
           </div>
         </div>
 

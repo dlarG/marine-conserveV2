@@ -340,34 +340,39 @@ const ApplyPage = () => {
     setSubmitError("");
 
     try {
-      // Create FormData for file uploads
-      const submitData = new FormData();
-
-      // Add all text fields
-      Object.keys(formData).forEach((key) => {
-        if (key !== "cv" && key !== "coverLetter" && key !== "termsAccepted") {
-          submitData.append(key, formData[key]);
-        }
-      });
-      submitData.append("termsAccepted", formData.termsAccepted);
-
-      // Add files
-      if (formData.cv) {
-        submitData.append("cv", formData.cv);
-      }
-      if (formData.coverLetter) {
-        submitData.append("coverLetter", formData.coverLetter);
-      }
+      // Prepare JSON data (no files for simplicity)
+      const submitData = {
+        name: formData.name,
+        email: formData.email,
+        dateOfBirth: formData.dateOfBirth,
+        nationality: formData.nationality,
+        course: formData.course,
+        certificationLevel: formData.certificationLevel,
+        numberOfDives: formData.numberOfDives,
+        lastDive: formData.lastDive,
+        education: formData.education,
+        futureEducation: formData.futureEducation,
+        occupation: formData.occupation,
+        marineBiologyExperience: formData.marineBiologyExperience,
+        heardFrom: formData.heardFrom,
+        programmeExpectations: formData.programmeExpectations,
+        foodAllergies: formData.foodAllergies,
+        medicalConditions: formData.medicalConditions,
+      };
 
       // Send to backend
-      const response = await fetch("YOUR_API_ENDPOINT_HERE", {
+      const response = await fetch("http://localhost:10000/api/apply", {
         method: "POST",
-        body: submitData,
-        // Don't set Content-Type header when using FormData
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submitData),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to submit application");
+        throw new Error(result.message || "Failed to submit application");
       }
 
       setSubmitSuccess(true);
@@ -393,10 +398,6 @@ const ApplyPage = () => {
         coverLetter: null,
         termsAccepted: false,
       });
-      // Reset file inputs
-      document.querySelectorAll('input[type="file"]').forEach((input) => {
-        input.value = "";
-      });
     } catch (error) {
       console.error("Submission error:", error);
       setSubmitError(
@@ -411,7 +412,7 @@ const ApplyPage = () => {
     return (
       <div className="min-h-screen bg-white">
         <ApplyPageNavbar />
-        <div className="max-w-3xl mx-auto px-4 py-20">
+        <div className="max-w-3xl mx-auto px-4 mt-25 py-20">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
               <svg
@@ -456,7 +457,7 @@ const ApplyPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Volunteer Application
+            Partnership Application
           </h1>
           <p className="text-gray-600">
             Please fill out ALL fields. Thank you.

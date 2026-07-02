@@ -24,6 +24,8 @@ import PerformanceBuoyancy from "./pages/courses/Specialty/PerformanceBouyancy";
 
 import TeamHero from "./pages/organization/team/TeamHero";
 import TeamBody from "./pages/organization/team/TeamBody";
+import Blogs from "./pages/organization/blog/Blogs";
+import AllBlogPost from "./pages/organization/blog/AllBlogPost";
 
 import HistoryHero from "./pages/organization/history/HistoryHero";
 import About1 from "./pages/organization/history/About1";
@@ -36,6 +38,14 @@ import COTSMonitoring from "./pages/courses/volunteer/COTSMonitoring";
 import DataCollection from "./pages/courses/volunteer/DataCollection";
 import ApplyPage from "./pages/ApplyPage";
 import DonatePage from "./pages/DonatePage";
+import BlogHero from "./pages/organization/blog/BlogHero";
+import FloraAndFauna from "./pages/organization/blog/specificblogs/FloraAndFauna";
+import DoubleActOfSogod from "./pages/organization/blog/specificblogs/DoubleActofSogod";
+import MalitbogCoralRes from "./pages/organization/blog/specificblogs/MalitbogCoralRes";
+import CotsMonitoringAbgao from "./pages/organization/blog/specificblogs/CotsMonitoringAbgao";
+import VsuMarineBiologyPartnership from "./pages/organization/blog/specificblogs/VsuMarineBiologyPartnership";
+
+import VolunteerPage from "./pages/VolunteerPage";
 
 const HomePage = () => {
   return (
@@ -410,6 +420,71 @@ const MissionPage = () => {
   );
 };
 
+const BlogPageSkeleton = () => {
+  return (
+    <div className="bg-white">
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        {/* Header skeleton */}
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <div className="h-6 w-36 bg-gray-100 rounded-full mx-auto mb-4" />
+          <div className="h-10 w-64 bg-gray-200 rounded mx-auto mb-3" />
+          <div className="h-4 w-72 bg-gray-100 rounded mx-auto" />
+        </div>
+
+        {/* Blog cards skeleton */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm"
+            >
+              <div className="h-48 bg-gray-100" />
+              <div className="p-6 space-y-3">
+                <div className="h-6 w-2/3 bg-gray-200 rounded" />
+                <div className="h-4 w-full bg-gray-100 rounded" />
+                <div className="h-4 w-5/6 bg-gray-100 rounded" />
+                <div className="h-4 w-4/6 bg-gray-100 rounded" />
+                <div className="mt-4 flex gap-2">
+                  <div className="h-6 w-20 bg-gray-100 rounded-full" />
+                  <div className="h-6 w-24 bg-gray-100 rounded-full" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA skeleton */}
+        <div className="mt-20 text-center">
+          <div className="inline-block p-8 rounded-2xl bg-gray-50 border border-gray-100 w-full max-w-2xl">
+            <div className="h-8 w-52 bg-gray-200 rounded mx-auto" />
+            <div className="mt-5 h-4 w-4/5 bg-gray-100 rounded mx-auto" />
+            <div className="mt-3 h-4 w-3/5 bg-gray-100 rounded mx-auto" />
+            <div className="mt-7 h-11 w-36 bg-gray-200 rounded-lg mx-auto" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BlogsPage = () => {
+  const [blogHeroReady, setBlogHeroReady] = useState(false);
+  return (
+    <div>
+      <Navbar />
+      <BlogHero onReady={() => setBlogHeroReady(true)} />
+      {blogHeroReady ? (
+        <>
+          <Blogs />
+          <Footer />
+        </>
+      ) : (
+        <BlogPageSkeleton />
+      )}
+    </div>
+  );
+};
+
 const CoralRestorationPage = () => {
   return (
     <>
@@ -531,6 +606,20 @@ const App = () => {
           />
           <Route path="/apply" element={<ApplyHomePage />} />
           <Route path="/donate" element={<DonatePage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/organization/all-blogs" element={<AllBlogPost />} />
+          <Route path="/organization/blog/1" element={<FloraAndFauna />} />
+          <Route path="/organization/blog/2" element={<MalitbogCoralRes />} />
+          <Route path="/organization/blog/3" element={<DoubleActOfSogod />} />
+          <Route
+            path="/organization/blog/4"
+            element={<CotsMonitoringAbgao />}
+          />
+          <Route
+            path="/organization/blog/5"
+            element={<VsuMarineBiologyPartnership />}
+          />
+          <Route path="/volunteer" element={<VolunteerPage />} />
         </Routes>
       </div>
     </Router>

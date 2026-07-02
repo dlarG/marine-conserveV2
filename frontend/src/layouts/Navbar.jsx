@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, X, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
 
 // ─── Inline social SVGs (lucide-react doesn't include these) ─────────────────
 const FacebookIcon = ({ size = 18 }) => (
@@ -60,7 +60,7 @@ const NAV_ITEMS = [
       { name: "Mission & Vision", path: "/mission-vision" },
       { name: "The Team", path: "/team" },
       { name: "Our Partners", path: "/organization/our-partners" },
-      { name: "Blogs", path: "/organization/blogs" },
+      { name: "Blogs & Stories", path: "/blogs" },
       { name: "News", path: "/organization/news" },
     ],
   },
@@ -122,9 +122,8 @@ const NAV_ITEMS = [
     label: "Contact Us",
     items: [
       { name: "Get in Touch", path: "/contact" },
-      { name: "FAQs", path: "/faqs" },
+      { name: "FAQs", path: "#faqs" },
       { name: "Location", path: "/contact/location" },
-      { name: "Support", path: "/contact/support" },
     ],
   },
 ];
@@ -139,10 +138,35 @@ const SOCIAL_LINKS = [
   { Icon: InstagramIcon, href: "#", label: "Instagram" },
 ];
 
+// ─── Active-route helpers ─────────────────────────────────────────────────────
+// A nav item is "active" if the current path matches it exactly, or is nested
+// under it (e.g. /organization/blog/3 should still light up a "/blogs" item
+// if you want that behavior — extend the prefix list below as routes grow).
+function isItemActive(itemPath, currentPath) {
+  if (!itemPath || itemPath.startsWith("#")) return false;
+  if (itemPath === "/") return currentPath === "/";
+  return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
+}
+
+function isSectionActive(nav, currentPath) {
+  if (nav.columns) {
+    return nav.columns.some((col) =>
+      col.items.some((item) => isItemActive(item.path, currentPath))
+    );
+  }
+  return nav.items.some((item) => isItemActive(item.path, currentPath));
+}
+
 // ─── Desktop dropdown (single column) ────────────────────────────────────────
-function Dropdown({ label, items, scrolled }) {
+function Dropdown({ label, items, scrolled, currentPath }) {
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const sectionActive = items.some((item) =>
+    isItemActive(item.path, currentPath)
+  );
 
   const show = () => {
     clearTimeout(timerRef.current);
@@ -154,21 +178,58 @@ function Dropdown({ label, items, scrolled }) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
+  // Function to handle FAQ link click
+  const handleClick = (item, e) => {
+    e.preventDefault();
+    setOpen(false);
+
+    if (item.path.startsWith("#")) {
+      const targetId = item.path;
+
+      // If we're already on the homepage, just scroll
+      if (location.pathname === "/") {
+        const element = document.querySelector(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Navigate to homepage first, then scroll after navigation
+        navigate("/");
+        // Wait for the page to render, then scroll
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    }
+  };
+
+  const baseColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
+  const activeColor = scrolled ? "#0d9488" : "#7dd3c0";
+  const textColor = sectionActive ? activeColor : baseColor;
   const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         style={{ color: textColor }}
-        className="cursor-pointer uppercase relative flex items-center text-sm font-light tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+        className={`cursor-pointer uppercase relative flex items-center text-sm tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+          sectionActive ? "font-medium" : "font-light"
+        }`}
         aria-haspopup="true"
         aria-expanded={open}
+        aria-current={sectionActive ? "true" : undefined}
       >
         {label}
         <span
-          style={{ backgroundColor: hoverUnder }}
-          className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full"
+          style={{
+            backgroundColor: sectionActive ? activeColor : hoverUnder,
+          }}
+          className={`absolute bottom-0 left-4 right-4 h-px origin-left rounded-full transition-transform duration-200 ${
+            sectionActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          }`}
         />
       </button>
 
@@ -180,17 +241,36 @@ function Dropdown({ label, items, scrolled }) {
         className="absolute uppercase top-12 left-0 mt-1 w-64 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden z-50"
       >
         <ul className="py-2">
-          {items.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.path}
-                className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
-                onClick={() => setOpen(false)}
-              >
-                {item.name}
-              </Link>
-            </li>
-          ))}
+          {items.map((item) => {
+            const active = isItemActive(item.path, currentPath);
+            const linkClasses = `flex items-center gap-3 px-5 py-2.5 text-xs transition-colors duration-150 border-l-2 ${
+              active
+                ? "text-teal-700 bg-teal-50 font-medium border-teal-500"
+                : "text-gray-600 hover:text-teal-700 hover:bg-teal-50 font-normal border-transparent"
+            }`;
+            return (
+              <li key={item.name}>
+                {item.path.startsWith("#") ? (
+                  <a
+                    href={item.path}
+                    onClick={(e) => handleClick(item, e)}
+                    className={linkClasses}
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={linkClasses}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
@@ -198,9 +278,13 @@ function Dropdown({ label, items, scrolled }) {
 }
 
 // ─── Desktop dropdown (two columns for Courses) ──────────────────────────────
-function CoursesDropdown({ label, columns, scrolled }) {
+function CoursesDropdown({ label, columns, scrolled, currentPath }) {
   const [open, setOpen] = useState(false);
   const timerRef = useRef(null);
+
+  const sectionActive = columns.some((col) =>
+    col.items.some((item) => isItemActive(item.path, currentPath))
+  );
 
   const show = () => {
     clearTimeout(timerRef.current);
@@ -212,21 +296,30 @@ function CoursesDropdown({ label, columns, scrolled }) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  const textColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
+  const baseColor = scrolled ? "#0f4c5c" : "rgba(255,255,255,0.93)";
+  const activeColor = scrolled ? "#0d9488" : "#7dd3c0";
+  const textColor = sectionActive ? activeColor : baseColor;
   const hoverUnder = scrolled ? "#0d9488" : "rgba(255,255,255,0.6)";
 
   return (
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         style={{ color: textColor }}
-        className="cursor-pointer uppercase relative flex items-center text-sm font-light tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+        className={`cursor-pointer uppercase relative flex items-center text-sm tracking-wide py-2 px-4 rounded-md transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 ${
+          sectionActive ? "font-medium" : "font-light"
+        }`}
         aria-haspopup="true"
         aria-expanded={open}
+        aria-current={sectionActive ? "true" : undefined}
       >
         {label}
         <span
-          style={{ backgroundColor: hoverUnder }}
-          className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full"
+          style={{
+            backgroundColor: sectionActive ? activeColor : hoverUnder,
+          }}
+          className={`absolute bottom-0 left-4 right-4 h-px origin-left rounded-full transition-transform duration-200 ${
+            sectionActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          }`}
         />
       </button>
 
@@ -253,17 +346,25 @@ function CoursesDropdown({ label, columns, scrolled }) {
 
             {/* Column Items */}
             <ul className="pb-3">
-              {column.items.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    className="flex items-center gap-3 px-5 py-2.5 text-xs font-normal text-gray-600 hover:text-teal-700 hover:bg-teal-50 transition-colors duration-150"
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+              {column.items.map((item) => {
+                const active = isItemActive(item.path, currentPath);
+                return (
+                  <li key={item.name}>
+                    <Link
+                      to={item.path}
+                      className={`flex items-center gap-3 px-5 py-2.5 text-xs transition-colors duration-150 border-l-2 ${
+                        active
+                          ? "text-teal-700 bg-teal-50 font-medium border-teal-500"
+                          : "text-gray-600 hover:text-teal-700 hover:bg-teal-50 font-normal border-transparent"
+                      }`}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
@@ -273,16 +374,66 @@ function CoursesDropdown({ label, columns, scrolled }) {
 }
 
 // ─── Mobile accordion (single column) ────────────────────────────────────────
-function MobileAccordion({ label, items, onClose }) {
-  const [open, setOpen] = useState(false);
+function MobileAccordion({ label, items, onClose, currentPath }) {
+  const sectionActive = items.some((item) =>
+    isItemActive(item.path, currentPath)
+  );
+  const [open, setOpen] = useState(sectionActive);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Auto-expand the section that matches the current route when it becomes active
+  useEffect(() => {
+    if (sectionActive) setOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPath]);
+
+  const handleClick = (item, e) => {
+    e.preventDefault();
+    onClose();
+
+    if (item.path.startsWith("#")) {
+      const targetId = item.path;
+
+      // If we're already on the homepage, just scroll
+      if (location.pathname === "/") {
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300); // Delay to allow mobile menu to close first
+      } else {
+        // Navigate to homepage first
+        navigate("/");
+        // Wait for navigation and render, then scroll
+        setTimeout(() => {
+          const element = document.querySelector(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 400);
+      }
+    }
+  };
 
   return (
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full px-5 py-4 text-[15px] font-medium text-gray-700 hover:text-teal-700 transition-colors"
+        className={`flex items-center justify-between w-full px-5 py-4 text-[15px] transition-colors ${
+          sectionActive
+            ? "text-teal-700 font-semibold"
+            : "text-gray-700 font-medium hover:text-teal-700"
+        }`}
+        aria-current={sectionActive ? "true" : undefined}
       >
-        {label}
+        <span className="flex items-center gap-2">
+          {sectionActive && (
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
+          )}
+          {label}
+        </span>
         <ChevronDown
           size={16}
           className="text-teal-500 transition-transform duration-200 flex-shrink-0"
@@ -297,18 +448,49 @@ function MobileAccordion({ label, items, onClose }) {
         }}
       >
         <ul className="pb-3">
-          {items.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.path}
-                onClick={onClose}
-                className="flex items-center gap-3 px-8 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
-                {item.name}
-              </Link>
-            </li>
-          ))}
+          {items.map((item) => {
+            const active = isItemActive(item.path, currentPath);
+            const linkClasses = `flex items-center gap-3 px-8 py-2.5 text-sm transition-colors ${
+              active
+                ? "text-teal-700 font-medium bg-teal-50"
+                : "text-gray-500 hover:text-teal-600"
+            }`;
+            return (
+              <li key={item.name}>
+                {item.path.startsWith("#") ? (
+                  <a
+                    href={item.path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClick(item, e);
+                    }}
+                    className={linkClasses}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                        active ? "bg-teal-600" : "bg-teal-400"
+                      }`}
+                    />
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    to={item.path}
+                    onClick={onClose}
+                    className={linkClasses}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                        active ? "bg-teal-600" : "bg-teal-400"
+                      }`}
+                    />
+                    {item.name}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
@@ -316,8 +498,16 @@ function MobileAccordion({ label, items, onClose }) {
 }
 
 // ─── Mobile accordion (two columns for Courses) ──────────────────────────────
-function MobileCoursesAccordion({ label, columns, onClose }) {
-  const [open, setOpen] = useState(false);
+function MobileCoursesAccordion({ label, columns, onClose, currentPath }) {
+  const sectionActive = columns.some((col) =>
+    col.items.some((item) => isItemActive(item.path, currentPath))
+  );
+  const [open, setOpen] = useState(sectionActive);
+
+  useEffect(() => {
+    if (sectionActive) setOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPath]);
 
   // Calculate total items for max-height
   const totalItems = columns.reduce((sum, col) => sum + col.items.length, 0);
@@ -326,9 +516,19 @@ function MobileCoursesAccordion({ label, columns, onClose }) {
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full px-5 py-4 text-[15px] font-medium text-gray-700 hover:text-teal-700 transition-colors"
+        className={`flex items-center justify-between w-full px-5 py-4 text-[15px] transition-colors ${
+          sectionActive
+            ? "text-teal-700 font-semibold"
+            : "text-gray-700 font-medium hover:text-teal-700"
+        }`}
+        aria-current={sectionActive ? "true" : undefined}
       >
-        {label}
+        <span className="flex items-center gap-2">
+          {sectionActive && (
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
+          )}
+          {label}
+        </span>
         <ChevronDown
           size={16}
           className="text-teal-500 transition-transform duration-200 flex-shrink-0"
@@ -350,18 +550,30 @@ function MobileCoursesAccordion({ label, columns, onClose }) {
                 {column.title}
               </h4>
               <ul>
-                {column.items.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.path}
-                      onClick={onClose}
-                      className="flex items-center gap-3 px-10 py-2.5 text-sm text-gray-500 hover:text-teal-600 transition-colors"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
+                {column.items.map((item) => {
+                  const active = isItemActive(item.path, currentPath);
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        to={item.path}
+                        onClick={onClose}
+                        className={`flex items-center gap-3 px-10 py-2.5 text-sm transition-colors ${
+                          active
+                            ? "text-teal-700 font-medium bg-teal-50"
+                            : "text-gray-500 hover:text-teal-600"
+                        }`}
+                        aria-current={active ? "page" : undefined}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                            active ? "bg-teal-600" : "bg-teal-400"
+                          }`}
+                        />
+                        {item.name}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -375,6 +587,8 @@ function MobileCoursesAccordion({ label, columns, onClose }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -398,6 +612,11 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  // Close the mobile drawer automatically whenever the route changes
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [currentPath]);
 
   const socialColor = scrolled ? "#134e4a" : "rgba(255,255,255,0.85)";
 
@@ -458,6 +677,7 @@ export default function Navbar() {
                       label={nav.label}
                       columns={nav.columns}
                       scrolled={scrolled}
+                      currentPath={currentPath}
                     />
                   );
                 }
@@ -468,6 +688,7 @@ export default function Navbar() {
                     label={nav.label}
                     items={nav.items}
                     scrolled={scrolled}
+                    currentPath={currentPath}
                   />
                 );
               })}
@@ -509,10 +730,18 @@ export default function Navbar() {
               <Link
                 to="/apply"
                 style={{
-                  color: scrolled ? "#0d9488" : "#fff",
+                  color:
+                    currentPath === "/apply"
+                      ? "#fff"
+                      : scrolled
+                      ? "#0d9488"
+                      : "#fff",
+                  backgroundColor:
+                    currentPath === "/apply" ? "#0d9488" : "transparent",
                   borderColor: scrolled ? "#0d9488" : "rgba(255,255,255,0.7)",
                   transition: "all 0.4s ease",
                 }}
+                aria-current={currentPath === "/apply" ? "page" : undefined}
                 className="uppercase flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold border-2 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-200"
               >
                 <FileText size={14} className="flex-shrink-0" />
@@ -522,11 +751,15 @@ export default function Navbar() {
               {/* Donate */}
               <Link
                 to="/donate"
+                aria-current={currentPath === "/donate" ? "page" : undefined}
                 className="uppercase flex items-center gap-2 px-5 py-2.5 bg-teal-600 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95"
                 style={{
                   boxShadow: scrolled
                     ? "0 2px 14px rgba(13,148,136,0.4)"
                     : "0 2px 14px rgba(0,0,0,0.25)",
+                  outline:
+                    currentPath === "/donate" ? "2px solid #fff" : "none",
+                  outlineOffset: "2px",
                 }}
               >
                 Donate
@@ -568,6 +801,7 @@ export default function Navbar() {
                     label={nav.label}
                     columns={nav.columns}
                     onClose={() => setMobileOpen(false)}
+                    currentPath={currentPath}
                   />
                 );
               }
@@ -578,6 +812,7 @@ export default function Navbar() {
                   label={nav.label}
                   items={nav.items}
                   onClose={() => setMobileOpen(false)}
+                  currentPath={currentPath}
                 />
               );
             })}
@@ -588,7 +823,12 @@ export default function Navbar() {
               <Link
                 to="/apply"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white transition-all"
+                aria-current={currentPath === "/apply" ? "page" : undefined}
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                  currentPath === "/apply"
+                    ? "bg-teal-600 text-white border-teal-600"
+                    : "border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white"
+                }`}
               >
                 <FileText size={16} />
                 Apply Now
@@ -599,9 +839,13 @@ export default function Navbar() {
                 <Link
                   to="/donate"
                   onClick={() => setMobileOpen(false)}
+                  aria-current={currentPath === "/donate" ? "page" : undefined}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white"
                   style={{
                     background: "linear-gradient(135deg, #0d9488, #0891b2)",
+                    outline:
+                      currentPath === "/donate" ? "2px solid #0f4c5c" : "none",
+                    outlineOffset: "2px",
                   }}
                 >
                   <Heart size={14} strokeWidth={2.5} />
