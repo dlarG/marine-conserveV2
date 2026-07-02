@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+from flask_limiter import Limiter # type: ignore
+from flask_limiter.util import get_remote_address # type: ignore
 from dotenv import load_dotenv
 import os
 
@@ -38,11 +38,13 @@ def create_app():
     from routes.contact import contact_bp
     from routes.volunteer import volunteer_bp
     from routes.courses import courses_bp
+    from routes.apply import apply_bp
     
     app.register_blueprint(donate_bp, url_prefix='/api')
     app.register_blueprint(contact_bp, url_prefix='/api')
     app.register_blueprint(volunteer_bp, url_prefix='/api')
     app.register_blueprint(courses_bp, url_prefix='/api')
+    app.register_blueprint(apply_bp, url_prefix='/api')
     
     # Health check endpoint
     @app.route('/api/health')
