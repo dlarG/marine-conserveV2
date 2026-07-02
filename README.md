@@ -139,49 +139,105 @@ GREEN Inc. is a full-time marine conservation NGO based in Malitbog, Southern Le
    Navigate to http://localhost:5173 ```
    ````
 
-green-inc-website/
-├── public/
-│ └── hero/
-│ ├── healthy_corals.png # Healthy reef image for hero
-│ └── unhealthy_corals.png # Bleached reef image for hero
-├── src/
-│ ├── components/
-│ │ └── home/
-│ │ ├── Hero.jsx # Interactive coral spotlight hero
-│ │ ├── WhyUs.jsx # Features section with counters
-│ │ ├── Review.jsx # Testimonials section
-│ │ ├── FAQ.jsx # FAQ accordion
-│ │ └── CTA.jsx # Call-to-action section
-│ ├── layouts/
-│ │ ├── Navbar.jsx # Main navigation
-│ │ └── Footer.jsx # Site footer
-│ ├── pages/
-│ │ ├── Home.jsx # Homepage composition
-│ │ ├── courses/
-│ │ │ ├── padi/
-│ │ │ │ ├── DiscoverScubaDiving.jsx
-│ │ │ │ ├── OpenWaterDiver.jsx
-│ │ │ │ └── ...
-│ │ │ └── specialty/
-│ │ │ ├── MarinePhotography.jsx
-│ │ │ └── ...
-│ │ ├── volunteer/
-│ │ │ ├── CoralConservation.jsx
-│ │ │ └── ...
-│ │ └── organization/
-│ │ ├── History.jsx
-│ │ └── ...
-│ ├── hooks/
-│ │ └── useScrollAnimation.js # Custom scroll animation hook
-│ ├── config/
-│ │ └── routes.js # Route constants
-│ ├── App.jsx # Main app with router
-│ ├── main.jsx # Entry point
-│ └── index.css # Global styles & Tailwind imports
-├── .env.example
-├── .gitignore
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
+```
+GREEN_Inc
+├─ backend
+│  ├─ .env
+│  ├─ app.py
+│  └─ routes
+│     ├─ contact.py
+│     ├─ courses.py
+│     ├─ donate.py
+│     └─ volunteer.py
+├─ frontend
+│  ├─ .env
+│  ├─ eslint.config.js
+│  ├─ index.html
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  ├─ asset
+│  │  │  ├─ community.jpg
+│  │  │  ├─ global.jpg
+│  │  │  ├─ qr.jpg
+│  │  │  ├─ qr_cropped.jpg
+│  │  │  ├─ science.jpg
+│  │  │  └─ track.jpg
+│  │  ├─ favicon.svg
+│  │  ├─ hero
+│  │  │  ├─ healthy_corals.png
+│  │  │  └─ unhealthy_corals.png
+│  │  ├─ icons.svg
+│  │  └─ logo
+│  │     └─ GREEN_Circ.png
+│  ├─ README.md
+│  ├─ src
+│  │  ├─ App.css
+│  │  ├─ App.jsx
+│  │  ├─ config
+│  │  │  └─ routes.js
+│  │  ├─ index.css
+│  │  ├─ layouts
+│  │  │  ├─ Footer.jsx
+│  │  │  └─ Navbar.jsx
+│  │  ├─ main.jsx
+│  │  ├─ pages
+│  │  │  ├─ ApplyPage.jsx
+│  │  │  ├─ ApplyPageNavbar.jsx
+│  │  │  ├─ courses
+│  │  │  │  ├─ PADI
+│  │  │  │  │  ├─ AdvancedOpenWater.jsx
+│  │  │  │  │  ├─ Divemaster.jsx
+│  │  │  │  │  ├─ DSD.jsx
+│  │  │  │  │  ├─ OpenWater.jsx
+│  │  │  │  │  └─ RescueDiver.jsx
+│  │  │  │  ├─ Specialty
+│  │  │  │  │  ├─ DeepDiver.jsx
+│  │  │  │  │  ├─ DiveNavigation.jsx
+│  │  │  │  │  ├─ MarinePhotography.jsx
+│  │  │  │  │  ├─ NightDiver.jsx
+│  │  │  │  │  └─ PerformanceBouyancy.jsx
+│  │  │  │  └─ volunteer
+│  │  │  │     ├─ CoralRestoration.jsx
+│  │  │  │     ├─ COTSMonitoring.jsx
+│  │  │  │     ├─ DataCollection.jsx
+│  │  │  │     ├─ DiveAgainstDebris.jsx
+│  │  │  │     └─ VolunteerApplyModal.jsx
+│  │  │  ├─ DonateModal.jsx
+│  │  │  ├─ DonatePage.jsx
+│  │  │  ├─ home
+│  │  │  │  ├─ CTA.jsx
+│  │  │  │  ├─ FAQ.jsx
+│  │  │  │  ├─ Hero.jsx
+│  │  │  │  ├─ Review.jsx
+│  │  │  │  └─ WhyUs.jsx
+│  │  │  ├─ organization
+│  │  │  │  ├─ blog
+│  │  │  │  │  ├─ AllBlogPost.jsx
+│  │  │  │  │  ├─ BlogHero.jsx
+│  │  │  │  │  ├─ Blogs.jsx
+│  │  │  │  │  └─ specificblogs
+│  │  │  │  │     ├─ CotsMonitoringAbgao.jsx
+│  │  │  │  │     ├─ DoubleActOfSogod.jsx
+│  │  │  │  │     ├─ FloraAndFauna.jsx
+│  │  │  │  │     ├─ MalitbogCoralRes.jsx
+│  │  │  │  │     └─ VsuMarineBiologyPartnership.jsx
+│  │  │  │  ├─ history
+│  │  │  │  │  ├─ About1.jsx
+│  │  │  │  │  ├─ About2.jsx
+│  │  │  │  │  └─ HistoryHero.jsx
+│  │  │  │  ├─ mission
+│  │  │  │  │  ├─ MissionBody.jsx
+│  │  │  │  │  ├─ MissionHero.jsx
+│  │  │  │  │  └─ MissionVisionHome.jsx
+│  │  │  │  └─ team
+│  │  │  │     ├─ TeamBody.jsx
+│  │  │  │     ├─ TeamHero.jsx
+│  │  │  │     └─ TeamMemberModal.jsx
+│  │  │  └─ VolunteerPage.jsx
+│  │  └─ utilities
+│  │     └─ useScrollAnimation.js
+│  └─ vite.config.js
+└─ README.md
+
+```
