@@ -457,7 +457,7 @@ const ApplyPage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Volunteer Application
+            Partnership Application
           </h1>
           <p className="text-gray-600">
             Please fill out ALL fields. Thank you.
