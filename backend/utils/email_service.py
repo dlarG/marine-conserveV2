@@ -960,3 +960,376 @@ class EmailService:
         """
         
         return EmailService.send_email(email, subject, html_content)
+    
+    @staticmethod
+    def send_volunteer_notification_to_admin(application_data):
+        """
+        Send new volunteer program application notification to admin
+        """
+        full_name = application_data.get('full_name', 'Unknown')
+        email = application_data.get('email', 'Not provided')
+        program_type = application_data.get('program_type', 'Not specified')
+        week_selection = application_data.get('week_selection', 'Not specified')
+        message = application_data.get('message', 'No message')
+        application_id = application_data.get('id', 'Unknown')
+        
+        subject = f"🌊 New Volunteer Application: {full_name} - Coral Restoration"
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background: #f5f5f5;
+                }}
+                .container {{
+                    background: white;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }}
+                .header {{
+                    background: linear-gradient(135deg, #0d9488, #059669);
+                    color: white;
+                    padding: 25px 30px;
+                    text-align: center;
+                }}
+                .header h1 {{
+                    margin: 0;
+                    font-size: 22px;
+                    font-weight: 600;
+                }}
+                .header .subtitle {{
+                    margin: 8px 0 0 0;
+                    opacity: 0.9;
+                    font-size: 14px;
+                }}
+                .content {{
+                    padding: 25px 30px;
+                }}
+                .detail-grid {{
+                    background: #f9fafb;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                }}
+                .detail-row {{
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 12px 0;
+                    border-bottom: 1px solid #e5e7eb;
+                }}
+                .detail-row:last-child {{
+                    border-bottom: none;
+                }}
+                .detail-label {{
+                    font-weight: 600;
+                    color: #6b7280;
+                    font-size: 13px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    min-width: 150px;
+                }}
+                .detail-value {{
+                    color: #111827;
+                    font-size: 14px;
+                    text-align: right;
+                    flex: 1;
+                }}
+                .badge {{
+                    display: inline-block;
+                    padding: 5px 15px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    background: #dbeafe;
+                    color: #1e40af;
+                }}
+                .message-box {{
+                    background: #f0fdf4;
+                    border-left: 4px solid #10b981;
+                    padding: 15px 20px;
+                    margin-bottom: 20px;
+                    border-radius: 4px;
+                }}
+                .action-needed {{
+                    background: #fff7ed;
+                    border: 2px solid #fed7aa;
+                    border-radius: 8px;
+                    padding: 15px 20px;
+                    margin-bottom: 20px;
+                }}
+                .action-needed h3 {{
+                    color: #9a3412;
+                    margin: 0 0 10px 0;
+                    font-size: 15px;
+                }}
+                .footer {{
+                    background: #111827;
+                    color: #9ca3af;
+                    padding: 20px 30px;
+                    text-align: center;
+                    font-size: 12px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🌊 New Volunteer Application!</h1>
+                    <p class="subtitle">Application #{application_id} • {application_data.get('created_at', datetime.now().strftime('%B %d, %Y'))}</p>
+                </div>
+                
+                <div class="content">
+                    <p style="font-size: 16px; color: #374151; margin-bottom: 20px;">
+                        <strong>{full_name}</strong> has applied for the <span class="badge">{program_type}</span> program.
+                    </p>
+                    
+                    <div class="detail-grid">
+                        <h3 style="margin: 0 0 15px 0; color: #111827; font-size: 16px;">📋 Applicant Information</h3>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">Full Name</span>
+                            <span class="detail-value">{full_name}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">Email</span>
+                            <span class="detail-value">{email}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">Program</span>
+                            <span class="detail-value">{program_type}</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">Week Selection</span>
+                            <span class="detail-value">{week_selection}</span>
+                        </div>
+                    </div>
+                    
+                    {message and message != 'No additional message' and f'''
+                    <div class="message-box">
+                        <h4 style="margin: 0 0 8px 0; color: #065f46; font-size: 14px;">💬 Message from Applicant</h4>
+                        <p style="margin: 0; color: #374151;">{message}</p>
+                    </div>
+                    ''' or ''}
+                    
+                    <div class="action-needed">
+                        <h3>⚠️ Action Required</h3>
+                        <p style="margin: 0; color: #92400e; font-size: 13px;">
+                            Please review this application and respond to the applicant at <strong>{email}</strong> within 3-5 business days.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p><strong>GREEN Inc. Marine Conservation</strong></p>
+                    <p>📍 Sogod Bay, Southern Leyte, Philippines</p>
+                    <p>📧 {current_app.config.get('CONTACT_EMAIL', '')}</p>
+                    <p>&copy; {datetime.now().year} GREEN Inc. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        admin_email = current_app.config.get('CONTACT_EMAIL', current_app.config['SMTP_FROM_EMAIL'])
+        return EmailService.send_email(admin_email, subject, html_content)
+
+    @staticmethod
+    def send_volunteer_receipt_to_applicant(application_data):
+        """
+        Send confirmation receipt to volunteer program applicant
+        """
+        full_name = application_data.get('full_name', 'Applicant')
+        email = application_data.get('email')
+        program_type = application_data.get('program_type', 'Coral Restoration')
+        week_selection = application_data.get('week_selection', '')
+        application_id = application_data.get('id', 'Unknown')
+        
+        if not email:
+            logger.warning("No applicant email provided, skipping receipt")
+            return False
+        
+        subject = f"✅ Application Received - Coral Restoration Volunteer Program"
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background: #f5f5f5;
+                }}
+                .container {{
+                    background: white;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }}
+                .header {{
+                    background: linear-gradient(135deg, #0d9488, #059669);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }}
+                .header .icon {{
+                    font-size: 48px;
+                    margin-bottom: 10px;
+                }}
+                .header h1 {{
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 600;
+                }}
+                .content {{
+                    padding: 30px;
+                }}
+                .greeting {{
+                    font-size: 18px;
+                    color: #374151;
+                    margin-bottom: 20px;
+                }}
+                .info-card {{
+                    background: #f9fafb;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 25px;
+                    border: 1px solid #e5e7eb;
+                }}
+                .info-row {{
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #e5e7eb;
+                }}
+                .info-row:last-child {{
+                    border-bottom: none;
+                }}
+                .label {{
+                    font-weight: 600;
+                    color: #6b7280;
+                }}
+                .value {{
+                    color: #111827;
+                }}
+                .badge {{
+                    display: inline-block;
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    background: #dbeafe;
+                    color: #1e40af;
+                }}
+                .next-steps {{
+                    background: #ecfdf5;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 25px;
+                }}
+                .next-steps h3 {{
+                    color: #065f46;
+                    margin: 0 0 15px 0;
+                }}
+                .next-steps ol {{
+                    margin: 0;
+                    padding-left: 20px;
+                    color: #374151;
+                }}
+                .next-steps li {{
+                    margin-bottom: 8px;
+                }}
+                .footer {{
+                    background: #111827;
+                    color: #9ca3af;
+                    padding: 20px 30px;
+                    text-align: center;
+                    font-size: 12px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <div class="icon">🌊</div>
+                    <h1>Application Received!</h1>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9;">Thank you for applying to our Coral Restoration Program</p>
+                </div>
+                
+                <div class="content">
+                    <div class="greeting">
+                        <p>Dear <strong>{full_name}</strong>,</p>
+                        <p>We've received your volunteer application for our <span class="badge">{program_type}</span> program. Your application reference number is <strong>#{application_id}</strong>.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3 style="margin: 0 0 15px 0; color: #111827;">📋 Application Summary</h3>
+                        
+                        <div class="info-row">
+                            <span class="label">Reference Number</span>
+                            <span class="value">#{application_id}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">Program</span>
+                            <span class="value">{program_type}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">Week Selection</span>
+                            <span class="value">{week_selection}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">Submitted</span>
+                            <span class="value">{application_data.get('created_at', datetime.now().strftime('%B %d, %Y'))}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h3>🔄 What Happens Next?</h3>
+                        <ol>
+                            <li>Our team will review your application within <strong>3-5 business days</strong></li>
+                            <li>We'll contact you via email (<strong>{email}</strong>) with our decision</li>
+                            <li>If accepted, we'll provide details about program dates, requirements, and preparation</li>
+                            <li>Feel free to reply to this email if you have any questions</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="margin: 0; color: #92400e; font-size: 13px;">
+                            📧 If you don't hear from us within 5 business days, please check your spam folder or contact us directly.
+                        </p>
+                    </div>
+                    
+                    <p style="text-align: center; color: #6b7280; margin: 20px 0;">
+                        Thank you for your interest in marine conservation. Together, we can restore our coral reefs! 🐠
+                    </p>
+                </div>
+                
+                <div class="footer">
+                    <p><strong>GREEN Inc. Marine Conservation</strong></p>
+                    <p>📍 Sogod Bay, Southern Leyte, Philippines</p>
+                    <p>📧 {current_app.config.get('CONTACT_EMAIL', '')}</p>
+                    <p>&copy; {datetime.now().year} GREEN Inc. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        return EmailService.send_email(email, subject, html_content)

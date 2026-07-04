@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check, Clock, Users, Star, ArrowLeft } from "lucide-react";
-import VolunteerApplyModal from "./VolunteerApplyModal";
 
 const CoralRestoration = () => {
   const navigate = useNavigate();
@@ -10,7 +9,6 @@ const CoralRestoration = () => {
     window.scrollTo(0, 0);
     document.title = "Coral Restoration | GREEN Inc. Volunteer";
   }, []);
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
   const programData = {
     title: "Coral Restoration",
@@ -79,7 +77,7 @@ const CoralRestoration = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <button
             onClick={() => navigate("/volunteer")}
-            className="mb-4 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors text-base"
+            className="cursor-pointer mb-4 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors text-base"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>See All Programs</span>
@@ -174,7 +172,9 @@ const CoralRestoration = () => {
                   {programData.pricing.note}
                 </p>
                 <button
-                  onClick={() => setIsApplyModalOpen(true)}
+                  onClick={() =>
+                    navigate("/volunteer/application-coral-restoration")
+                  }
                   className="cursor-pointer w-full py-2.5 rounded-xl bg-white text-teal-700 font-bold text-sm hover:shadow-xl transition-all"
                 >
                   Apply Now
@@ -398,11 +398,6 @@ const CoralRestoration = () => {
           </div>
         </div>
       </section>
-      <VolunteerApplyModal
-        isOpen={isApplyModalOpen}
-        onClose={() => setIsApplyModalOpen(false)}
-        programTitle="Coral Restoration"
-      />
     </div>
   );
 };
