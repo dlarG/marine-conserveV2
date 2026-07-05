@@ -46,6 +46,10 @@ import CotsMonitoringAbgao from "./pages/organization/blog/specificblogs/CotsMon
 import VsuMarineBiologyPartnership from "./pages/organization/blog/specificblogs/VsuMarineBiologyPartnership";
 
 import VolunteerPage from "./pages/VolunteerPage";
+import CoralRestorationApplication from "./pages/courses/volunteer/CoralRestorationApplication";
+import DiveAgainstDebrisApplication from "./pages/courses/volunteer/DiveAgainstDebrisApplication";
+import COTSMonitoringApplication from "./pages/courses/volunteer/COTSMonitoringApplication";
+import DataCollectionApplication from "./pages/courses/volunteer/DataCollectionApplication";
 
 const HomePage = () => {
   return (
@@ -485,7 +489,7 @@ const BlogsPage = () => {
   );
 };
 
-const CoralRestorationPage = () => {
+const CoralRestorationPages = () => {
   return (
     <>
       <Navbar />
@@ -590,7 +594,7 @@ const App = () => {
           <Route path="/mission-vision" element={<MissionPage />} />
           <Route
             path="/volunteer/coral-restoration"
-            element={<CoralRestorationPage />}
+            element={<CoralRestorationPages />}
           />
           <Route
             path="/volunteer/dive-against-debris"
@@ -620,6 +624,22 @@ const App = () => {
             element={<VsuMarineBiologyPartnership />}
           />
           <Route path="/volunteer" element={<VolunteerPage />} />
+          <Route
+            path="/volunteer/application-coral-restoration"
+            element={<CoralRestorationApplication />}
+          />
+          <Route
+            path="/volunteer/application-dive-against-debris"
+            element={<DiveAgainstDebrisApplication />}
+          />
+          <Route
+            path="/volunteer/application-cots-monitoring"
+            element={<COTSMonitoringApplication />}
+          />
+          <Route
+            path="/volunteer/application-scientific-data-collection"
+            element={<DataCollectionApplication />}
+          />
         </Routes>
       </div>
     </Router>

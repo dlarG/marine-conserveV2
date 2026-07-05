@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, X, FileText } from "lucide-react";
@@ -148,6 +149,7 @@ function isItemActive(itemPath, currentPath) {
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
 }
 
+// eslint-disable-next-line no-unused-vars
 function isSectionActive(nav, currentPath) {
   if (nav.columns) {
     return nav.columns.some((col) =>
