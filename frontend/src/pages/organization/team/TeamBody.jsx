@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TeamMemberModal from "./TeamMemberModal";
-// import ApplyModal from "./ApplyModal";
+import { useNavigate } from "react-router-dom";
 
 const teamMembers = [
   {
@@ -60,17 +60,12 @@ const TeamBody = () => {
   const [direction, setDirection] = useState("right");
   const [selectedMember, setSelectedMember] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "The Team | GREEN Inc.";
   }, []);
-
-  //   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-
-  //   const HandleContactClick = () => {
-  //     setIsContactModalOpen(true);
-  //   };
 
   const itemsPerView = 3;
 
@@ -497,7 +492,7 @@ const TeamBody = () => {
             </p>
             <button
               style={{ cursor: "pointer" }}
-              //   onClick={HandleContactClick}
+              onClick={() => navigate("/apply")}
               className="relative px-6 py-2.5 text-sm bg-gradient-to-r from-teal-600 to-green-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-teal-600 transition-transform duration-500 group-hover:translate-x-full" />
@@ -529,10 +524,6 @@ const TeamBody = () => {
         }}
         member={selectedMember}
       />
-      {/* <ApplyModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      /> */}
     </>
   );
 };

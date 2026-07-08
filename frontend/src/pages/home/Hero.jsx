@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 // ─── Spotlight config ─────────────────────────────────────────────────────────
 const SPOTLIGHT = {
   radius: 200,
@@ -42,6 +42,7 @@ export default function CoralSpotlight() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const rafRef = useRef(null);
+  const navigate = useNavigate();
 
   const stateRef = useRef({
     healthyImg: null,
@@ -431,6 +432,7 @@ export default function CoralSpotlight() {
             }}
           >
             <button
+              onClick={() => navigate("/mission-vision")}
               style={{
                 padding: "15px 34px",
                 backgroundColor: "#0d9488",
@@ -458,6 +460,7 @@ export default function CoralSpotlight() {
               Support Our Mission
             </button>
             <button
+              onClick={() => navigate("/blogs")}
               style={{
                 padding: "15px 34px",
                 backgroundColor: "transparent",
