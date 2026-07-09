@@ -3,6 +3,106 @@ import { Send, MapPin, Mail, Phone, Loader2 } from "lucide-react";
 import Navbar from "../layouts/Navbar";
 import Footer from "../layouts/Footer";
 
+// Map component with maximize/minimize controls
+const MapWithControls = () => {
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  // Lock body scroll when maximized
+  useEffect(() => {
+    if (isMaximized) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMaximized]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setIsMaximized(false);
+    };
+    if (isMaximized) {
+      document.addEventListener("keydown", handleEscape);
+    }
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isMaximized]);
+
+  // Google Maps embed URL - using place mode to avoid "place info couldn't load"
+  const mapSrc =
+    "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3924.5!2d124.997157!3d10.167441!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDEwJzAyLjgiTiAxMjTCsDU5JzQ5LjgiRQ!5e0!3m2!1sen!2sph!4v1234567890";
+
+  return (
+    <>
+      {/* Normal Map */}
+      <div
+        className={`rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-gray-200 transition-all duration-300 ${
+          isMaximized ? "hidden" : "block"
+        }`}
+        style={{ height: isMaximized ? "0" : "24rem" }}
+      >
+        <div className="relative h-full">
+          <iframe
+            src={mapSrc}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="GREEN Inc. Location - Casa Florida, Malitbog, Southern Leyte"
+          />
+          {/* Maximize button */}
+          <button
+            onClick={() => setIsMaximized(true)}
+            className="absolute top-3 right-3 bg-white rounded-lg shadow-md px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors border border-gray-200 z-10"
+            title="Maximize map"
+          >
+            ⛶ Maximize
+          </button>
+        </div>
+      </div>
+
+      {/* Maximized Map Overlay */}
+      {isMaximized && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm">
+          <div className="absolute inset-4 sm:inset-8 rounded-2xl overflow-hidden shadow-2xl">
+            <iframe
+              src={mapSrc}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="GREEN Inc. Location - Casa Florida, Malitbog, Southern Leyte"
+              className="rounded-2xl"
+            />
+            {/* Controls bar */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              <button
+                onClick={() => setIsMaximized(false)}
+                className="bg-white rounded-lg shadow-md px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors border border-gray-200"
+                title="Minimize map"
+              >
+                ✕ Minimize
+              </button>
+            </div>
+            {/* Close overlay by clicking outside */}
+            <button
+              onClick={() => setIsMaximized(false)}
+              className="absolute inset-0 -z-10"
+              aria-label="Close map"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,9 +130,7 @@ const ContactPage = () => {
 
     try {
       const response = await fetch(
-        `${
-          import.meta.env.VITE_API_URL || "http://localhost:10000"
-        }/api/contact`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:10000"}/contact`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +181,7 @@ const ContactPage = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="location" className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Contact Info */}
@@ -273,7 +371,7 @@ const ContactPage = () => {
       </section>
 
       {/* Map / Location */}
-      <section className="py-12 bg-gray-50">
+      <section id="location" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -284,17 +382,25 @@ const ContactPage = () => {
               Philippines.
             </p>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm h-64 sm:h-96 bg-gray-200">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3924.5!2d124.9!3d10.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDI0JzAwLjAiTiAxMjTCsDU0JzAwLjAiRQ!5e0!3m2!1sen!2sph!4v1234567890"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="GREEN Inc. Location"
-            />
+
+          <MapWithControls />
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-700">
+                📍 Casa Florida
+              </span>
+              <br />
+              Malitbog Street, Malitbog, 6603 Eastern Visayas, Philippines
+            </p>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=10.167441,124.997157"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-2 text-teal-700 text-sm font-medium hover:underline"
+            >
+              Get Directions →
+            </a>
           </div>
         </div>
       </section>
