@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import Navbar from "../../../layouts/Navbar";
 import Footer from "../../../layouts/Footer";
-// import ApplyNowModalWithCert from "./ApplyNowModalWithCert";
+import ApplyModalWithCert from "./utils/ApplyModalWithCert";
 
 const TabLink = ({ active, onClick, children }) => {
   return (
@@ -35,89 +35,70 @@ const BulletList = ({ items }) => {
   );
 };
 
-// const CourseTile = ({ title, description, href }) => {
-//   return (
-//     <a
-//       href={href}
-//       className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all p-6"
-//     >
-//       <div className="flex items-start justify-between gap-4">
-//         <div>
-//           <h4 className="text-lg font-extrabold text-gray-900 group-hover:text-teal-700 transition-colors">
-//             {title}
-//           </h4>
-//           <p className="mt-2 text-sm text-gray-600">{description}</p>
-//         </div>
-//         <span className="text-teal-700 font-semibold">→</span>
-//       </div>
-//     </a>
-//   );
-// };
-
 const OpenWater = () => {
-  //   const [isApplyOpen, setIsApplyOpen] = useState(false);
-  //   const dateRanges = useMemo(
-  //     () => [
-  //       {
-  //         from: "January 1st",
-  //         to: "February 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "February 1st",
-  //         to: "March 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "March 10th",
-  //         to: "April 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //       {
-  //         from: "April 20th",
-  //         to: "May 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "June 20th",
-  //         to: "July 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "August 20th",
-  //         to: "September 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "October 1st",
-  //         to: "November 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "November 10th",
-  //         to: "December 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //     ],
-  //     []
-  //   );
+  const [isApplyOpen, setIsApplyOpen] = useState(false);
+  const dateRanges = useMemo(
+    () => [
+      {
+        from: "January 1st",
+        to: "February 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "February 1st",
+        to: "March 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "March 10th",
+        to: "April 10th",
+        time: "Opens Daily",
+        slots: "6 slots",
+      },
+      {
+        from: "April 20th",
+        to: "May 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "June 20th",
+        to: "July 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "August 20th",
+        to: "September 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "October 1st",
+        to: "November 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "November 10th",
+        to: "December 10th",
+        time: "Opens Daily",
+        slots: "6 slots",
+      },
+    ],
+    []
+  );
 
-  //   const dateOptions = useMemo(
-  //     () =>
-  //       dateRanges.map((d) => ({
-  //         value: `${d.from} - ${d.to}`,
-  //         label: `${d.from} - ${d.to} (${d.time})`,
-  //       })),
-  //     [dateRanges]
-  //   );
+  const dateOptions = useMemo(
+    () =>
+      dateRanges.map((d) => ({
+        value: `${d.from} - ${d.to}`,
+        label: `${d.from} - ${d.to} (${d.time})`,
+      })),
+    [dateRanges]
+  );
   const tabs = useMemo(
     () => [
       { key: "skills", label: "Description" },
@@ -132,7 +113,6 @@ const OpenWater = () => {
 
   const [activeTab, setActiveTab] = useState("skills");
 
-  // NEW: content model for the two-column layout
   const tabModel = useMemo(() => {
     const baseDescription =
       "The PADI Open Water Diver course is the foundational, globally recognized scuba certification, allowing you to dive independently with a buddy to a maximum depth of 18 meters (60 feet). It typically takes 3–4 days, combining theoretical knowledge, confined water skill practice, and four open water check-out dives.";
@@ -297,7 +277,7 @@ const OpenWater = () => {
 
             <button
               type="button"
-              //   onClick={() => setIsApplyOpen(true)}
+              onClick={() => setIsApplyOpen(true)}
               className="cursor-pointer text-base w-full md:w-auto px-3 py-2 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
             >
               APPLY NOW
@@ -525,15 +505,14 @@ const OpenWater = () => {
       </section>
 
       <Footer />
-      {/* <ApplyNowModalWithCert
+      <ApplyModalWithCert
         isOpen={isApplyOpen}
         onClose={() => setIsApplyOpen(false)}
         courseKey="open-water"
         courseTitle="PADI Open Water Diver"
         dateOptions={dateOptions}
         apiBaseUrl="http://localhost:5000"
-        certLabel="Discover Scuba Certificate Photo *"
-      /> */}
+      />
     </div>
   );
 };

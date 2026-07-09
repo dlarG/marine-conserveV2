@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import Navbar from "../../../layouts/Navbar";
 import Footer from "../../../layouts/Footer";
-// import ApplyNowModal from "./ApplyNowModal";
+import ApplyModal from "./utils/ApplyModal";
 
 const TabLink = ({ active, onClick, children }) => {
   return (
@@ -59,69 +59,69 @@ const DiscoverScubaDive = () => {
     window.scrollTo(0, 0);
     document.title = "PADI Discover Scuba Diving Course | GREEN Inc.";
   }, []);
-  //   const [isApplyOpen, setIsApplyOpen] = useState(false);
-  //   const dateRanges = useMemo(
-  //     () => [
-  //       {
-  //         from: "January 1st",
-  //         to: "February 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "February 1st",
-  //         to: "March 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "March 10th",
-  //         to: "April 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //       {
-  //         from: "April 20th",
-  //         to: "May 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "June 20th",
-  //         to: "July 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "August 20th",
-  //         to: "September 20th",
-  //         time: "Opens Daily",
-  //         slots: "10 slots",
-  //       },
-  //       {
-  //         from: "October 1st",
-  //         to: "November 1st",
-  //         time: "Opens Daily",
-  //         slots: "8 slots",
-  //       },
-  //       {
-  //         from: "November 10th",
-  //         to: "December 10th",
-  //         time: "Opens Daily",
-  //         slots: "6 slots",
-  //       },
-  //     ],
-  //     []
-  //   );
+  const [isApplyOpen, setIsApplyOpen] = useState(false);
+  const dateRanges = useMemo(
+    () => [
+      {
+        from: "January 1st",
+        to: "February 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "February 1st",
+        to: "March 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "March 10th",
+        to: "April 10th",
+        time: "Opens Daily",
+        slots: "6 slots",
+      },
+      {
+        from: "April 20th",
+        to: "May 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "June 20th",
+        to: "July 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "August 20th",
+        to: "September 20th",
+        time: "Opens Daily",
+        slots: "10 slots",
+      },
+      {
+        from: "October 1st",
+        to: "November 1st",
+        time: "Opens Daily",
+        slots: "8 slots",
+      },
+      {
+        from: "November 10th",
+        to: "December 10th",
+        time: "Opens Daily",
+        slots: "6 slots",
+      },
+    ],
+    []
+  );
 
-  //   const dateOptions = useMemo(
-  //     () =>
-  //       dateRanges.map((d) => ({
-  //         value: `${d.from} - ${d.to}`,
-  //         label: `${d.from} - ${d.to} (${d.time})`,
-  //       })),
-  //     [dateRanges]
-  //   );
+  const dateOptions = useMemo(
+    () =>
+      dateRanges.map((d) => ({
+        value: `${d.from} - ${d.to}`,
+        label: `${d.from} - ${d.to} (${d.time})`,
+      })),
+    [dateRanges]
+  );
   const tabs = useMemo(
     () => [
       { key: "skills", label: "Description" },
@@ -306,7 +306,7 @@ const DiscoverScubaDive = () => {
 
             <button
               type="button"
-              //   onClick={() => setIsApplyOpen(true)}
+              onClick={() => setIsApplyOpen(true)}
               className="cursor-pointer text-base w-full md:w-auto px-3 py-2 rounded-xl bg-teal-600 text-white hover:shadow-lg transition-all whitespace-nowrap"
             >
               APPLY NOW
@@ -534,14 +534,14 @@ const DiscoverScubaDive = () => {
       </section>
 
       <Footer />
-      {/* <ApplyNowModal
+      <ApplyModal
         isOpen={isApplyOpen}
         onClose={() => setIsApplyOpen(false)}
         courseKey="discover-scuba"
         courseTitle="Discover Scuba Diving"
         dateOptions={dateOptions}
         apiBaseUrl="http://localhost:5000"
-      /> */}
+      />
     </div>
   );
 };
