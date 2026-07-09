@@ -1757,3 +1757,142 @@ class EmailService:
         """
         
         return EmailService.send_email(email, subject, html_content)
+    
+    @staticmethod
+    def send_contact_notification_to_admin(contact_data):
+        """
+        Send contact form notification to admin in plain paragraph format
+        """
+        name = contact_data.get('name', 'Unknown')
+        email = contact_data.get('email', 'Not provided')
+        subject = contact_data.get('subject', 'No subject')
+        message = contact_data.get('message', 'No message')
+        message_id = contact_data.get('id', 'Unknown')
+        created_at = contact_data.get('created_at', datetime.now().strftime('%B %d, %Y at %I:%M %p'))
+        
+        email_subject = f"New Contact Message: {subject}"
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    line-height: 1.8;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 30px;
+                }}
+                .message-box {{
+                    border: 1px solid #e5e7eb;
+                    border-radius: 8px;
+                    padding: 25px 30px;
+                    margin: 20px 0;
+                }}
+                .meta {{
+                    color: #6b7280;
+                    font-size: 13px;
+                    margin-bottom: 20px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #e5e7eb;
+                }}
+                .meta strong {{
+                    color: #374151;
+                }}
+                .message-content {{
+                    font-size: 15px;
+                    color: #374151;
+                    line-height: 1.8;
+                    margin-bottom: 25px;
+                }}
+                .reply-info {{
+                    font-size: 13px;
+                    color: #6b7280;
+                    padding-top: 20px;
+                    border-top: 1px solid #e5e7eb;
+                }}
+                .reply-info a {{
+                    color: #0d9488;
+                    text-decoration: none;
+                }}
+                .footer-note {{
+                    font-size: 11px;
+                    color: #9ca3af;
+                    margin-top: 30px;
+                }}
+            </style>
+        </head>
+        <body>
+            <p style="font-size: 16px; color: #374151;">
+                You have received a new message from the GREEN Inc. website contact form.
+            </p>
+            
+            <div class="message-box">
+                <div class="meta">
+                    <strong>From:</strong> {name}<br>
+                    <strong>Email:</strong> {email}<br>
+                    <strong>Subject:</strong> {subject}<br>
+                    <strong>Date:</strong> {created_at}<br>
+                    <strong>Reference:</strong> #{message_id}
+                </div>
+                
+                <div class="message-content">
+                    {message}
+                </div>
+                
+                <div class="reply-info">
+                    To reply to this message, simply respond to this email or contact the sender directly at 
+                    <a href="mailto:{email}">{email}</a>.
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                This message was sent via the GREEN Inc. website contact form. Reference: #{message_id}
+            </div>
+        </body>
+        </html>
+        """
+        
+        # Set Reply-To header to the sender's email so admin can reply directly
+        admin_email = current_app.config.get('CONTACT_EMAIL', current_app.config['SMTP_FROM_EMAIL'])
+        
+        # Override send_email to include Reply-To
+        try:
+            import smtplib
+            from email.mime.text import MIMEText
+            from email.mime.multipart import MIMEMultipart
+            
+            msg = MIMEMultipart('alternative')
+            from_name = current_app.config.get('SMTP_FROM_NAME', 'GREEN Inc. Marine Conservation')
+            from_email = current_app.config['SMTP_FROM_EMAIL']
+            
+            msg['From'] = f"{from_name} <{from_email}>"
+            msg['To'] = admin_email
+            msg['Subject'] = email_subject
+            msg['Reply-To'] = email  # Set Reply-To to the sender's email
+            
+            msg['Message-ID'] = f"<{datetime.now().timestamp()}@{from_email.split('@')[1]}>"
+            msg['X-Priority'] = '3'
+            msg['X-Mailer'] = 'GREEN Inc. Mailer'
+            
+            msg.attach(MIMEText(html_content, 'html'))
+            
+            server = smtplib.SMTP(current_app.config['SMTP_SERVER'], current_app.config['SMTP_PORT'])
+            server.ehlo()
+            
+            if current_app.config['SMTP_USE_TLS']:
+                server.starttls()
+                server.ehlo()
+            
+            server.login(current_app.config['SMTP_USERNAME'], current_app.config['SMTP_PASSWORD'])
+            server.sendmail(from_email, admin_email, msg.as_string())
+            server.quit()
+            
+            logger.info(f"Contact notification sent to admin for message #{message_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to send contact notification: {str(e)}")
+            raise e
