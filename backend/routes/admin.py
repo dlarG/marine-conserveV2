@@ -8,12 +8,10 @@ logger = logging.getLogger(__name__)
 
 admin_bp = Blueprint('admin', __name__)
 
-# Simple admin credentials (move to .env in production)
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'green2024')
 
 def login_required(f):
-    """Decorator to protect admin routes"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('admin_logged_in'):
@@ -21,18 +19,15 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# ─── Auth ──────────────────────────────────────────────────────────────────────
+
 @admin_bp.route('/admin/login', methods=['POST'])
 def admin_login():
-    """Admin login endpoint"""
     data = request.get_json()
-    
     if not data:
         return jsonify({'error': 'Invalid request'}), 400
     
-    username = data.get('username')
-    password = data.get('password')
-    
-    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+    if data.get('username') == ADMIN_USERNAME and data.get('password') == ADMIN_PASSWORD:
         session['admin_logged_in'] = True
         session.permanent = True
         return jsonify({'success': True, 'message': 'Login successful'}), 200
@@ -41,183 +36,273 @@ def admin_login():
 
 @admin_bp.route('/admin/logout', methods=['POST'])
 def admin_logout():
-    """Admin logout endpoint"""
     session.pop('admin_logged_in', None)
     return jsonify({'success': True, 'message': 'Logged out'}), 200
 
 @admin_bp.route('/admin/check', methods=['GET'])
 def admin_check():
-    """Check if admin is logged in"""
-    if session.get('admin_logged_in'):
-        return jsonify({'authenticated': True}), 200
-    return jsonify({'authenticated': False}), 401
+    return jsonify({'authenticated': bool(session.get('admin_logged_in'))}), 200
+
+# ─── Helper ────────────────────────────────────────────────────────────────────
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+def get_db_path(name):
+    return os.path.join(BASE_DIR, name)
+
+def fetch_all(db_name, table, order_by='created_at DESC'):
+    db_path = get_db_path(db_name)
+    if not os.path.exists(db_path):
+        return []
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(f'SELECT * FROM {table} ORDER BY {order_by}')
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return rows
+
+def update_status(db_name, table, item_id, status):
+    db_path = get_db_path(db_name)
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute(f'UPDATE {table} SET status = ? WHERE id = ?', (status, item_id))
+    conn.commit()
+    conn.close()
+
+def delete_item(db_name, table, item_id):
+    db_path = get_db_path(db_name)
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute(f'DELETE FROM {table} WHERE id = ?', (item_id,))
+    conn.commit()
+    conn.close()
+
+# ─── Stats ─────────────────────────────────────────────────────────────────────
+
+@admin_bp.route('/admin/stats', methods=['GET'])
+@login_required
+def get_all_stats():
+    """Get combined stats from all databases"""
+    stats = {
+        'donations': {'total': 0, 'today': 0},
+        'course_applications': {'total': 0, 'today': 0},
+        'volunteer_applications': {'total': 0, 'today': 0},
+        'general_applications': {'total': 0, 'today': 0},
+        'contact_messages': {'total': 0, 'today': 0, 'unread': 0},
+    }
+    
+    today = __import__('datetime').datetime.now().strftime('%Y-%m-%d')
+    
+    configs = [
+        ('donations.db', 'donations', 'donations'),
+        ('course_applications.db', 'course_applications', 'course_applications'),
+        ('volunteer_applications.db', 'volunteer_applications', 'volunteer_applications'),
+        ('applications.db', 'applications', 'general_applications'),
+        ('contact_messages.db', 'contact_messages', 'contact_messages'),
+    ]
+    
+    for db_name, table, key in configs:
+        db_path = get_db_path(db_name)
+        if not os.path.exists(db_path):
+            continue
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute(f'SELECT COUNT(*) FROM {table}')
+        stats[key]['total'] = cursor.fetchone()[0]
+        
+        cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE date(created_at) = ?", (today,))
+        stats[key]['today'] = cursor.fetchone()[0]
+        
+        if key == 'contact_messages':
+            cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE status = 'unread'")
+            stats[key]['unread'] = cursor.fetchone()[0]
+        
+        conn.close()
+    
+    return jsonify(stats), 200
+
+# ─── Course Applications ───────────────────────────────────────────────────────
 
 @admin_bp.route('/admin/course-applications', methods=['GET'])
 @login_required
 def get_all_course_applications():
-    """Get all course applications with file info (admin only)"""
     try:
-        db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'course_applications.db')
-        
-        if not os.path.exists(db_path):
-            return jsonify({'applications': []}), 200
-            
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT id, full_name, email, phone, course_name, 
-                   preferred_date, experience_level, message,
-                   medical_certificate_path, experience_certificate_path,
-                   status, created_at 
-            FROM course_applications 
-            ORDER BY created_at DESC
-        ''')
-        
+        rows = fetch_all('course_applications.db', 'course_applications')
         applications = []
-        for row in cursor.fetchall():
-            medical_path = row[8]
-            experience_path = row[9]
-            
+        for row in rows:
+            med_path = row.get('medical_certificate_path')
+            exp_path = row.get('experience_certificate_path')
             applications.append({
-                'id': row[0],
-                'full_name': row[1],
-                'email': row[2],
-                'phone': row[3],
-                'course_name': row[4],
-                'preferred_date': row[5],
-                'experience_level': row[6],
-                'message': row[7],
+                **row,
                 'medical_certificate': {
-                    'exists': bool(medical_path),
-                    'filename': os.path.basename(medical_path) if medical_path else None,
-                    'path': medical_path
+                    'exists': bool(med_path),
+                    'filename': os.path.basename(med_path) if med_path else None,
                 },
                 'experience_certificate': {
-                    'exists': bool(experience_path),
-                    'filename': os.path.basename(experience_path) if experience_path else None,
-                    'path': experience_path
-                },
-                'status': row[10],
-                'created_at': row[11]
+                    'exists': bool(exp_path),
+                    'filename': os.path.basename(exp_path) if exp_path else None,
+                }
             })
-        
-        conn.close()
         return jsonify({'applications': applications}), 200
-        
     except Exception as e:
-        logger.error(f"Error fetching applications: {str(e)}")
-        return jsonify({'error': 'Failed to fetch applications'}), 500
+        logger.error(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
-@admin_bp.route('/admin/course-applications/<int:application_id>/download/<file_type>', methods=['GET'])
+@admin_bp.route('/admin/course-applications/<int:app_id>/status', methods=['PUT'])
 @login_required
-def download_application_file(application_id, file_type):
-    """Download a specific file from an application (admin only)"""
-    try:
-        db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'course_applications.db')
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT medical_certificate_path, experience_certificate_path
-            FROM course_applications WHERE id = ?
-        ''', (application_id,))
-        
-        result = cursor.fetchone()
-        conn.close()
-        
-        if not result:
-            return jsonify({'error': 'Application not found'}), 404
-        
-        if file_type == 'medical':
-            filepath = result[0]
-        elif file_type == 'experience':
-            filepath = result[1]
-        else:
-            return jsonify({'error': 'Invalid file type'}), 400
-        
-        if not filepath or not os.path.exists(filepath):
-            return jsonify({'error': 'File not found'}), 404
-        
-        return send_file(filepath, as_attachment=True)
-        
-    except Exception as e:
-        logger.error(f"Error downloading file: {str(e)}")
-        return jsonify({'error': 'Failed to download file'}), 500
+def update_course_status(app_id):
+    data = request.get_json()
+    update_status('course_applications.db', 'course_applications', app_id, data.get('status', 'pending'))
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/course-applications/<int:app_id>', methods=['DELETE'])
+@login_required
+def delete_course_application(app_id):
+    delete_item('course_applications.db', 'course_applications', app_id)
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/course-applications/<int:app_id>/download/<file_type>', methods=['GET'])
+@login_required
+def download_course_file(app_id, file_type):
+    db_path = get_db_path('course_applications.db')
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT medical_certificate_path, experience_certificate_path FROM course_applications WHERE id = ?', (app_id,))
+    result = cursor.fetchone()
+    conn.close()
+    
+    if not result:
+        return jsonify({'error': 'Not found'}), 404
+    
+    filepath = result[0] if file_type == 'medical' else result[1]
+    if not filepath or not os.path.exists(filepath):
+        return jsonify({'error': 'File not found'}), 404
+    
+    return send_file(filepath, as_attachment=True)
+
+# ─── Volunteer Applications ────────────────────────────────────────────────────
 
 @admin_bp.route('/admin/volunteer-applications', methods=['GET'])
 @login_required
 def get_all_volunteer_applications():
-    """Get all volunteer applications with file info (admin only)"""
     try:
-        db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'volunteer_applications.db')
-        
-        if not os.path.exists(db_path):
-            return jsonify({'applications': []}), 200
-            
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT id, full_name, email, program_type, week_selection, 
-                   message, medical_certificate_path, status, created_at 
-            FROM volunteer_applications 
-            ORDER BY created_at DESC
-        ''')
-        
+        rows = fetch_all('volunteer_applications.db', 'volunteer_applications')
         applications = []
-        for row in cursor.fetchall():
-            medical_path = row[6]
-            
+        for row in rows:
+            med_path = row.get('medical_certificate_path')
             applications.append({
-                'id': row[0],
-                'full_name': row[1],
-                'email': row[2],
-                'program_type': row[3],
-                'week_selection': row[4],
-                'message': row[5],
+                **row,
                 'medical_certificate': {
-                    'exists': bool(medical_path),
-                    'filename': os.path.basename(medical_path) if medical_path else None,
-                    'path': medical_path
-                },
-                'status': row[7],
-                'created_at': row[8]
+                    'exists': bool(med_path),
+                    'filename': os.path.basename(med_path) if med_path else None,
+                }
             })
-        
-        conn.close()
         return jsonify({'applications': applications}), 200
-        
     except Exception as e:
-        logger.error(f"Error fetching applications: {str(e)}")
-        return jsonify({'error': 'Failed to fetch applications'}), 500
+        logger.error(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
-@admin_bp.route('/admin/volunteer-applications/<int:application_id>/download', methods=['GET'])
+@admin_bp.route('/admin/volunteer-applications/<int:app_id>/status', methods=['PUT'])
 @login_required
-def download_volunteer_file(application_id):
-    """Download medical certificate from volunteer application (admin only)"""
+def update_volunteer_status(app_id):
+    data = request.get_json()
+    update_status('volunteer_applications.db', 'volunteer_applications', app_id, data.get('status', 'pending'))
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/volunteer-applications/<int:app_id>', methods=['DELETE'])
+@login_required
+def delete_volunteer_application(app_id):
+    delete_item('volunteer_applications.db', 'volunteer_applications', app_id)
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/volunteer-applications/<int:app_id>/download', methods=['GET'])
+@login_required
+def download_volunteer_file(app_id):
+    db_path = get_db_path('volunteer_applications.db')
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT medical_certificate_path FROM volunteer_applications WHERE id = ?', (app_id,))
+    result = cursor.fetchone()
+    conn.close()
+    
+    if not result or not result[0] or not os.path.exists(result[0]):
+        return jsonify({'error': 'File not found'}), 404
+    
+    return send_file(result[0], as_attachment=True)
+
+# ─── General Applications (Apply Page) ─────────────────────────────────────────
+
+@admin_bp.route('/admin/general-applications', methods=['GET'])
+@login_required
+def get_all_general_applications():
     try:
-        db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'volunteer_applications.db')
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT medical_certificate_path FROM volunteer_applications WHERE id = ?
-        ''', (application_id,))
-        
-        result = cursor.fetchone()
-        conn.close()
-        
-        if not result or not result[0]:
-            return jsonify({'error': 'File not found'}), 404
-        
-        filepath = result[0]
-        
-        if not os.path.exists(filepath):
-            return jsonify({'error': 'File not found'}), 404
-        
-        return send_file(filepath, as_attachment=True)
-        
+        rows = fetch_all('applications.db', 'applications')
+        return jsonify({'applications': rows}), 200
     except Exception as e:
-        logger.error(f"Error downloading file: {str(e)}")
-        return jsonify({'error': 'Failed to download file'}), 500
+        logger.error(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@admin_bp.route('/admin/general-applications/<int:app_id>/status', methods=['PUT'])
+@login_required
+def update_general_status(app_id):
+    data = request.get_json()
+    update_status('applications.db', 'applications', app_id, data.get('status', 'pending'))
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/general-applications/<int:app_id>', methods=['DELETE'])
+@login_required
+def delete_general_application(app_id):
+    delete_item('applications.db', 'applications', app_id)
+    return jsonify({'success': True}), 200
+
+# ─── Donations ─────────────────────────────────────────────────────────────────
+
+@admin_bp.route('/admin/donations', methods=['GET'])
+@login_required
+def get_all_donations():
+    try:
+        rows = fetch_all('donations.db', 'donations')
+        return jsonify({'donations': rows}), 200
+    except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@admin_bp.route('/admin/donations/<int:donation_id>/status', methods=['PUT'])
+@login_required
+def update_donation_status(donation_id):
+    data = request.get_json()
+    update_status('donations.db', 'donations', donation_id, data.get('status', 'pending'))
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/donations/<int:donation_id>', methods=['DELETE'])
+@login_required
+def delete_donation(donation_id):
+    delete_item('donations.db', 'donations', donation_id)
+    return jsonify({'success': True}), 200
+
+# ─── Contact Messages ──────────────────────────────────────────────────────────
+
+@admin_bp.route('/admin/contact-messages', methods=['GET'])
+@login_required
+def get_all_contact_messages():
+    try:
+        rows = fetch_all('contact_messages.db', 'contact_messages')
+        return jsonify({'messages': rows}), 200
+    except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@admin_bp.route('/admin/contact-messages/<int:msg_id>/status', methods=['PUT'])
+@login_required
+def update_message_status(msg_id):
+    data = request.get_json()
+    update_status('contact_messages.db', 'contact_messages', msg_id, data.get('status', 'read'))
+    return jsonify({'success': True}), 200
+
+@admin_bp.route('/admin/contact-messages/<int:msg_id>', methods=['DELETE'])
+@login_required
+def delete_contact_message(msg_id):
+    delete_item('contact_messages.db', 'contact_messages', msg_id)
+    return jsonify({'success': True}), 200

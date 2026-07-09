@@ -3,157 +3,182 @@ import { useNavigate } from "react-router-dom";
 import {
   LogOut,
   Download,
-  Eye,
   FileText,
   Users,
   BookOpen,
   Calendar,
   Mail,
   Phone,
-  Clock,
   ChevronDown,
   ChevronUp,
   Search,
   RefreshCw,
-  X,
+  Heart,
+  MessageSquare,
+  Trash2,
+  CheckCircle,
 } from "lucide-react";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:10000";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("courses");
-  const [courseApplications, setCourseApplications] = useState([]);
-  const [volunteerApplications, setVolunteerApplications] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [expandedApp, setExpandedApp] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [stats, setStats] = useState({});
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:10000";
-
-  // Check authentication
+  // Auth check
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(`${API_BASE}/admin/check`, {
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (!data.authenticated) {
-          navigate("/admin");
-        }
-      } catch {
-        navigate("/admin");
-      }
-    };
-    checkAuth();
-  }, [navigate, API_BASE]);
+    fetch(`${API_BASE}/admin/check`, { credentials: "include" })
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.authenticated) navigate("/admin");
+      })
+      .catch(() => navigate("/admin"));
+  }, [navigate]);
 
-  // Fetch applications
-  const fetchApplications = useCallback(async () => {
+  // Fetch data
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      if (activeTab === "courses") {
-        const response = await fetch(`${API_BASE}/admin/course-applications`, {
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setCourseApplications(data.applications || []);
-        } else {
-          setError("Failed to fetch course applications");
-        }
+      const endpoints = {
+        courses: "course-applications",
+        volunteer: "volunteer-applications",
+        general: "general-applications",
+        donations: "donations",
+        contact: "contact-messages",
+      };
+      const res = await fetch(`${API_BASE}/admin/${endpoints[activeTab]}`, {
+        credentials: "include",
+      });
+      const d = await res.json();
+      if (res.ok) {
+        setData(d.applications || d.donations || d.messages || []);
       } else {
-        const response = await fetch(
-          `${API_BASE}/admin/volunteer-applications`,
-          { credentials: "include" }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setVolunteerApplications(data.applications || []);
-        } else {
-          setError("Failed to fetch volunteer applications");
-        }
+        setError("Failed to fetch data");
       }
     } catch {
-      setError("Network error. Please check your connection.");
+      setError("Network error");
     } finally {
       setLoading(false);
     }
-  }, [activeTab, API_BASE]);
+  }, [activeTab]);
+
+  // Fetch stats
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/admin/stats`, {
+        credentials: "include",
+      });
+      const d = await res.json();
+      if (res.ok) setStats(d);
+    } catch {}
+  }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchApplications();
-  }, [fetchApplications]);
+    fetchData();
+    fetchStats();
+  }, [fetchData, fetchStats]);
 
-  // Download file
-  const handleDownload = async (applicationId, fileType) => {
+  // Status update
+  const updateStatus = async (id, status) => {
+    const endpoints = {
+      courses: "course-applications",
+      volunteer: "volunteer-applications",
+      general: "general-applications",
+      donations: "donations",
+      contact: "contact-messages",
+    };
+    await fetch(`${API_BASE}/admin/${endpoints[activeTab]}/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+      credentials: "include",
+    });
+    fetchData();
+  };
+
+  // Delete
+  const deleteItem = async (id) => {
+    const endpoints = {
+      courses: "course-applications",
+      volunteer: "volunteer-applications",
+      general: "general-applications",
+      donations: "donations",
+      contact: "contact-messages",
+    };
+    await fetch(`${API_BASE}/admin/${endpoints[activeTab]}/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    setDeleteConfirm(null);
+    setExpandedId(null);
+    fetchData();
+    fetchStats();
+  };
+
+  // Download
+  const handleDownload = async (id, fileType) => {
     try {
       const endpoint =
         activeTab === "courses"
-          ? `${API_BASE}/admin/course-applications/${applicationId}/download/${fileType}`
-          : `${API_BASE}/admin/volunteer-applications/${applicationId}/download`;
-
-      const response = await fetch(endpoint, { credentials: "include" });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+          ? `${API_BASE}/admin/course-applications/${id}/download/${fileType}`
+          : `${API_BASE}/admin/volunteer-applications/${id}/download`;
+      const res = await fetch(endpoint, { credentials: "include" });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        const disposition = response.headers.get("Content-Disposition");
-        const filename = disposition
-          ? disposition.split("filename=")[1]?.replace(/"/g, "")
-          : `file_${applicationId}_${fileType}`;
-        a.download = filename;
-        document.body.appendChild(a);
+        a.download = `file_${id}_${fileType}`;
         a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
       }
-    } catch (err) {
-      console.error("Download failed:", err);
-    }
+    } catch {}
   };
 
-  // Logout
   const handleLogout = async () => {
     await fetch(`${API_BASE}/admin/logout`, {
       method: "POST",
       credentials: "include",
     });
-    navigate("/admin/login");
+    navigate("/admin");
   };
 
-  // Filter by search and status
-  const applications =
-    activeTab === "courses" ? courseApplications : volunteerApplications;
-
-  const filteredApplications = applications.filter((app) => {
-    const matchesSearch =
-      app.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (app.course_name || app.program_type)
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-    const matchesStatus = statusFilter === "all" || app.status === statusFilter;
-
+  // Filter
+  const filtered = data.filter((item) => {
+    const searchStr =
+      (item.full_name || item.name || item.first_name || "") +
+      " " +
+      (item.email || "") +
+      " " +
+      (item.course_name || item.program_type || item.subject || "");
+    const matchesSearch = searchStr
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || item.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  // Stats
-  const stats = {
-    total: applications.length,
-    pending: applications.filter((a) => a.status === "pending").length,
-    reviewed: applications.filter((a) => a.status === "reviewed").length,
-    today: applications.filter((a) => {
-      const today = new Date().toISOString().split("T")[0];
-      return a.created_at?.includes(today);
-    }).length,
-  };
+  // Tab config
+  const tabs = [
+    { key: "courses", label: "Courses", icon: BookOpen },
+    { key: "volunteer", label: "Volunteer", icon: Users },
+    { key: "general", label: "Apply", icon: FileText },
+    { key: "donations", label: "Donations", icon: Heart },
+    { key: "contact", label: "Messages", icon: MessageSquare },
+  ];
+
+  const getTotalStat = (key) => stats[key]?.total || 0;
+  const getTodayStat = (key) => stats[key]?.today || 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -169,204 +194,176 @@ const AdminDashboard = () => {
                 <h1 className="text-lg font-bold text-gray-900">
                   GREEN Inc. Admin
                 </h1>
-                <p className="text-xs text-gray-500">Application Dashboard</p>
+                <p className="text-xs text-gray-500">Dashboard</p>
               </div>
             </div>
-
             <button
               onClick={handleLogout}
-              className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
-              <LogOut className="w-4 h-4" />
-              Logout
+              <LogOut className="w-4 h-4" /> Logout
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[
-            {
-              label: "Total Applications",
-              value: stats.total,
-              icon: FileText,
-              color: "bg-blue-50 text-blue-600",
-            },
-            {
-              label: "Pending",
-              value: stats.pending,
-              icon: Clock,
-              color: "bg-amber-50 text-amber-600",
-            },
-            {
-              label: "Reviewed",
-              value: stats.reviewed,
-              icon: Eye,
-              color: "bg-green-50 text-green-600",
-            },
-            {
-              label: "Today",
-              value: stats.today,
-              icon: Calendar,
-              color: "bg-purple-50 text-purple-600",
-            },
-          ].map((stat) => (
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-8">
+          {tabs.map((tab) => (
             <div
-              key={stat.label}
-              className="bg-white rounded-xl border border-gray-200 p-5"
+              key={tab.key}
+              className="bg-white rounded-xl border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => setActiveTab(tab.key)}
             >
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${stat.color}`}>
-                  <stat.icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {stat.value}
-                  </p>
-                  <p className="text-xs text-gray-500">{stat.label}</p>
-                </div>
+              <div className="flex items-center gap-2 mb-2">
+                <tab.icon
+                  className={`w-4 h-4 ${
+                    activeTab === tab.key ? "text-teal-600" : "text-gray-400"
+                  }`}
+                />
+                <span className="text-xs text-gray-500">{tab.label}</span>
               </div>
+              <p className="text-2xl font-bold text-gray-900">
+                {getTotalStat(tab.key)}
+              </p>
+              <p className="text-xs text-gray-400">
+                {getTodayStat(tab.key)} today
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-4 mb-6 border-b border-gray-200">
-          {[
-            { key: "courses", label: "Course Applications", icon: BookOpen },
-            { key: "volunteer", label: "Volunteer Applications", icon: Users },
-          ].map((tab) => (
+        {/* Tab bar */}
+        <div className="flex items-center gap-1 mb-6 border-b border-gray-200 overflow-x-auto">
+          {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => {
                 setActiveTab(tab.key);
-                setExpandedApp(null);
+                setExpandedId(null);
               }}
-              className={`cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab.key
                   ? "border-teal-600 text-teal-700"
                   : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
-              <tab.icon className="w-4 h-4" />
-              {tab.label}
+              <tab.icon className="w-4 h-4" /> {tab.label}
             </button>
           ))}
         </div>
 
-        {/* Search & Filter Bar */}
+        {/* Search & Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by name, email, or program..."
+              placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm"
             />
           </div>
-
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 outline-none bg-white"
+            className="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="reviewed">Reviewed</option>
             <option value="accepted">Accepted</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
           </select>
-
           <button
-            onClick={fetchApplications}
-            className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            onClick={fetchData}
+            className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
           >
-            <RefreshCw className="w-4 h-4" />
-            Refresh
+            <RefreshCw className="w-4 h-4" /> Refresh
           </button>
         </div>
 
-        {/* Error State */}
+        {/* Error */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
-            <button
-              onClick={fetchApplications}
-              className="cursor-pointer ml-4 underline"
-            >
-              Try again
-            </button>
           </div>
         )}
 
-        {/* Applications List */}
-        {loading ? (
+        {/* Loading */}
+        {loading && (
           <div className="text-center py-20">
             <RefreshCw className="w-8 h-8 text-gray-400 animate-spin mx-auto mb-3" />
-            <p className="text-gray-500">Loading applications...</p>
+            <p className="text-gray-500">Loading...</p>
           </div>
-        ) : filteredApplications.length === 0 ? (
+        )}
+
+        {/* Empty */}
+        {!loading && filtered.length === 0 && (
           <div className="text-center py-20">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 text-lg font-medium">
-              No applications found
-            </p>
-            <p className="text-gray-400 text-sm">
-              {searchTerm
-                ? "Try adjusting your search"
-                : "Applications will appear here"}
-            </p>
+            <p className="text-gray-500">No items found</p>
           </div>
-        ) : (
-          <div className="space-y-3">
-            {filteredApplications.map((app) => (
+        )}
+
+        {/* List */}
+        {!loading &&
+          filtered.map((item) => {
+            const isExpanded = expandedId === item.id;
+            const name =
+              item.full_name ||
+              item.name ||
+              `${item.first_name || ""} ${item.last_name || ""}`.trim();
+            const email = item.email || "";
+            const program =
+              item.course_name || item.program_type || item.subject || "";
+            const hasMedical = item.medical_certificate?.exists;
+            const hasExperience = item.experience_certificate?.exists;
+
+            return (
               <div
-                key={app.id}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden"
+                key={item.id}
+                className="bg-white rounded-xl border border-gray-200 mb-3 overflow-hidden"
               >
                 {/* Summary Row */}
                 <div
-                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() =>
-                    setExpandedApp(expandedApp === app.id ? null : app.id)
-                  }
+                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
+                  onClick={() => setExpandedId(isExpanded ? null : item.id)}
                 >
-                  <div className="flex items-center gap-4 flex-1 min-w-0">
-                    <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-sm font-bold text-teal-700">
-                        {app.full_name?.charAt(0) || "?"}
+                        {name?.charAt(0) || "?"}
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 truncate">
-                        {app.full_name}
+                      <p className="font-semibold text-gray-900 text-sm truncate">
+                        {name}
                       </p>
                       <p className="text-xs text-gray-500 truncate">
-                        {app.course_name || app.program_type} • #{app.id}
+                        {program || email}
                       </p>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-4 flex-shrink-0">
+                  <div className="flex items-center gap-3 flex-shrink-0">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        app.status === "pending"
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                        item.status === "pending" || item.status === "unread"
                           ? "bg-amber-100 text-amber-700"
-                          : app.status === "reviewed"
+                          : item.status === "reviewed" || item.status === "read"
                           ? "bg-blue-100 text-blue-700"
                           : "bg-green-100 text-green-700"
                       }`}
                     >
-                      {app.status}
+                      {item.status}
                     </span>
                     <span className="text-xs text-gray-400 hidden sm:block">
-                      {app.created_at?.split(" at")[0]}
+                      {item.created_at?.split(" ")[0]}
                     </span>
-                    {expandedApp === app.id ? (
+                    {isExpanded ? (
                       <ChevronUp className="w-4 h-4 text-gray-400" />
                     ) : (
                       <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -375,136 +372,173 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Expanded Details */}
-                {expandedApp === app.id && (
-                  <div className="border-t border-gray-100 p-5 bg-gray-50/50">
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <p className="text-xs text-gray-500">Email</p>
-                          <p className="text-sm text-gray-900">{app.email}</p>
-                        </div>
-                      </div>
-
-                      {app.phone && (
+                {isExpanded && (
+                  <div className="border-t border-gray-100 p-5 bg-gray-50/50 space-y-4">
+                    {/* Details grid */}
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {item.email && (
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <p className="text-xs text-gray-500">Phone</p>
-                            <p className="text-sm text-gray-900">{app.phone}</p>
-                          </div>
+                          <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <span className="text-sm text-gray-700 truncate">
+                            {item.email}
+                          </span>
                         </div>
                       )}
-
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <p className="text-xs text-gray-500">Date</p>
-                          <p className="text-sm text-gray-900">
-                            {app.preferred_date || app.week_selection || "N/A"}
-                          </p>
-                        </div>
-                      </div>
-
-                      {app.experience_level && (
+                      {item.phone && (
                         <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <p className="text-xs text-gray-500">Experience</p>
-                            <p className="text-sm text-gray-900 capitalize">
-                              {app.experience_level}
-                            </p>
-                          </div>
+                          <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">
+                            {item.phone}
+                          </span>
                         </div>
+                      )}
+                      {item.preferred_date && (
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">
+                            {item.preferred_date}
+                          </span>
+                        </div>
+                      )}
+                      {item.week_selection && (
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">
+                            {item.week_selection}
+                          </span>
+                        </div>
+                      )}
+                      {item.amount && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-teal-700">
+                            ₱{item.amount}
+                          </span>
+                        </div>
+                      )}
+                      {item.donation_type && (
+                        <span className="text-xs text-gray-500 capitalize">
+                          {item.donation_type}
+                        </span>
+                      )}
+                      {item.nationality && (
+                        <span className="text-sm text-gray-700">
+                          🌍 {item.nationality}
+                        </span>
+                      )}
+                      {item.course && (
+                        <span className="text-sm text-gray-700">
+                          📚 {item.course}
+                        </span>
+                      )}
+                      {item.certification_level && (
+                        <span className="text-sm text-gray-700">
+                          🎯 {item.certification_level}
+                        </span>
+                      )}
+                      {item.experience_level && (
+                        <span className="text-sm text-gray-700 capitalize">
+                          Level: {item.experience_level}
+                        </span>
                       )}
                     </div>
 
                     {/* Message */}
-                    {app.message && app.message !== "No additional message" && (
-                      <div className="mb-4 p-3 bg-white rounded-lg border border-gray-200">
-                        <p className="text-xs text-gray-500 mb-1">Message</p>
-                        <p className="text-sm text-gray-700">{app.message}</p>
-                      </div>
-                    )}
-
-                    {/* Files */}
-                    <div className="space-y-2">
-                      <p className="text-xs font-semibold text-gray-500 uppercase">
-                        Attached Documents
-                      </p>
-
-                      {/* Medical Certificate */}
-                      {app.medical_certificate?.exists ? (
-                        <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
-                          <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-teal-600" />
-                            <span className="text-sm text-gray-700">
-                              Medical Certificate:{" "}
-                              <span className="text-teal-700 font-medium">
-                                {app.medical_certificate.filename}
-                              </span>
-                            </span>
-                          </div>
-                          <button
-                            onClick={() =>
-                              handleDownload(
-                                app.id,
-                                activeTab === "courses" ? "medical" : "medical"
-                              )
-                            }
-                            className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
-                          >
-                            <Download className="w-3 h-3" />
-                            Download
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2 p-3 bg-white rounded-lg border border-gray-200">
-                          <X className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-400">
-                            No medical certificate uploaded
-                          </span>
+                    {item.message &&
+                      item.message !== "No additional message" &&
+                      item.message !== "No message" && (
+                        <div className="p-3 bg-white rounded-lg border border-gray-200">
+                          <p className="text-xs text-gray-500 mb-1">Message</p>
+                          <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                            {item.message}
+                          </p>
                         </div>
                       )}
 
-                      {/* Experience Certificate (courses only) */}
-                      {activeTab === "courses" &&
-                        (app.experience_certificate?.exists ? (
-                          <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
-                            <div className="flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-teal-600" />
-                              <span className="text-sm text-gray-700">
-                                Experience Certificate:{" "}
-                                <span className="text-teal-700 font-medium">
-                                  {app.experience_certificate.filename}
-                                </span>
-                              </span>
-                            </div>
+                    {/* Files */}
+                    {(hasMedical || hasExperience) && (
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold text-gray-500 uppercase">
+                          Attachments
+                        </p>
+                        {hasMedical && (
+                          <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                            <span className="text-sm text-teal-700">
+                              📄 {item.medical_certificate.filename}
+                            </span>
                             <button
-                              onClick={() =>
-                                handleDownload(app.id, "experience")
-                              }
-                              className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
+                              onClick={() => handleDownload(item.id, "medical")}
+                              className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
                             >
-                              <Download className="w-3 h-3" />
-                              Download
+                              <Download className="w-3 h-3" /> Download
                             </button>
                           </div>
-                        ) : (
-                          <div className="flex items-center gap-2 p-3 bg-white rounded-lg border border-gray-200">
-                            <X className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-400">
-                              No experience certificate uploaded
+                        )}
+                        {hasExperience && (
+                          <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                            <span className="text-sm text-teal-700">
+                              📄 {item.experience_certificate.filename}
                             </span>
+                            <button
+                              onClick={() =>
+                                handleDownload(item.id, "experience")
+                              }
+                              className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
+                            >
+                              <Download className="w-3 h-3" /> Download
+                            </button>
                           </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200">
+                      {/* Status buttons */}
+                      {["pending", "reviewed", "accepted", "read"]
+                        .filter((s) => s !== item.status)
+                        .map((status) => (
+                          <button
+                            key={status}
+                            onClick={() => updateStatus(item.id, status)}
+                            className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-300 hover:bg-gray-100 capitalize"
+                          >
+                            <CheckCircle className="w-3 h-3" /> Mark {status}
+                          </button>
                         ))}
+
+                      {/* Delete */}
+                      {deleteConfirm === item.id ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-red-600">
+                            Confirm delete?
+                          </span>
+                          <button
+                            onClick={() => deleteItem(item.id)}
+                            className="px-2 py-1 text-xs bg-red-600 text-white rounded"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(null)}
+                            className="px-2 py-1 text-xs border rounded"
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setDeleteConfirm(item.id)}
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
+                        >
+                          <Trash2 className="w-3 h-3" /> Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })}
       </div>
     </div>
   );
