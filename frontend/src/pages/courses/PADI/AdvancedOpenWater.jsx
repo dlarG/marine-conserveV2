@@ -586,7 +586,7 @@ const AdvancedOpenWater = () => {
         courseKey="discover-scuba"
         courseTitle="PADI Advance Open Water Diver"
         dateOptions={dateOptions}
-        apiBaseUrl="http://localhost:5000"
+        apiBaseUrl="http://localhost:10000"
       />
     </div>
   );

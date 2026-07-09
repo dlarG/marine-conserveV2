@@ -540,7 +540,7 @@ const DiscoverScubaDive = () => {
         courseKey="discover-scuba"
         courseTitle="Discover Scuba Diving"
         dateOptions={dateOptions}
-        apiBaseUrl="http://localhost:5000"
+        apiBaseUrl="http://localhost:10000"
       />
     </div>
   );

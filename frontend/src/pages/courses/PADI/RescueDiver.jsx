@@ -588,7 +588,7 @@ const RescueDiver = () => {
         courseKey="discover-scuba"
         courseTitle="PADI Rescue Diver"
         dateOptions={dateOptions}
-        apiBaseUrl="http://localhost:5000"
+        apiBaseUrl="http://localhost:10000"
       />
     </div>
   );
