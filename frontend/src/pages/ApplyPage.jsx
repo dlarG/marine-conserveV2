@@ -54,6 +54,7 @@ const ApplyPage = () => {
     "Internship",
     "Research Assistant",
     "Research Fellow",
+    "Team",
     "Others",
   ];
 
@@ -575,7 +576,7 @@ const ApplyPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Select your course *
+                  Select your choice of application *
                 </label>
                 <select
                   name="course"

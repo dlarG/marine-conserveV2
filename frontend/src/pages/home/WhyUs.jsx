@@ -181,9 +181,9 @@ const WhyUs = () => {
 
   const stats = [
     { number: "10+", label: "Years of Impact" },
-    { number: "50K+", label: "Corals Planted" },
-    { number: "200+", label: "Volunteers Trained" },
-    { number: "15", label: "Partner Organizations" },
+    { number: "1000+", label: "Corals Planted" },
+    { number: "20+", label: "Volunteers Trained" },
+    { number: "5+", label: "Partner Organizations" },
   ];
 
   return (

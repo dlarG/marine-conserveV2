@@ -51,6 +51,9 @@ import DiveAgainstDebrisApplication from "./pages/courses/volunteer/DiveAgainstD
 import COTSMonitoringApplication from "./pages/courses/volunteer/COTSMonitoringApplication";
 import DataCollectionApplication from "./pages/courses/volunteer/DataCollectionApplication";
 
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+
 const HomePage = () => {
   return (
     <div>
@@ -640,6 +643,8 @@ const App = () => {
             path="/volunteer/application-scientific-data-collection"
             element={<DataCollectionApplication />}
           />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </div>
     </Router>
