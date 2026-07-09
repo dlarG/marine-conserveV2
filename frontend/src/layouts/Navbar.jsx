@@ -67,7 +67,6 @@ const NAV_ITEMS = [
   },
   {
     label: "Our Courses",
-    // Two-column layout for courses
     columns: [
       {
         title: "PADI Diver Courses",
@@ -108,10 +107,7 @@ const NAV_ITEMS = [
     label: "Volunteer",
     items: [
       { name: "Coral Restoration", path: "/volunteer/coral-restoration" },
-      {
-        name: "Marine Debris Removal",
-        path: "/volunteer/dive-against-debris",
-      },
+      { name: "Marine Debris Removal", path: "/volunteer/dive-against-debris" },
       { name: "COTS Monitoring", path: "/volunteer/cots-monitoring" },
       {
         name: "Scientific Data Collection",
@@ -123,12 +119,11 @@ const NAV_ITEMS = [
     label: "Contact Us",
     items: [
       { name: "Get in Touch", path: "/contact" },
-      { name: "FAQs", path: "#faqs" },
-      { name: "Location", path: "/contact/location" },
+      { name: "FAQs", path: "#faqs", page: "/" }, // Goes to homepage
+      { name: "Location", path: "#location", page: "/contact" }, // Goes to contact page
     ],
   },
 ];
-
 const SOCIAL_LINKS = [
   {
     Icon: FacebookIcon,
@@ -180,30 +175,31 @@ function Dropdown({ label, items, scrolled, currentPath }) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  // Function to handle FAQ link click
-  const handleClick = (item, e) => {
+  // Function to handle FAQ and Location link clicks
+  const handleHashClick = (item, e) => {
     e.preventDefault();
     setOpen(false);
 
     if (item.path.startsWith("#")) {
       const targetId = item.path;
+      const targetPage = item.page || "/"; // Default to homepage for FAQs
 
-      // If we're already on the homepage, just scroll
-      if (location.pathname === "/") {
+      // If we're already on the target page, just scroll
+      if (location.pathname === targetPage) {
         const element = document.querySelector(targetId);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
         }
       } else {
-        // Navigate to homepage first, then scroll after navigation
-        navigate("/");
+        // Navigate to target page first, then scroll after navigation
+        navigate(targetPage);
         // Wait for the page to render, then scroll
         setTimeout(() => {
           const element = document.querySelector(targetId);
           if (element) {
             element.scrollIntoView({ behavior: "smooth" });
           }
-        }, 100);
+        }, 300);
       }
     }
   };
@@ -245,6 +241,7 @@ function Dropdown({ label, items, scrolled, currentPath }) {
         <ul className="py-2">
           {items.map((item) => {
             const active = isItemActive(item.path, currentPath);
+            const isHashLink = item.path.startsWith("#");
             const linkClasses = `flex items-center gap-3 px-5 py-2.5 text-xs transition-colors duration-150 border-l-2 ${
               active
                 ? "text-teal-700 bg-teal-50 font-medium border-teal-500"
@@ -252,10 +249,10 @@ function Dropdown({ label, items, scrolled, currentPath }) {
             }`;
             return (
               <li key={item.name}>
-                {item.path.startsWith("#") ? (
+                {isHashLink ? (
                   <a
                     href={item.path}
-                    onClick={(e) => handleClick(item, e)}
+                    onClick={(e) => handleHashClick(item, e)}
                     className={linkClasses}
                   >
                     {item.name}
@@ -390,15 +387,16 @@ function MobileAccordion({ label, items, onClose, currentPath }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath]);
 
-  const handleClick = (item, e) => {
+  const handleHashClick = (item, e) => {
     e.preventDefault();
     onClose();
 
     if (item.path.startsWith("#")) {
       const targetId = item.path;
+      const targetPage = item.page || "/"; // Default to homepage for FAQs
 
-      // If we're already on the homepage, just scroll
-      if (location.pathname === "/") {
+      // If we're already on the target page, just scroll
+      if (location.pathname === targetPage) {
         setTimeout(() => {
           const element = document.querySelector(targetId);
           if (element) {
@@ -406,15 +404,15 @@ function MobileAccordion({ label, items, onClose, currentPath }) {
           }
         }, 300); // Delay to allow mobile menu to close first
       } else {
-        // Navigate to homepage first
-        navigate("/");
+        // Navigate to target page first
+        navigate(targetPage);
         // Wait for navigation and render, then scroll
         setTimeout(() => {
           const element = document.querySelector(targetId);
           if (element) {
             element.scrollIntoView({ behavior: "smooth" });
           }
-        }, 400);
+        }, 500);
       }
     }
   };
@@ -452,6 +450,7 @@ function MobileAccordion({ label, items, onClose, currentPath }) {
         <ul className="pb-3">
           {items.map((item) => {
             const active = isItemActive(item.path, currentPath);
+            const isHashLink = item.path.startsWith("#");
             const linkClasses = `flex items-center gap-3 px-8 py-2.5 text-sm transition-colors ${
               active
                 ? "text-teal-700 font-medium bg-teal-50"
@@ -459,13 +458,10 @@ function MobileAccordion({ label, items, onClose, currentPath }) {
             }`;
             return (
               <li key={item.name}>
-                {item.path.startsWith("#") ? (
+                {isHashLink ? (
                   <a
                     href={item.path}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleClick(item, e);
-                    }}
+                    onClick={(e) => handleHashClick(item, e)}
                     className={linkClasses}
                   >
                     <span

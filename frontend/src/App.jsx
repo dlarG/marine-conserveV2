@@ -54,6 +54,8 @@ import DataCollectionApplication from "./pages/courses/volunteer/DataCollectionA
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 
+import ContactPage from "./pages/ContactPage";
+
 const HomePage = () => {
   return (
     <div>
@@ -643,6 +645,7 @@ const App = () => {
             path="/volunteer/application-scientific-data-collection"
             element={<DataCollectionApplication />}
           />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>

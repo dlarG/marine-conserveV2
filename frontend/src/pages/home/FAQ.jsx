@@ -1,6 +1,7 @@
 // FAQ.jsx
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import useScrollAnimation from "../../utilities/useScrollAnimation";
 
 const FAQItem = ({ faq, index, isOpen, onToggle }) => {
@@ -58,6 +59,7 @@ const FAQ = () => {
   const [contactRef, contactIsVisible] = useScrollAnimation({
     threshold: 0.3,
   });
+  const navigate = useNavigate();
 
   const faqs = [
     {
@@ -160,7 +162,10 @@ const FAQ = () => {
             Can't find the answer you're looking for? Reach out to our team and
             we'll get back to you within 24 hours.
           </p>
-          <button className="cursor-pointer inline-flex items-center gap-2 px-8 py-3 bg-teal-600 text-white rounded-full font-semibold hover:bg-teal-700 transition-all duration-300 shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5">
+          <button
+            onClick={() => navigate("/contact")}
+            className="cursor-pointer inline-flex items-center gap-2 px-8 py-3 bg-teal-600 text-white rounded-full font-semibold hover:bg-teal-700 transition-all duration-300 shadow-lg hover:shadow-teal-500/25 hover:-translate-y-0.5"
+          >
             Contact Our Team
             <svg
               className="w-4 h-4"
