@@ -5,14 +5,15 @@ from flask_limiter.util import get_remote_address # type: ignore
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
 load_dotenv()
 
 def create_app():
     app = Flask(__name__)
     
-    # Configuration
-    app.config['SECRET_KEY'] = os.urandom(24)
+    # Configuration - SET SECRET KEY ONCE, BEFORE SESSIONS
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24))
+    app.config['SESSION_PERMANENT'] = True
+    
     app.config['SMTP_SERVER'] = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
     app.config['SMTP_PORT'] = int(os.getenv('SMTP_PORT', 587))
     app.config['SMTP_USE_TLS'] = os.getenv('SMTP_USE_TLS', 'true').lower() == 'true'
@@ -22,8 +23,14 @@ def create_app():
     app.config['SMTP_FROM_NAME'] = os.getenv('SMTP_FROM_NAME', 'GREEN Inc. Marine Conservation')
     app.config['CONTACT_EMAIL'] = os.getenv('CONTACT_EMAIL')
     
-    # Initialize extensions
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # Initialize CORS with credentials support
+    CORS(app, 
+         resources={r"/api/*": {
+             "origins": ["http://localhost:5173", "http://localhost:3000"],
+             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization"],
+             "supports_credentials": True
+         }})
     
     # Rate limiter
     limiter = Limiter(
@@ -39,13 +46,15 @@ def create_app():
     from routes.volunteer import volunteer_bp
     from routes.courses import courses_bp
     from routes.apply import apply_bp
+    from routes.admin import admin_bp
     
     app.register_blueprint(donate_bp, url_prefix='/api')
     app.register_blueprint(contact_bp, url_prefix='/api')
     app.register_blueprint(volunteer_bp, url_prefix='/api')
     app.register_blueprint(courses_bp, url_prefix='/api')
     app.register_blueprint(apply_bp, url_prefix='/api')
-    
+    app.register_blueprint(admin_bp, url_prefix='/api')
+
     # Health check endpoint
     @app.route('/api/health')
     def health_check():
