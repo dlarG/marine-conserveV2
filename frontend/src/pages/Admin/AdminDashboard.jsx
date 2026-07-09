@@ -175,7 +175,7 @@ const AdminDashboard = () => {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Logout
@@ -245,7 +245,7 @@ const AdminDashboard = () => {
                 setActiveTab(tab.key);
                 setExpandedApp(null);
               }}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              className={`cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.key
                   ? "border-teal-600 text-teal-700"
                   : "border-transparent text-gray-500 hover:text-gray-700"
@@ -283,7 +283,7 @@ const AdminDashboard = () => {
 
           <button
             onClick={fetchApplications}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -294,7 +294,10 @@ const AdminDashboard = () => {
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
-            <button onClick={fetchApplications} className="ml-4 underline">
+            <button
+              onClick={fetchApplications}
+              className="cursor-pointer ml-4 underline"
+            >
               Try again
             </button>
           </div>
@@ -449,7 +452,7 @@ const AdminDashboard = () => {
                                 activeTab === "courses" ? "medical" : "medical"
                               )
                             }
-                            className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
+                            className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
                           >
                             <Download className="w-3 h-3" />
                             Download
@@ -481,7 +484,7 @@ const AdminDashboard = () => {
                               onClick={() =>
                                 handleDownload(app.id, "experience")
                               }
-                              className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
+                              className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors"
                             >
                               <Download className="w-3 h-3" />
                               Download
