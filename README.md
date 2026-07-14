@@ -144,11 +144,40 @@ GREEN_Inc
 ├─ backend
 │  ├─ .env
 │  ├─ app.py
-│  └─ routes
-│     ├─ contact.py
-│     ├─ courses.py
-│     ├─ donate.py
-│     └─ volunteer.py
+│  ├─ applications.db
+│  ├─ contact_messages.db
+│  ├─ course_applications.db
+│  ├─ donations.db
+│  ├─ requirements.txt
+│  ├─ reset_limit.py
+│  ├─ routes
+│  │  ├─ admin.py
+│  │  ├─ apply.py
+│  │  ├─ contact.py
+│  │  ├─ courses.py
+│  │  ├─ donate.py
+│  │  ├─ volunteer.py
+│  │  ├─ __init__.py
+│  │  └─ __pycache__
+│  │     ├─ admin.cpython-310.pyc
+│  │     ├─ apply.cpython-310.pyc
+│  │     ├─ contact.cpython-310.pyc
+│  │     ├─ courses.cpython-310.pyc
+│  │     ├─ donate.cpython-310.pyc
+│  │     ├─ volunteer.cpython-310.pyc
+│  │     └─ __init__.cpython-310.pyc
+│  ├─ uploads
+│  │  ├─ course_certificates
+│  │  │  ├─ experience_20260709_083052_Gerald_Catina_PersonalRecord.pdf
+│  │  │  └─ medical_20260709_083052_Gerald_Catina_SCREENSHOT.png
+│  │  └─ medical_certificates
+│  │     ├─ 20260704_164009_asd_CatinaGerald_Resume.pdf
+│  │     └─ 20260704_165643_asd_CatinaGerald_Resume.pdf
+│  ├─ utils
+│  │  ├─ email_service.py
+│  │  └─ __pycache__
+│  │     └─ email_service.cpython-310.pyc
+│  └─ volunteer_applications.db
 ├─ frontend
 │  ├─ .env
 │  ├─ eslint.config.js
@@ -182,15 +211,22 @@ GREEN_Inc
 │  │  │  └─ Navbar.jsx
 │  │  ├─ main.jsx
 │  │  ├─ pages
+│  │  │  ├─ Admin
+│  │  │  │  ├─ AdminDashboard.jsx
+│  │  │  │  └─ AdminLogin.jsx
 │  │  │  ├─ ApplyPage.jsx
 │  │  │  ├─ ApplyPageNavbar.jsx
+│  │  │  ├─ ContactPage.jsx
 │  │  │  ├─ courses
 │  │  │  │  ├─ PADI
 │  │  │  │  │  ├─ AdvancedOpenWater.jsx
 │  │  │  │  │  ├─ Divemaster.jsx
 │  │  │  │  │  ├─ DSD.jsx
 │  │  │  │  │  ├─ OpenWater.jsx
-│  │  │  │  │  └─ RescueDiver.jsx
+│  │  │  │  │  ├─ RescueDiver.jsx
+│  │  │  │  │  └─ utils
+│  │  │  │  │     ├─ ApplyModal.jsx
+│  │  │  │  │     └─ ApplyModalWithCert.jsx
 │  │  │  │  ├─ Specialty
 │  │  │  │  │  ├─ DeepDiver.jsx
 │  │  │  │  │  ├─ DiveNavigation.jsx
@@ -199,10 +235,13 @@ GREEN_Inc
 │  │  │  │  │  └─ PerformanceBouyancy.jsx
 │  │  │  │  └─ volunteer
 │  │  │  │     ├─ CoralRestoration.jsx
+│  │  │  │     ├─ CoralRestorationApplication.jsx
 │  │  │  │     ├─ COTSMonitoring.jsx
+│  │  │  │     ├─ COTSMonitoringApplication.jsx
 │  │  │  │     ├─ DataCollection.jsx
+│  │  │  │     ├─ DataCollectionApplication.jsx
 │  │  │  │     ├─ DiveAgainstDebris.jsx
-│  │  │  │     └─ VolunteerApplyModal.jsx
+│  │  │  │     └─ DiveAgainstDebrisApplication.jsx
 │  │  │  ├─ DonateModal.jsx
 │  │  │  ├─ DonatePage.jsx
 │  │  │  ├─ home
