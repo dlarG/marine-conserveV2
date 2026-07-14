@@ -1,12 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useState } from "react";
 
-import ReactGA from "react-ga4";
-
-ReactGA.initialize("G-96MBDCY9ND");
-
-ReactGA.send({ hitType: "pageview", page: window.location.pathname });
-
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
 
