@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable no-empty */
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -149,7 +151,7 @@ const AdminDashboard = () => {
       method: "POST",
       credentials: "include",
     });
-    navigate("/admin");
+    navigate("/admin/login");
   };
 
   // Filter
@@ -199,7 +201,7 @@ const AdminDashboard = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" /> Logout
             </button>
@@ -243,7 +245,7 @@ const AdminDashboard = () => {
                 setActiveTab(tab.key);
                 setExpandedId(null);
               }}
-              className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+              className={`cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab.key
                   ? "border-teal-600 text-teal-700"
                   : "border-transparent text-gray-500 hover:text-gray-700"
@@ -280,7 +282,7 @@ const AdminDashboard = () => {
           </select>
           <button
             onClick={fetchData}
-            className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
           >
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
@@ -467,7 +469,7 @@ const AdminDashboard = () => {
                             </span>
                             <button
                               onClick={() => handleDownload(item.id, "medical")}
-                              className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
+                              className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
                             >
                               <Download className="w-3 h-3" /> Download
                             </button>
@@ -482,7 +484,7 @@ const AdminDashboard = () => {
                               onClick={() =>
                                 handleDownload(item.id, "experience")
                               }
-                              className="flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
+                              className="cursor-pointer flex items-center gap-1 px-3 py-1 text-xs bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100"
                             >
                               <Download className="w-3 h-3" /> Download
                             </button>
@@ -500,7 +502,7 @@ const AdminDashboard = () => {
                           <button
                             key={status}
                             onClick={() => updateStatus(item.id, status)}
-                            className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-300 hover:bg-gray-100 capitalize"
+                            className="cursor-pointer flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-gray-300 hover:bg-gray-100 capitalize"
                           >
                             <CheckCircle className="w-3 h-3" /> Mark {status}
                           </button>
@@ -514,13 +516,13 @@ const AdminDashboard = () => {
                           </span>
                           <button
                             onClick={() => deleteItem(item.id)}
-                            className="px-2 py-1 text-xs bg-red-600 text-white rounded"
+                            className="cursor-pointer px-2 py-1 text-xs bg-red-600 text-white rounded"
                           >
                             Yes
                           </button>
                           <button
                             onClick={() => setDeleteConfirm(null)}
-                            className="px-2 py-1 text-xs border rounded"
+                            className="cursor-pointer px-2 py-1 text-xs border rounded"
                           >
                             No
                           </button>
@@ -530,7 +532,7 @@ const AdminDashboard = () => {
                           onClick={() => setDeleteConfirm(item.id)}
                           className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-red-200 text-red-600 hover:bg-red-50"
                         >
-                          <Trash2 className="w-3 h-3" /> Delete
+                          <Trash2 className="cursor-pointer w-3 h-3" /> Delete
                         </button>
                       )}
                     </div>

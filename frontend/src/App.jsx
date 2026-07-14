@@ -1,13 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useState } from "react";
 
+import ReactGA from "react-ga4";
+
+ReactGA.initialize("G-96MBDCY9ND");
+
+ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
 
 import Hero from "./pages/home/Hero";
 import WhyUs from "./pages/home/WhyUs";
 import Review from "./pages/home/Review";
-import FAQ from "./pages/home/Faq";
+import FAQ from "./pages/home/FAQ";
 import CTA from "./pages/home/CTA";
 
 import DiscoverScubaDive from "./pages/courses/PADI/DSD";
@@ -40,7 +46,7 @@ import ApplyPage from "./pages/ApplyPage";
 import DonatePage from "./pages/DonatePage";
 import BlogHero from "./pages/organization/blog/BlogHero";
 import FloraAndFauna from "./pages/organization/blog/specificblogs/FloraAndFauna";
-import DoubleActOfSogod from "./pages/organization/blog/specificblogs/DoubleActofSogod";
+import DoubleActOfSogod from "./pages/organization/blog/specificblogs/DoubleActOfSogod";
 import MalitbogCoralRes from "./pages/organization/blog/specificblogs/MalitbogCoralRes";
 import CotsMonitoringAbgao from "./pages/organization/blog/specificblogs/CotsMonitoringAbgao";
 import VsuMarineBiologyPartnership from "./pages/organization/blog/specificblogs/VsuMarineBiologyPartnership";
