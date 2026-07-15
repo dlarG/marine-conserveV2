@@ -46,7 +46,6 @@ const CoralRestorationApplication = () => {
       inclusions: [
         "Advanced coral restoration techniques",
         "PADI Advanced Open Water certification",
-        "Private room accommodation",
         "3 meals per day (premium menu)",
         "Night diving experience",
         "Marine species identification training",
@@ -64,13 +63,11 @@ const CoralRestorationApplication = () => {
       inclusions: [
         "Master coral restoration specialist",
         "PADI Rescue Diver certification",
-        "Private beachfront bungalow",
         "All meals included",
         "Lead your own restoration project",
         "Community outreach programs",
         "Research methodology training",
         "Publication opportunity",
-        "Career placement assistance",
       ],
     },
   ];

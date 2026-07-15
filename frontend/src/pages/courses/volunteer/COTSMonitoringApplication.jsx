@@ -46,7 +46,6 @@ const COTSMonitoringApplication = () => {
       inclusions: [
         "Advanced COTS survey techniques",
         "Outbreak response specialization",
-        "Private room accommodation",
         "3 meals per day (premium menu)",
         "Reef health assessment training",
         "Data collection & reporting skills",
@@ -64,12 +63,10 @@ const COTSMonitoringApplication = () => {
       inclusions: [
         "Master COTS management specialist",
         "Lead outbreak response teams",
-        "Private beachfront bungalow",
         "All meals included",
         "Develop management strategies",
         "Research methodology training",
         "Publication opportunity",
-        "Career placement assistance",
         "Policy recommendation workshop",
       ],
     },

@@ -46,7 +46,6 @@ const DiveAgainstDebrisApplication = () => {
       inclusions: [
         "Advanced debris survey techniques",
         "Ghost gear removal specialization",
-        "Private room accommodation",
         "3 meals per day (premium menu)",
         "Data collection & reporting training",
         "Marine pollution impact assessment",
@@ -64,13 +63,11 @@ const DiveAgainstDebrisApplication = () => {
       inclusions: [
         "Master debris management specialist",
         "Lead your own survey team",
-        "Private beachfront bungalow",
         "All meals included",
         "Contribute to global database",
         "Policy recommendation training",
         "Research methodology workshop",
         "Publication opportunity",
-        "Career placement assistance",
       ],
     },
   ];
