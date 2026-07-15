@@ -46,7 +46,6 @@ const DataCollectionApplication = () => {
       inclusions: [
         "Advanced data collection techniques",
         "Photo quadrat & video transect training",
-        "Private room accommodation",
         "3 meals per day (premium menu)",
         "Data analysis & reporting skills",
         "Scientific diving protocols",
@@ -64,13 +63,11 @@ const DataCollectionApplication = () => {
       inclusions: [
         "Master research methodology",
         "Lead survey teams independently",
-        "Private beachfront bungalow",
         "All meals included",
         "Contribute to scientific publications",
         "Advanced statistical analysis",
         "Research presentation skills",
         "Publication opportunity",
-        "Career placement assistance",
       ],
     },
   ];
