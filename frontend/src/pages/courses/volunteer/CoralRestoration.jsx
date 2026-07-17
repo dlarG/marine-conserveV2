@@ -237,7 +237,7 @@ const CoralRestoration = () => {
               {
                 weeks: "Weeks 1 – 6",
                 price: "₱25,000.00",
-                period: "/ 24 weeks",
+                period: "/ week",
               },
               {
                 weeks: "Weeks 7 – 12",
