@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const teamMembers = [
   {
     name: "Jerome Jack Napala",
-    role: "Green Inc. CEO, Marine Biologist, SLSU Researcher, and PADI Divemaster",
+    role: "Green Inc. CEO, Marine Biologist, SLSU Researcher, and PADI Instructor",
     image:
       "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771384106/JeromaNapala_x6fqh2.jpg",
     bio: "Jerome started the nursery almost twenty years ago after witnessing how his childhood reefs had begun to show signs of stress. He started with a couple of plastic bottles, ropes, and the will to succeed.",
