@@ -45,7 +45,7 @@ const MissionHero = ({
   maxWaitMs = 1200,
   onReady,
   subtitle = "Our mission is to empower coastal communities to become stewards of their local marine environments, fostering a sustainable future for our oceans. We envision a world where thriving marine ecosystems support biodiversity, sustain livelihoods, and inspire a deep connection between people and the sea.",
-  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/v1774835958/17801323-uhd_3840_2160_25fps_g24uwd.mp4",
+  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/f_auto,q_auto:good,w_1280,c_limit/v1774835958/17801323-uhd_3840_2160_25fps_g24uwd.mp4",
 }) => {
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [forceShow, setForceShow] = useState(false);
