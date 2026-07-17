@@ -239,7 +239,7 @@ const ContactPage = () => {
                       Phone
                     </h3>
                     <p className="text-gray-600 text-sm mt-1">
-                      +63 (910) 976-0288
+                      +63 976 028 8908
                     </p>
                   </div>
                 </div>
