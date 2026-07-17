@@ -43,7 +43,7 @@ const TeamHeroSkeleton = () => {
 const TeamHero = ({
   title = "Our Team",
   subtitle = "Meet the people behind GREEN Inc. — scientists, divers, and community leaders working together to protect marine ecosystems.",
-  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/v1774837305/14920043-uhd_3840_2160_25fps_sob7sx.mp4",
+  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/f_auto,q_auto,w_1280,c_limit/v1774837305/14920043-uhd_3840_2160_25fps_sob7sx.mp4",
   maxWaitMs = 1500,
   onReady,
 }) => {

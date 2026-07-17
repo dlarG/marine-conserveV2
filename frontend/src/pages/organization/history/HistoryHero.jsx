@@ -43,7 +43,7 @@ const AboutHeroSkeleton = () => {
 const HistoryHero = ({
   title = "What We Do",
   subtitle = "We at GREEN Inc. protect and restore marine ecosystems through community-led conservation, research, and education.",
-  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/v1774838153/17454115-uhd_3840_2160_25fps_tkhd3n.mp4",
+  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/f_auto,q_auto,w_1280,c_limit/v1774838153/17454115-uhd_3840_2160_25fps_tkhd3n.mp4",
   maxWaitMs = 1200,
   onReady,
 }) => {

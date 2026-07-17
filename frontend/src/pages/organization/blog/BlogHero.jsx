@@ -43,7 +43,7 @@ const BlogHeroSkeleton = () => {
 const BlogHero = ({
   title = "Our Blog And Stories",
   subtitle = "Discover the latest news, insights, and stories from GREEN Inc. Dive into our blog to learn about marine conservation, community initiatives, and the impact of our work on marine ecosystems.",
-  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/v1774838240/17454110-uhd_3840_2160_25fps_cidtyu.mp4",
+  backgroundVideoUrl = "https://res.cloudinary.com/dfsxmtyxk/video/upload/f_auto,q_auto,w_1280,c_limit/v1774838240/17454110-uhd_3840_2160_25fps_cidtyu.mp4",
   maxWaitMs = 1200,
   onReady,
 }) => {
