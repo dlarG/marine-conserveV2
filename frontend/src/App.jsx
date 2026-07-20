@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import Footer from "./layouts/Footer";
 import Navbar from "./layouts/Navbar";
+import BackToTop from "./BackToTop";
 
 import Hero from "./pages/home/Hero";
 import WhyUs from "./pages/home/WhyUs";
@@ -649,6 +650,7 @@ const App = () => {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
+        <BackToTop />
       </div>
     </Router>
   );

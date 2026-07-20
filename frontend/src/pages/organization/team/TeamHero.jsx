@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const TeamHeroSkeleton = () => {
   return (
-    <header className="relative w-full h-[50vh] min-h-[260px] overflow-hidden bg-gray-900">
+    <header className="relative w-full min-h-[60vh] md:h-[50vh] overflow-hidden bg-gray-900 pt-[100px] md:pt-0">
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900" />
       <div
         className="absolute inset-0 opacity-30"
@@ -15,8 +15,8 @@ const TeamHeroSkeleton = () => {
         aria-hidden="true"
       />
 
-      <div className="relative h-full max-w-7xl mx-auto px-4 flex mt-30">
-        <div className="max-w-2xl w-full">
+      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+        <div className="max-w-2xl w-full md:mt-0">
           <div className="h-10 md:h-14 w-64 md:w-96 rounded bg-white/15" />
           <div className="mt-5 space-y-3">
             <div className="h-4 w-full rounded bg-white/10" />
@@ -75,7 +75,7 @@ const TeamHero = ({
   if (!shouldShowContent) return <TeamHeroSkeleton />;
 
   return (
-    <header className="relative w-full h-[50vh] min-h-[260px] overflow-hidden bg-black">
+    <header className="relative w-full min-h-[60vh] md:h-[50vh] overflow-hidden bg-black pt-[100px] md:pt-0">
       <video
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
           isVideoReady ? "opacity-100" : "opacity-0"
@@ -104,17 +104,17 @@ const TeamHero = ({
         aria-hidden="true"
       />
 
-      <div className="relative h-full max-w-7xl mx-auto px-4 flex mt-30">
-        <div className="max-w-2xl">
-          <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
+      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center py-8 sm:py-12 md:py-16">
+        <div className="max-w-2xl w-full md:mt-0">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
             {title}
           </h1>
 
-          <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/85 leading-relaxed max-w-xl">
             {subtitle}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 sm:mt-6 flex flex-wrap gap-3">
             <a
               href="#team-content"
               className="px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"

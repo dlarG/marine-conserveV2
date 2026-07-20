@@ -90,7 +90,7 @@ function About1() {
       <div>
         <div
           ref={(el) => (sectionRefs.current["mainContainer"] = el)}
-          className={`bg-white max-h-screen w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden transform transition-all duration-1000 ${
+          className={`bg-white w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden transform transition-all duration-1000 ${
             isVisible.mainContainer
               ? "translate-x-0 opacity-100 scale-100"
               : "-translate-x-12 opacity-0 scale-95"
@@ -180,7 +180,7 @@ function About1() {
                 isVisible.mainContainer
                   ? "translate-x-0 opacity-100"
                   : "translate-x-12 opacity-0"
-              }`}
+              } hidden lg:block`} // Added "hidden lg:block" here
             >
               <div className="absolute inset-0 overflow-hidden">
                 <img

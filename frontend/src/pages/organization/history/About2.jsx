@@ -81,7 +81,10 @@ function About2() {
               [key]: entry.isIntersecting,
             }));
           },
-          { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }
+          {
+            threshold: 0.05, // Trigger much earlier!
+            rootMargin: "0px 0px -10px 0px", // Reduce the bottom padding offset
+          }
         );
 
         itemObserver.observe(sectionRefs.current[key]);
@@ -95,18 +98,12 @@ function About2() {
   }, []);
 
   return (
-    <div className="mb-20 mt-20 px-4 sm:px-6 lg:px-8">
+    <div className="mb-20 mt-10 px-4 sm:px-6 lg:px-8">
       <div
         ref={(el) => (sectionRefs.current["timeline"] = el)}
         className="bg-white p-8"
       >
-        <h3
-          className={`text-3xl font-bold text-center text-gray-900 mb-12 transform transition-all duration-1000 ${
-            isVisible.timeline
-              ? "translate-y-0 opacity-100"
-              : "translate-y-8 opacity-0"
-          }`}
-        >
+        <h3 className="text-3xl font-bold text-center text-gray-900 mb-12 transform transition-all duration-1000">
           Our <span className="text-teal-600">Journey</span> Through the Years
         </h3>
 
