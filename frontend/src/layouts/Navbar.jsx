@@ -618,6 +618,17 @@ export default function Navbar() {
 
   const socialColor = scrolled ? "#134e4a" : "rgba(255,255,255,0.85)";
 
+  // ── Mobile drawer background: glassmorphism at top, solid white when scrolled ──
+  // Both states are semi-transparent + blurred while open; scrolled just gets
+  // more opaque so text stays readable over a solid page background, while the
+  // "at top" state stays light/frosted over your hero imagery.
+  const drawerBg = scrolled
+    ? "rgba(255,255,255,0.96)"
+    : "rgba(255,255,255,0.55)";
+  const drawerBorder = scrolled
+    ? "1px solid rgba(13,148,136,0.12)"
+    : "1px solid rgba(255,255,255,0.35)";
+
   return (
     <>
       <nav
@@ -776,16 +787,29 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* ── Mobile drawer ── */}
+        {/* ── Mobile drawer ──
+            Fixes applied:
+            1. Scrollable: capped at (100svh - navbar height) with overflowY auto,
+               so expanding every accordion no longer clips content off-screen.
+            2. Background reacts to `scrolled`: frosted/glass when at the top of
+               the page, solid white once scrolled — matching the top nav bar.
+            3. backdropFilter blur only applies while open, and transitions
+               smoothly between the two states along with background-color. */}
         <div
           style={{
-            maxHeight: mobileOpen ? "100svh" : "0",
+            maxHeight: mobileOpen ? "calc(100svh - 100px)" : "0",
             opacity: mobileOpen ? 1 : 0,
-            overflow: "hidden",
-            transition: "max-height 0.32s ease, opacity 0.24s ease",
-            backgroundColor: "rgba(255,255,255,0.99)",
-            backdropFilter: "blur(18px)",
-            borderTop: mobileOpen ? "1px solid rgba(13,148,136,0.1)" : "none",
+            overflowY: mobileOpen ? "auto" : "hidden",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
+            transition:
+              "max-height 0.32s ease, opacity 0.24s ease, background-color 0.4s ease, backdrop-filter 0.4s ease",
+            backgroundColor: drawerBg,
+            backdropFilter: mobileOpen ? "blur(20px) saturate(160%)" : "none",
+            WebkitBackdropFilter: mobileOpen
+              ? "blur(20px) saturate(160%)"
+              : "none",
+            borderTop: mobileOpen ? drawerBorder : "none",
           }}
           className="lg:hidden"
         >

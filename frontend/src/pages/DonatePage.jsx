@@ -9,7 +9,7 @@ const DonatePage = () => {
   const [, setIsLoaded] = useState(false);
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
+  const [, setScrollY] = useState(0);
   // Define refs
   const heroRef = useRef(null);
   const threatsRef = useRef(null);
