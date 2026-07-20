@@ -75,7 +75,7 @@ const HistoryHero = ({
   if (!shouldShowContent) return <AboutHeroSkeleton />;
 
   return (
-    <header className="relative w-full h-[50vh] min-h-[260px] overflow-hidden bg-black">
+    <header className="relative w-full h-[50vh] min-h-[400px] md:min-h-[350px] overflow-hidden bg-black pt-[100px] md:pt-0">
       <video
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
           isVideoReady ? "opacity-100" : "opacity-0"
@@ -104,17 +104,17 @@ const HistoryHero = ({
         aria-hidden="true"
       />
 
-      <div className="relative h-full max-w-7xl mx-auto px-4 flex mt-30">
-        <div className="max-w-2xl">
-          <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
+      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+        <div className="max-w-2xl w-full md:mt-0">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
             {title}
           </h1>
 
-          <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/85 leading-relaxed max-w-xl">
             {subtitle}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 sm:mt-6 flex flex-wrap gap-3">
             <a
               href="#team-content"
               className="px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"
