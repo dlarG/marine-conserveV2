@@ -183,7 +183,7 @@ const DonatePage = () => {
   ];
 
   const backgroundVideoUrl =
-    "https://res.cloudinary.com/dfsxmtyxk/video/upload/v1774838153/17454115-uhd_3840_2160_25fps_tkhd3n.mp4";
+    "https://res.cloudinary.com/dfsxmtyxk/video/upload/f_auto,q_auto:good,w_1280,c_limit/v1774838153/17454115-uhd_3840_2160_25fps_tkhd3n.mp4";
   const title = "Your Donation Saves Lives";
   const subtitle =
     "Every peso brings us closer to saving Sogod Bay's coral reefs. Your support funds actual dives, removes threats, and restores hope for thousands of marine species and coastal communities.";
@@ -192,8 +192,8 @@ const DonatePage = () => {
     <>
       <Navbar />
       {/* Hero Section */}
-      <section id="hero" ref={heroRef}>
-        <header className="relative w-full h-[45vh] overflow-hidden">
+      <section id="hero" ref={heroRef} className="relative">
+        <header className="relative w-full min-h-[50vh] md:h-[40vh] overflow-hidden bg-black pt-[100px] md:pt-0">
           {/* Background Video */}
           <video
             className="absolute inset-0 w-full h-full object-cover"
@@ -213,27 +213,27 @@ const DonatePage = () => {
           />
 
           {/* Content */}
-          <div className="relative h-full max-w-7xl mx-auto px-4 flex mt-30">
-            <div className="max-w-2xl">
-              <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
+          <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center py-8 sm:py-12 md:py-16">
+            <div className="max-w-2xl w-full md:mt-0">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
                 {title}
               </h1>
 
-              <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/85 leading-relaxed max-w-xl">
                 {subtitle}
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
+              <div className="mt-5 sm:mt-6 flex flex-wrap gap-3">
+                <button
                   onClick={() => handleDonateClick()}
-                  className="cursor-pointer px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"
+                  className="px-4 py-2 text-sm rounded-full bg-teal-600 text-white font-normal hover:bg-teal-700 transition-colors"
                 >
+                  {" "}
                   Make Contribution
-                </a>
+                </button>
+
                 <a
-                  onClick={() => {
-                    "/about";
-                  }}
+                  href="/about"
                   className="px-4 py-2 text-sm rounded-full bg-white/10 text-white font-normal border border-white/20 hover:bg-white/15 transition-colors"
                 >
                   Explore Our Impact
@@ -243,15 +243,12 @@ const DonatePage = () => {
           </div>
         </header>
 
-        {/* Scroll Indicator - with subtle parallax */}
-        <div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
-          style={{
-            transform: `translate(-50%, ${scrollY * 0.2}px)`,
-          }}
-        >
-          <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-1.5 bg-white/50 rounded-full mt-2 animate-pulse" />
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden md:block">
+          <div className="animate-bounce">
+            <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center">
+              <div className="w-1 h-1.5 bg-white/50 rounded-full mt-2 animate-pulse" />
+            </div>
           </div>
         </div>
       </section>
