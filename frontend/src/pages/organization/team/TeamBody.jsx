@@ -13,7 +13,7 @@ const teamMembers = [
   },
   {
     name: "Christian Polo",
-    role: "Coral Jardinero and PADI Divemaster",
+    role: "Coral Steward and PADI Divemaster",
     image:
       "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771384070/ChristianPolo_kqmoeu.jpg",
     bio: "Christian has been a trusted helper and coral nurse for several years. He is a scuba divemaster and spends his days diving on the beautiful reefs in Sogod Bay.",
@@ -21,7 +21,7 @@ const teamMembers = [
   },
   {
     name: "Jollibee Looc",
-    role: "Marine Biologist, Coral Jardinera and PADI AOW Diver",
+    role: "Marine Biologist, Coral Steward and PADI AOW Diver",
     image:
       "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771384109/JollibeeLooc_sin3gx.jpg",
     bio: "Jobs became a marine biologist with a PADI Advanced Open Water certificate, and her time working with GREEN, Inc. has helped her build her career.",
@@ -29,7 +29,7 @@ const teamMembers = [
   },
   {
     name: "Nova Almine",
-    role: "Marine Biologist, Coral Jardinera, and a PADI AOW",
+    role: "Marine Biologist, Coral Steward, and a PADI AOW",
     image:
       "https://res.cloudinary.com/dfsxmtyxk/image/upload/v1771384114/NovaAlmine_sfxdgv.jpg",
     bio: "Nova joined GREEN, Inc. while doing her undergrad in marine biology. Growing up in Southern Leyte, she became deeply passionate about the ocean.",
@@ -126,7 +126,7 @@ const TeamBody = () => {
             </span>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            Meet Our <span className="text-teal-700">Experts</span>
+            Meet Our <span className="text-teal-700">Specialist</span>
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base leading-relaxed">
             Our interdisciplinary team brings together leading scientists and
